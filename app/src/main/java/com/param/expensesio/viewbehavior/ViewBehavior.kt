@@ -1,5 +1,6 @@
 package com.param.expensesio.viewbehavior
 
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Rect
 import android.view.View
@@ -9,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 
 object ViewBehavior {
+
+    fun isDarkThemeOn(resources: Resources) = resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
     fun getNoDataViewVisibility(list: List<*>, imageView: ImageView, textView: TextView) {
         val visibility = if (list.isEmpty()) View.VISIBLE else View.INVISIBLE
@@ -43,6 +47,5 @@ object ViewBehavior {
         textInputLayout.errorIconDrawable = null
         textInputLayout.error = if (isValid) null else errorMsg
     }
-
 
 }

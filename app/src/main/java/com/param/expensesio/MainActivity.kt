@@ -1,24 +1,28 @@
 package com.param.expensesio
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-
-import com.param.expensesio.fragment.*
 import com.facebook.FacebookSdk
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.param.expensesio.databinding.ActivityMainBinding
-import java.lang.IllegalArgumentException
+import com.param.expensesio.fragment.HomeFragmentDirections
+import org.jetbrains.anko.find
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         setTheme(R.style.Theme_Expensery)
         setContentView(binding.root)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setSupportActionBar(binding.customToolbar.root)
 
         // Init Facebook SDK
@@ -83,6 +87,25 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+
+        when (newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
+                findViewById<CoordinatorLayout>(R.id.mainManageCategories).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
+                findViewById<CoordinatorLayout>(R.id.mainBudget).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
+                findViewById<CoordinatorLayout>(R.id.mainAllExpenses).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
+            } // Night mode is not active, we're using the light theme
+            Configuration.UI_MODE_NIGHT_YES -> {
+                findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+                findViewById<CoordinatorLayout>(R.id.mainManageCategories).setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+                findViewById<CoordinatorLayout>(R.id.mainBudget).setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+                findViewById<CoordinatorLayout>(R.id.mainAllExpenses).setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+            } // Night mode is active, we're using dark theme
+        }
+
+    }
+
     override fun onStart() {
 
         super.onStart()
@@ -103,12 +126,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("RestrictedApi")
-    fun BS() = navController.backStack
-        .map { it.destination }
-        .filterNot { it is NavGraph }
-        .joinToString(" > ") { it.displayName.split('/')[1] }
-
     override fun onSupportNavigateUp() = navController.navigateUp() || super.onSupportNavigateUp()
 
     fun buildSnackBar(msg: String) {
@@ -118,6 +135,12 @@ class MainActivity : AppCompatActivity() {
             Snackbar.LENGTH_SHORT
         ).show()
     }
+
+    @SuppressLint("RestrictedApi")
+    fun BS() = navController.backStack
+        .map { it.destination }
+        .filterNot { it is NavGraph }
+        .joinToString(" > ") { it.displayName.split('/')[1] }
 
 
     fun mockDB() {

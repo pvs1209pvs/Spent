@@ -78,6 +78,12 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    fun updateExpense(expense: Expense){
+        viewModelScope.launch (Dispatchers.IO){
+            expenseDAO.updateExpense(expense)
+        }
+    }
+
     fun updateExpenseTotal(title: String, newAmount: Float, ofUser: String) {
         viewModelScope.launch(Dispatchers.IO) {
             expenseDAO.updateTotal(title, newAmount, ofUser)

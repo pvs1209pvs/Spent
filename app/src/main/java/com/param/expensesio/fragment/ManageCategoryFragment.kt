@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -30,6 +31,8 @@ class ManageCategoryFragment : Fragment() {
     ): View {
 
         binding = FragmentManageCategoryBinding.inflate(inflater, container, false)
+
+
 
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_5)

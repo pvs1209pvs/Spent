@@ -2,6 +2,7 @@ package com.param.expensesio.fragment
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,7 +15,6 @@ import com.param.expensesio.data.Expense
 import com.param.expensesio.databinding.FragmentExpensesByCategoryBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
-import kotlinx.android.synthetic.main.pref_profile.*
 import java.util.*
 
 
@@ -38,6 +38,8 @@ class ExpensesByCategoryFragment : Fragment() {
     ): View {
 
         binding = FragmentExpensesByCategoryBinding.inflate(inflater, container, false)
+
+
 
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_2)

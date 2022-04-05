@@ -4,19 +4,20 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.param.expensesio.MyViewModel
 import com.param.expensesio.R
 import com.param.expensesio.adapter.AdapterCategory
 import com.param.expensesio.data.Category
 import com.param.expensesio.databinding.FragmentHomeBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
-import com.google.firebase.auth.FirebaseAuth
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
 import java.util.*
 
@@ -42,6 +43,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         Log.d("HomeFragment.onCreateView", "Welcome Home ${BS()}")
+
 
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_1)

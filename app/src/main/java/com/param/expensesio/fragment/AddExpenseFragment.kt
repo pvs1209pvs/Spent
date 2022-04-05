@@ -73,20 +73,10 @@ class AddExpenseFragment : Fragment() {
                         expenseToEdit.title = title
                         expenseToEdit.amount = amount.toFloat()
                         expenseToEdit.ofCategory = ofCategory
-
-                        if (oldTitle == title) {
-                            viewModel.updateExpenseTotal(
-                                title,
-                                expenseToEdit.amount,
-                                viewModel.userEmail()
-                            )
-                        } else {
-                            viewModel.addExpense(expenseToEdit)
-                            viewModel.delExpense(expenseToEdit)
-                        }
-
+                        viewModel.updateExpense(expenseToEdit)
                     }
                 }
+
 
                 findNavController().popBackStack()
 
