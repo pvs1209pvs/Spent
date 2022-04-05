@@ -10,4 +10,5 @@
     <color name="gray_light">#0A000000</color>
     <color name="google_red">#DB4437</color>
     <color name="colorTextPrimary">#000000</color>
+    <color name="colorThemeType">#FFFFFF</color>
 </resources>

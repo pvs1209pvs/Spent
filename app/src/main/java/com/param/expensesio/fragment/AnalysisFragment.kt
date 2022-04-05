@@ -157,6 +157,8 @@ class AnalysisFragment : Fragment() {
             dragDecelerationFrictionCoef = 0.15f
             setEntryLabelTextSize(12f)
             setCenterTextSize(24f)
+            isDrawHoleEnabled = true
+            setHoleColor(ContextCompat.getColor(requireContext(), R.color.colorThemeType))
         }
 
         binding.pieChart.legend.apply {

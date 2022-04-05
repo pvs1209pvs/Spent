@@ -2,13 +2,15 @@ package com.param.expensesio
 
 import android.app.Application
 import android.util.Patterns
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
+import com.google.firebase.auth.FirebaseAuth
 import com.param.expensesio.data.Category
 import com.param.expensesio.data.CategoryIcon
 import com.param.expensesio.data.Expense
 import com.param.expensesio.db.LocalDB
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
@@ -76,9 +78,21 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    fun updateExpenseTotal(title: String, newAmount: Float, ofUser: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            expenseDAO.updateTotal(title, newAmount, ofUser)
+        }
+    }
+
     fun delExpense(expense: Expense) {
         viewModelScope.launch(Dispatchers.IO) {
             expenseDAO.delExpense(expense)
+        }
+    }
+
+    fun delExpenseByTitle(title: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            expenseDAO.delExpenseByTitle(title)
         }
     }
 

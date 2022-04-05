@@ -13,6 +13,9 @@ interface ExpenseDAO {
     @Delete
     suspend fun delExpense(expense: Expense)
 
+    @Query("DELETE FROM expense_table WHERE title = :title")
+    suspend fun delExpenseByTitle(title: String)
+
     @Query("UPDATE expense_table SET amount = :newAmount WHERE title = :title AND ofUser = :ofUser")
     suspend fun updateTotal(title: String, newAmount: Float, ofUser: String)
 

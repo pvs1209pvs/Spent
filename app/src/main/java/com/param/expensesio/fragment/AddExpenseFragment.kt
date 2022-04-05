@@ -1,12 +1,12 @@
 package com.param.expensesio.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,6 +16,7 @@ import com.param.expensesio.data.Expense
 import com.param.expensesio.databinding.FragmentAddExpenseBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
 import java.util.*
+import kotlin.math.exp
 
 
 class AddExpenseFragment : Fragment() {
@@ -49,6 +50,8 @@ class AddExpenseFragment : Fragment() {
         // Add or update Expense
         binding.expenseAddConfirmFAB.setOnClickListener {
 
+            val oldTitle = expenseToEdit?.title ?: ""
+
             val title = binding.expenseTitle.editText!!.text.toString()
             val amount = binding.expenseAmount.editText!!.text.toString()
             val ofCategory = binding.categoryDropDownTitle.text.toString()
@@ -70,8 +73,18 @@ class AddExpenseFragment : Fragment() {
                         expenseToEdit.title = title
                         expenseToEdit.amount = amount.toFloat()
                         expenseToEdit.ofCategory = ofCategory
-                        viewModel.addExpense(expenseToEdit)
-                        viewModel.delExpense(expenseToEdit)
+
+                        if (oldTitle == title) {
+                            viewModel.updateExpenseTotal(
+                                title,
+                                expenseToEdit.amount,
+                                viewModel.userEmail()
+                            )
+                        } else {
+                            viewModel.addExpense(expenseToEdit)
+                            viewModel.delExpense(expenseToEdit)
+                        }
+
                     }
                 }
 
