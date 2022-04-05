@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+
+        <item
+            android:id="@+id/sortTotalBy"
+            android:title="Sort total by">
+
+            <menu>
+                <item
+                    android:id="@+id/highestTotalFirst"
+                    android:title="Highest first" />
+                <item
+                    android:id="@+id/lowestTotalFirst"
+                    android:title="Lowest first" />
+            </menu>
+
+        </item>
+
+    </group>
+
+    <group>
+
+        <item
+            android:id="@+id/sortBudgetBy"
+            android:title="Sort budget by">
+
+            <menu>
+                <item
+                    android:id="@+id/highestBudgetFirst"
+                    android:title="Highest first" />
+                <item
+                    android:id="@+id/lowestBudgetFirst"
+                    android:title="Lowest first" />
+            </menu>
+
+        </item>
+
+    </group>
+
+
+</menu>

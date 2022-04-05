@@ -1,0 +1,79 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.example.expensery.ui.ProfileViewPreference
+        android:layout="@layout/pref_profile"
+        app:key="profileImage" />
+
+    <PreferenceCategory
+        android:icon="@drawable/ic_baseline_category_24"
+        app:title="Manage">
+
+        <Preference
+            app:key="categories"
+            app:title="Categories" />
+
+        <Preference
+            app:key="budgets"
+            app:title="Budgets" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:icon="@drawable/ic_baseline_attach_money_24"
+        app:key="currencyCategory"
+        app:title="Currency">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="useLocalCurrency"
+            app:title="Use local currency" />
+
+        <EditTextPreference
+            app:defaultValue="$"
+            app:enabled="false"
+            app:key="currencySymbol"
+            app:title="Currency symbol"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:icon="@drawable/ic_baseline_history_24"
+        app:title="History">
+
+        <ListPreference
+            app:defaultValue="by_category"
+            app:entries="@array/sort_by_entries"
+            app:entryValues="@array/sort_by_values"
+            app:key="sortHistoryBy"
+            app:title="Sort history by"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:icon="@drawable/ic_baseline_account_circle_24" app:title="Account">
+
+        <Preference
+            app:key="logout"
+            app:title="Logout" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:icon="@drawable/ic_baseline_info_24"
+        app:title="About">
+
+        <Preference
+            app:key="about"
+            app:title="About" />
+
+        <Preference
+            app:key="openSourceLicenses"
+            app:title="Open source licences" />
+
+    </PreferenceCategory>
+
+<!--    https://www.flaticon.com/authors/freepik -->
+
+</PreferenceScreen>

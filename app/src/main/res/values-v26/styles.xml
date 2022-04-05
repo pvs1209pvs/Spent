@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--    <style name="PrimaryCardView">-->
+<!--        <item name="android:layout_marginHorizontal">8dp</item>-->
+<!--        <item name="android:layout_marginTop">8dp</item>-->
+<!--        <item name="elevation">8dp</item>-->
+<!--        <item name="cornerRadius">4dp</item>-->
+<!--    </style>-->
+
+<!--    <style name="Theme.Expensery.PrimaryCard">-->
+<!--        <item name="android:layout_marginHorizontal">8dp</item>-->
+<!--        <item name="android:layout_marginTop">8dp</item>-->
+<!--        <item name="elevation">8dp</item>-->
+<!--        <item name="cornerRadius">4dp</item>-->
+<!--    </style>-->
+</resources>

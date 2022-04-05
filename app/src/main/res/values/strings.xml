@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Expensery</string>
+
+    <!-- Firebase Facebook login -->
+    <string name="facebook_app_id">819925476066726</string>
+    <string name="fb_login_protocol_scheme">fb819925476066726</string>
+    <string name="facebook_client_token">ac0953cfd878b85548c6dbcc5e63a9b7</string>
+
+    <!-- Login -->
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="register_helper">Don\'t have an account?</string>
+    <string name="account_exists_helper">Already have an account?</string>
+    <string name="register_action">Register here</string>
+    <string name="or">or</string>
+
+    <!-- Data -->
+    <string name="monetary_amount">%2$s%1$.2f</string>
+    <string name="monetary_amount_long">%2$s %1$.2f</string>
+
+    <!-- Category -->
+    <string name="category_total_out_of_budget">%3$s%1$.2f / %3$s%2$.2f</string>
+    <string name="creation_date">%1$d/%2$d/%3$d</string>
+    <string name="category_title">Category title</string>
+    <string name="category_budget">Category budget</string>
+    <string name="enter_budget">Enter budget</string>
+
+    <!-- Expense -->
+    <string name="select_category">Select category</string>
+    <string name="expense_amount">Expense amount</string>
+    <string name="expense_title">Expense title</string>
+
+    <!-- Views -->
+    <string name="fab">fab</string>
+    <string name="no_data_text">Nothing to see here</string>
+
+    <!-- Misc -->
+    <string name="empty_amount">0.00</string>
+    <string name="empty_date">0000/00/00</string>
+    <string name="budget">Budget</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+
+</resources>

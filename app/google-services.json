@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "696063268360",
+    "project_id": "expensesio",
+    "storage_bucket": "expensesio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696063268360:android:33f0e3e0ae8cacbb3063bd",
+        "android_client_info": {
+          "package_name": "com.param.expensesio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696063268360-1leu50d75cdh6h623goavlc058f8gdpc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.param.expensesio",
+            "certificate_hash": "6f46bc5e30fa3ff1a65e82f8b868ecec2c4d26f2"
+          }
+        },
+        {
+          "client_id": "696063268360-iqlubf72v6j04nl7gsot0gs4qcjome7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT7Q8JVg46VTES57eOxxw9OT1JfjC02cg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696063268360-iqlubf72v6j04nl7gsot0gs4qcjome7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

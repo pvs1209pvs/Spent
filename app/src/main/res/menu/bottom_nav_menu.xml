@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/ic_baseline_home_24"
+        android:id="@+id/homeFragment"
+        android:title="Home" />
+
+    <item
+        android:icon="@drawable/ic_baseline_history_24"
+        android:id="@+id/historyFragment"
+        android:title="History"/>
+
+    <item
+        android:icon="@drawable/ic_baseline_insert_chart_outlined_24"
+        android:id="@+id/analysisFragment"
+        android:title="Analysis"/>
+
+    <item
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:id="@+id/settingsFragment"
+        android:title="Setting" />
+
+</menu>

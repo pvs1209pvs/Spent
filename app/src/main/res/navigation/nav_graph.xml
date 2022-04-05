@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/appNavGraph">
+
+    <navigation
+        android:id="@+id/loginNavGraph"
+        app:startDestination="@id/loginFragment">
+
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.param.expensesio.fragment.LoginFragment"
+            android:label="fragment_login"
+            tools:layout="@layout/fragment_login">
+
+            <action
+                android:id="@+id/actionLoginFragmentToHomeFragment"
+                app:destination="@id/appNavGraph"
+                app:popUpTo="@id/loginFragment"
+                app:popUpToInclusive="true" />
+
+            <action
+                android:id="@+id/actionLoginFragmentToRegisterFragment"
+                app:destination="@id/registerFragment" />
+
+        </fragment>
+
+        <fragment
+            android:id="@+id/registerFragment"
+            android:name="com.param.expensesio.fragment.RegisterFragment"
+            android:label="fragment_register"
+            tools:layout="@layout/fragment_register">
+
+            <action
+                android:id="@+id/actionRegisterFragmentToHomeFragment"
+                app:destination="@id/appNavGraph"
+                app:popUpTo="@id/loginFragment"
+                app:popUpToInclusive="true" />
+
+        </fragment>
+
+    </navigation>
+
+    <navigation
+        android:id="@+id/appNavGraph"
+        app:startDestination="@id/homeFragment">
+
+        <fragment
+            android:id="@+id/manageCategory"
+            android:name="com.param.expensesio.fragment.ManageCategoryFragment"
+            android:label="Manage Category"
+            tools:layout="@layout/fragment_manage_category">
+
+            <action
+                android:id="@+id/actionManageCategoryFragmentToAddCategoryFragment"
+                app:destination="@id/addCategoryFragment" />
+
+        </fragment>
+
+        <fragment
+            android:id="@+id/analysisFragment"
+            android:name="com.param.expensesio.fragment.AnalysisFragment"
+            android:label="Analysis"
+            tools:layout="@layout/fragment_analysis" />
+
+        <fragment
+            android:id="@+id/budgetFragment"
+            android:name="com.param.expensesio.fragment.BudgetFragment"
+            android:label="Budgets"
+            tools:layout="@layout/fragment_budget" />
+
+        <fragment
+            android:id="@+id/addExpenseFragment"
+            android:name="com.param.expensesio.fragment.AddExpenseFragment"
+            android:label="Add Expense"
+            tools:layout="@layout/fragment_add_expense">
+
+            <argument
+                android:name="expenseToEdit"
+                app:argType="com.param.expensesio.data.Expense"
+                app:nullable="true" />
+
+            <argument
+                android:name="quickFillCategory"
+                app:argType="string"
+                app:nullable="true" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/settingsFragment"
+            android:name="com.param.expensesio.fragment.SettingsFragment"
+            android:label="Settings">
+
+            <action
+                android:id="@+id/actionSettingsFragmentToManageCategoryFragment"
+                app:destination="@id/manageCategory" />
+
+            <action
+                android:id="@+id/actionSettingsFragmentToBudgetFragment"
+                app:destination="@id/budgetFragment" />
+
+            <action
+                android:id="@+id/actionSettingsFragmentToLoginFragment"
+                app:destination="@id/loginNavGraph"
+                app:popUpTo="@id/nav_graph"
+                app:popUpToInclusive="true" />
+
+        </fragment>
+
+        <fragment
+            android:id="@+id/historyFragment"
+            android:name="com.param.expensesio.fragment.HistoryFragment"
+            android:label="History"
+            tools:layout="@layout/fragment_history" />
+
+        <fragment
+            android:id="@+id/addCategoryFragment"
+            android:name="com.param.expensesio.fragment.AddCategoryFragment"
+            android:label="Add Category"
+            tools:layout="@layout/fragment_add_category" />
+
+        <fragment
+            android:id="@+id/expensesByCategoryFragment"
+            android:name="com.param.expensesio.fragment.ExpensesByCategoryFragment"
+            android:label="{categoryTitleArg}"
+            tools:layout="@layout/fragment_expenses_by_category">
+
+            <argument
+                android:name="categoryTitleArg"
+                app:argType="string" />
+
+            <action
+                android:id="@+id/actionExpenseByCategoryFragmentToAddExpenseFragment"
+                app:destination="@id/addExpenseFragment" />
+
+        </fragment>
+
+        <fragment
+            android:id="@+id/homeFragment"
+            android:name="com.param.expensesio.fragment.HomeFragment"
+            android:label="Home"
+            tools:layout="@layout/fragment_home">
+
+            <action
+                android:id="@+id/actionHomeFragmentToAddExpenseFragment"
+                app:destination="@id/addExpenseFragment" />
+
+            <action
+                android:id="@+id/actionHomeFragmentTooExpensesByCategoryFragment"
+                app:destination="@id/expensesByCategoryFragment" />
+
+            <action
+                android:id="@+id/actionHomeFragmentToLoginFragment"
+                app:destination="@id/loginNavGraph"
+                app:popUpTo="@id/homeFragment"
+                app:popUpToInclusive="true" />
+
+        </fragment>
+
+    </navigation>
+
+</navigation>

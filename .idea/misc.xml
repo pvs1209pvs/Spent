@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable-v24/button_style_email_pass.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-v24/cat_food.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-v24/cat_other.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-v24/ic_baseline_home_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-v24/splash_bg.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/splash_bg.xml" value="0.177" />
+        <entry key="app/src/main/res/layout/category_icon.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/fragment_add_category.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/fragment_add_expense.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/fragment_budget.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/fragment_history.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/item_dropdown_category.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/login_secondary_action.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/picker_category_icon.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/pref_profile.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/toolbar_custom.xml" value="0.32974358974358975" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

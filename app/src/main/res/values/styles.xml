@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryDark">@color/purple_700</item>
+        <item name="colorAccent">@color/teal_200</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="ExpenseryPrimaryCard">
+        <item name="android:layout_marginHorizontal">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="elevation">16dp</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+</resources>
