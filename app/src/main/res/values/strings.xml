@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Expensery</string>
+    <string name="app_name">Expensesio</string>
 
     <!-- Firebase Facebook login -->
-    <string name="facebook_app_id">819925476066726</string>
-    <string name="fb_login_protocol_scheme">fb819925476066726</string>
-    <string name="facebook_client_token">ac0953cfd878b85548c6dbcc5e63a9b7</string>
+    <string name="facebook_app_id">1174078533364693</string>
+    <string name="fb_login_protocol_scheme">fb1174078533364693</string>
+    <string name="facebook_client_token">38d9d48c6024dd2a2872a7fb80e6e731</string>
 
     <!-- Login -->
     <string name="sign_in">Sign In</string>

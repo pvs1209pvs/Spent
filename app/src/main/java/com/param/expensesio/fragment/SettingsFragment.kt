@@ -28,7 +28,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     @SuppressLint("RestrictedApi")
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
-        setPreferencesFromResource(com.param.expensesio.R.xml.root_preferences, rootKey)
+        setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
         // Display name, email and profile pic
         val user = firebaseAuth.currentUser!!

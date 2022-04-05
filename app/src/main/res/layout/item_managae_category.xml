@@ -26,6 +26,7 @@
             android:paddingVertical="4dp"
             android:text="@string/category_title"
             android:textSize="24sp"
+            android:textColor="@color/colorTextPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/categoryIcon"
             app:layout_constraintTop_toTopOf="parent" />

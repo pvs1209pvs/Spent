@@ -6,13 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.param.expensesio.MyViewModel
-import com.param.expensesio.R
-import com.param.expensesio.data.Expense
-import com.param.expensesio.databinding.FragmentAnalysisBinding
-import com.param.expensesio.viewbehavior.ViewBehavior
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
@@ -20,6 +16,11 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.param.expensesio.MyViewModel
+import com.param.expensesio.R
+import com.param.expensesio.data.Expense
+import com.param.expensesio.databinding.FragmentAnalysisBinding
+import com.param.expensesio.viewbehavior.ViewBehavior
 import java.util.*
 
 
@@ -37,7 +38,7 @@ class AnalysisFragment : Fragment() {
         binding = FragmentAnalysisBinding.inflate(inflater, container, false)
 
         // Set no data image
-        binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_4)
+        binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_7)
 
         val monthNameToInt = listOf(
             "January",
@@ -58,7 +59,20 @@ class AnalysisFragment : Fragment() {
 
         viewModel.readAllExpenseFromNow(viewModel.userEmail(), Calendar.getInstance())
             .observe(viewLifecycleOwner) {
-                makePieChart(it)
+
+                ViewBehavior.getNoDataViewVisibility(
+                    it,
+                    binding.noData.noDataImage,
+                    binding.noData.noDataText
+                )
+
+                if (it.isNotEmpty()) {
+                    makePieChart(it)
+                    binding.pieChart.visibility = View.VISIBLE
+                }
+                else{
+                    binding.pieChart.visibility = View.GONE
+                }
             }
 
         binding.monthYearDropDown.setOnItemClickListener { _, _, _, _ ->
@@ -70,7 +84,20 @@ class AnalysisFragment : Fragment() {
 
             viewModel.readAllExpenseFromNow(viewModel.userEmail(), selectPeriod)
                 .observe(viewLifecycleOwner) {
-                    makePieChart(it)
+
+                    ViewBehavior.getNoDataViewVisibility(
+                        it,
+                        binding.noData.noDataImage,
+                        binding.noData.noDataText
+                    )
+
+                    if (it.isNotEmpty()) {
+                        makePieChart(it)
+                        binding.pieChart.visibility = View.VISIBLE
+                    }
+                    else{
+                        binding.pieChart.visibility = View.GONE
+                    }
                 }
 
         }
@@ -94,12 +121,6 @@ class AnalysisFragment : Fragment() {
     }
 
     private fun makePieChart(expenses: List<Expense>) {
-
-        ViewBehavior.getNoDataViewVisibility(
-            expenses,
-            binding.noData.noDataImage,
-            binding.noData.noDataText
-        )
 
         val totalMoneySpend = expenses.sumOf { it.amount.toDouble() }.toFloat()
 
@@ -145,6 +166,7 @@ class AnalysisFragment : Fragment() {
             formSize = 10f
             formToTextSpace = 2f
             isWordWrapEnabled = true
+            textColor = ContextCompat.getColor(requireContext(), R.color.colorTextPrimary)
         }
 
     }

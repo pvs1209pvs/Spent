@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/splash_bg.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/layout_border.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/splash_bg.xml" value="0.177" />
         <entry key="app/src/main/res/layout/category_icon.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/fragment_add_category.xml" value="0.32974358974358975" />
@@ -17,7 +18,16 @@
         <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/fragment_budget.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/fragment_history.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.16822916666666668" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.16822916666666668" />
+        <entry key="app/src/main/res/layout/fragment_manage_category.xml" value="0.16822916666666668" />
+        <entry key="app/src/main/res/layout/history_expandable_header.xml" value="0.16822916666666668" />
+        <entry key="app/src/main/res/layout/item_budget.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_category.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/item_dropdown_category.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/layout/item_expense.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_history.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_managae_category.xml" value="0.1" />
         <entry key="app/src/main/res/layout/login_secondary_action.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/picker_category_icon.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/pref_profile.xml" value="0.32974358974358975" />

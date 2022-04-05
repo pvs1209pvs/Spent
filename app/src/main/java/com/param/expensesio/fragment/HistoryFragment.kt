@@ -33,7 +33,7 @@ class HistoryFragment : Fragment() {
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         // Set no data image
-        binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_3)
+        binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_6)
 
         // Set up recyclerview
         binding.historyRV.apply {
