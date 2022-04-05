@@ -68,8 +68,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             val e = expenseDAO.readExpense(expense.title, expense.ofUser)
 
             if (e == null) {
+                println("new add")
                 expenseDAO.addExpense(expense)
             } else {
+                println("modify")
                 // modifies the already present expense with new expense
                 expenseDAO.updateTotal(e.title, expense.amount + e.amount, userEmail())
             }
@@ -78,11 +80,35 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun updateExpense(expense: Expense){
-        viewModelScope.launch (Dispatchers.IO){
+    fun mergeExpense(editedExpense: Expense) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            // Already existing in database
+            val e = expenseDAO.readExpense(editedExpense.title, editedExpense.ofUser)
+
+            if(e==null){
+                expenseDAO.updateExpense(editedExpense)
+            }
+            else{
+                if(e.id != editedExpense.id){
+                    val newAmount = e.amount+editedExpense.amount
+                    updateExpenseTotal(e.title, newAmount, editedExpense.ofUser)
+                    delExpense(editedExpense)
+                }
+                else{
+                    expenseDAO.updateExpense(editedExpense)
+                }
+            }
+
+        }
+    }
+
+    fun updateExpense(expense: Expense) {
+        viewModelScope.launch(Dispatchers.IO) {
             expenseDAO.updateExpense(expense)
         }
     }
+
 
     fun updateExpenseTotal(title: String, newAmount: Float, ofUser: String) {
         viewModelScope.launch(Dispatchers.IO) {

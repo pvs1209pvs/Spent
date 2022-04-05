@@ -16,7 +16,6 @@ import com.param.expensesio.data.Expense
 import com.param.expensesio.databinding.FragmentAddExpenseBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
 import java.util.*
-import kotlin.math.exp
 
 
 class AddExpenseFragment : Fragment() {
@@ -70,11 +69,26 @@ class AddExpenseFragment : Fragment() {
                         viewModel.addExpense(expense)
                     }
                     else -> { // edit
+                        // updated
                         expenseToEdit.title = title
                         expenseToEdit.amount = amount.toFloat()
                         expenseToEdit.ofCategory = ofCategory
-                        viewModel.updateExpense(expenseToEdit)
+//
+//                        val newExpense = Expense(
+//                            title = title,
+//                            amount = amount.toFloat(),
+//                            ofCategory = ofCategory,
+//                            ofUser = viewModel.userEmail(),
+//                            createdOn = Calendar.getInstance()
+//                        )
+
+                        viewModel.mergeExpense(expenseToEdit)
+
+
+//                        viewModel.mergeExpense(expenseToEdit)
                     }
+                    // gad
+                    // gas
                 }
 
 

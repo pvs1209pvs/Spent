@@ -28,6 +28,9 @@ interface ExpenseDAO {
     @Query("SELECT * FROM expense_table WHERE title = :title AND ofUser = :ofUser")
     fun readExpense(title: String, ofUser: String): Expense?
 
+    @Query("SELECT * FROM expense_table WHERE id = :id AND ofUser = :ofUser")
+    suspend fun readExpense(id:Int, ofUser: String) : Expense?
+
     @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser")
     fun readAllExpense(ofUser: String): LiveData<List<Expense>>
 
