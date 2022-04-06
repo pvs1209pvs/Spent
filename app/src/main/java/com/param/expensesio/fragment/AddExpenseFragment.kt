@@ -49,8 +49,6 @@ class AddExpenseFragment : Fragment() {
         // Add or update Expense
         binding.expenseAddConfirmFAB.setOnClickListener {
 
-            val oldTitle = expenseToEdit?.title ?: ""
-
             val title = binding.expenseTitle.editText!!.text.toString()
             val amount = binding.expenseAmount.editText!!.text.toString()
             val ofCategory = binding.categoryDropDownTitle.text.toString()
@@ -69,26 +67,12 @@ class AddExpenseFragment : Fragment() {
                         viewModel.addExpense(expense)
                     }
                     else -> { // edit
-                        // updated
                         expenseToEdit.title = title
                         expenseToEdit.amount = amount.toFloat()
                         expenseToEdit.ofCategory = ofCategory
-//
-//                        val newExpense = Expense(
-//                            title = title,
-//                            amount = amount.toFloat(),
-//                            ofCategory = ofCategory,
-//                            ofUser = viewModel.userEmail(),
-//                            createdOn = Calendar.getInstance()
-//                        )
-
                         viewModel.mergeExpense(expenseToEdit)
-
-
-//                        viewModel.mergeExpense(expenseToEdit)
                     }
-                    // gad
-                    // gas
+
                 }
 
 

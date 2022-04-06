@@ -2,4 +2,11 @@
 <resources>
     <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorThemeType">#000000</color>
+    <color name="mainBackground">#121212</color>
+
+    <color name="gray_dark">#929292</color>
+
+    <color name="cardColor">#1E1E1E</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="textColorSecondary">@color/gray_dark</color>
 </resources>

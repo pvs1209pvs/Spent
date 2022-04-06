@@ -20,15 +20,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/cat_other" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/titleTextView"
-            android:padding="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:padding="4dp"
             android:text="@string/category_title"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/colorTextPrimary"
+            style="@style/MyPrimaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/categoryIcon"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,8 +38,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="@string/empty_amount"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/colorTextPrimary"
+            style="@style/MyPrimaryText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/titleTextView"
@@ -52,6 +50,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="@string/empty_amount"
+            style="@style/MySecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -65,6 +64,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="@string/budget"
+            style="@style/MySecondaryText"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

@@ -23,7 +23,7 @@
         <entry key="app/src/main/res/layout/fragment_manage_category.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/history_expandable_header.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/item_budget.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_category.xml" value="0.16822916666666668" />
+        <entry key="app/src/main/res/layout/item_category.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_dropdown_category.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/item_expense.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_history.xml" value="0.1" />
