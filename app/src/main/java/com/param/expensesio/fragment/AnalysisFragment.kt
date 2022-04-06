@@ -158,7 +158,7 @@ class AnalysisFragment : Fragment() {
             setEntryLabelTextSize(12f)
             setCenterTextSize(24f)
             isDrawHoleEnabled = true
-            setHoleColor(ContextCompat.getColor(requireContext(), R.color.colorThemeType))
+            setHoleColor(ContextCompat.getColor(requireContext(), R.color.theme_color))
         }
 
         binding.pieChart.legend.apply {
@@ -168,7 +168,7 @@ class AnalysisFragment : Fragment() {
             formSize = 10f
             formToTextSpace = 2f
             isWordWrapEnabled = true
-            textColor = ContextCompat.getColor(requireContext(), R.color.colorTextPrimary)
+            textColor = ContextCompat.getColor(requireContext(), R.color.theme_color)
         }
 
     }

@@ -52,7 +52,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:icon="@drawable/ic_baseline_account_circle_24" app:title="Account">
+    <PreferenceCategory
+        android:icon="@drawable/ic_baseline_account_circle_24"
+        app:title="Account">
 
         <Preference
             app:key="logout"
@@ -74,6 +76,6 @@
 
     </PreferenceCategory>
 
-<!--    https://www.flaticon.com/authors/freepik -->
+    <!--    https://www.flaticon.com/authors/freepik -->
 
 </PreferenceScreen>

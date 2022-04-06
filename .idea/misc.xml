@@ -21,6 +21,7 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/fragment_manage_category.xml" value="0.16822916666666668" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.2111111111111111" />
         <entry key="app/src/main/res/layout/history_expandable_header.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/item_budget.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_category.xml" value="0.1" />

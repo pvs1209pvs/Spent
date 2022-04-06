@@ -23,12 +23,10 @@
 
     <TextView
         android:id="@+id/crntMonth"
-        style="@style/TextAppearance.MaterialComponents.Headline5"
+        style="@style/CustomPrimaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Month Year"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
@@ -41,8 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="26sp"
+        style="@style/CustomPrimaryText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

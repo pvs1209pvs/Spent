@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_dodgeInsetEdges="bottom"
     android:id="@+id/mainHome"
-    android:background="@color/mainBackground"
+    android:background="@color/gray_100"
     tools:context=".fragment.HomeFragment">
 
     <androidx.recyclerview.widget.RecyclerView

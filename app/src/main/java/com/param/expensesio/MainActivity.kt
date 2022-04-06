@@ -8,9 +8,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
@@ -22,7 +20,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.param.expensesio.databinding.ActivityMainBinding
 import com.param.expensesio.fragment.HomeFragmentDirections
-import org.jetbrains.anko.find
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.Theme_Expensery)
         setContentView(binding.root)
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             setTheme(R.style.AppThemeDark) //when dark mode is enabled, we use the dark theme
@@ -99,10 +96,10 @@ class MainActivity : AppCompatActivity() {
 
         when (newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
-                findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
-                findViewById<CoordinatorLayout>(R.id.mainManageCategories).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
-                findViewById<CoordinatorLayout>(R.id.mainBudget).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
-                findViewById<CoordinatorLayout>(R.id.mainAllExpenses).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_light))
+                findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_100))
+                findViewById<CoordinatorLayout>(R.id.mainManageCategories).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_100))
+                findViewById<CoordinatorLayout>(R.id.mainBudget).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_100))
+                findViewById<CoordinatorLayout>(R.id.mainAllExpenses).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_100))
             } // Night mode is not active, we're using the light theme
             Configuration.UI_MODE_NIGHT_YES -> {
                 findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(ContextCompat.getColor(this, R.color.black))

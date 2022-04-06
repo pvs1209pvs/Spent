@@ -18,8 +18,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:text="@string/sign_up"
-        android:textSize="48sp"
-        android:textStyle="bold"
+        style="@style/CustomHeading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,6 +40,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/CustomSecondaryText2"
             android:hint="@string/first_name" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,9 +60,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/CustomSecondaryText2"
             android:hint="@string/last_name" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailTIL"
@@ -83,6 +83,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
+            style="@style/CustomSecondaryText2"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -109,6 +110,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
+            style="@style/CustomSecondaryText2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPassword" />
@@ -151,6 +153,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="2dp"
             android:paddingVertical="16dp"
+            android:textColor="?attr/text_color_primary"
             android:text="@string/account_exists_helper" />
 
         <TextView
@@ -163,6 +166,5 @@
             android:textColor="@color/teal_200"
             android:textStyle="bold" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
