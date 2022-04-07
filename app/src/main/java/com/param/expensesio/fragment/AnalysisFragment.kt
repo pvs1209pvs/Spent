@@ -168,7 +168,7 @@ class AnalysisFragment : Fragment() {
             formSize = 10f
             formToTextSpace = 2f
             isWordWrapEnabled = true
-            textColor = ContextCompat.getColor(requireContext(), R.color.theme_color)
+            textColor = ContextCompat.getColor(requireContext(), R.color.theme_opposite_color)
         }
 
     }
