@@ -29,10 +29,11 @@
             android:hint="@string/enter_budget"
             android:inputType="numberDecimal"
             android:maxWidth="100dp"
-            style="@style/CustomSecondaryText2"
+            style="@style/CustomPrimaryText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints="Budget" />
 
         <ImageView
             android:id="@+id/categoryIcon"

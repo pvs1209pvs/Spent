@@ -175,6 +175,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
+<!--        android:textColor="?attr/text_color_primary"-->
         <TextView
             android:id="@+id/helperText"
             android:layout_width="wrap_content"
@@ -182,7 +183,7 @@
             android:paddingHorizontal="2dp"
             android:paddingVertical="16dp"
             android:text="@string/register_helper"
-            android:textColor="?attr/text_color_primary" />
+          />
 
         <TextView
             android:id="@+id/actionText"

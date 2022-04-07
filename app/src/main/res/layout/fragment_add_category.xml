@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/category_title"
-        android:paddingBottom="8dp"
         app:errorIconDrawable="@drawable/ic_baseline_error_outline_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,8 +31,8 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:hint="@string/category_budget"
-        android:paddingBottom="8dp"
         app:errorIconDrawable="@drawable/ic_baseline_error_outline_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -48,7 +47,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-
         android:id="@+id/confirmAddFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

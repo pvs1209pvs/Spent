@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog.BUTTON_POSITIVE
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.*
@@ -27,8 +29,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+              setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
         // Display name, email and profile pic
         val user = firebaseAuth.currentUser!!

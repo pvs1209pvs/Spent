@@ -7,27 +7,27 @@
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/teal_200</item>
 
-        <item name="main_background">@color/gray_100</item>
+        <!--        <item name="main_background">@color/gray_100</item>-->
 
-        <item name="card_color">@color/white</item>
+        <!--        <item name="card_color">@color/white</item>-->
 
-        <item name="text_color_primary">@color/black</item>
-        <item name="text_color_secondary">@color/gray_250</item>
+        <!--        <item name="text_color_primary">@color/black</item>-->
+        <!--        <item name="text_color_secondary">@color/gray_250</item>-->
     </style>
 
     <!-- Dark theme -->
-    <style name="AppThemeDark" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/purple_700</item>
-        <item name="colorAccent">@color/teal_200</item>
+    <!--    <style name="AppThemeDark" parent="Theme.AppCompat.Light.DarkActionBar">-->
+    <!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--        <item name="colorPrimaryDark">@color/purple_700</item>-->
+    <!--        <item name="colorAccent">@color/teal_200</item>-->
 
-        <item name="main_background">@color/gray_500</item>
+    <!--        <item name="main_background">@color/gray_500</item>-->
 
-        <item name="card_color">@color/gray_400</item>
+    <!--        <item name="card_color">@color/gray_400</item>-->
 
-        <item name="text_color_primary">@color/white</item>
-        <item name="text_color_secondary">@color/gray_250</item>
-    </style>
+    <!--        <item name="text_color_primary">@color/white</item>-->
+    <!--        <item name="text_color_secondary">@color/gray_250</item>-->
+    <!--    </style>-->
 
     <!--     Misc -->
     <style name="CustomCardView" parent="Widget.MaterialComponents.CardView">
@@ -35,27 +35,31 @@
         <item name="android:layout_marginTop">8dp</item>
         <item name="elevation">16dp</item>
         <item name="cornerRadius">16dp</item>
-        <item name="cardBackgroundColor">?attr/card_color</item>
     </style>
 
     <style name="CustomHeading">
-        <item name="android:textColor">?attr/text_color_primary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">48sp</item>
     </style>
 
     <style name="CustomPrimaryText">
-        <item name="android:textColor">?attr/text_color_primary</item>
-        <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
     </style>
 
     <style name="CustomSecondaryText">
-        <item name="android:textColor">?attr/text_color_secondary</item>
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
     </style>
 
     <style name="CustomSecondaryText2">
-        <item name="android:textColor">?attr/text_color_primary</item>
         <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray_250</item>
+    </style>
+
+    <style name="CustomSecondaryText3">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>

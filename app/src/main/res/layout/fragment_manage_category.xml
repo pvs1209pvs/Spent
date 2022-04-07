@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/mainManageCategories"
+    android:background="@color/gray_100"
     tools:context=".fragment.ManageCategoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView

@@ -31,7 +31,6 @@
             android:id="@+id/monthYearDropDown"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            style="@style/CustomSecondaryText2"
             android:hint="Select a month"
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
