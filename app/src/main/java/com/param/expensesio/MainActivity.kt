@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavGraph
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -66,10 +67,29 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+        bottomNavFragmentAnimation()
+
         toggleBottomNavAndToolbarVisibility()
 
     }
 
+    private fun bottomNavFragmentAnimation(){
+        val options = NavOptions.Builder()
+            .setLaunchSingleTop(true)
+            .setEnterAnim(R.anim.from_right)
+            .setExitAnim(R.anim.to_left)
+            .setPopEnterAnim(R.anim.from_left)
+            .setPopExitAnim(R.anim.to_right)
+            .setPopUpTo(navController.graph.startDestination, false)
+            .build()
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            if(navController.currentDestination?.id != it.itemId){
+                navController.navigate(it.itemId, null, options)
+            }
+            true
+        }
+    }
 
     /**
      * Hides BottomNavigationView and Toolbar when on Login Fragment.
