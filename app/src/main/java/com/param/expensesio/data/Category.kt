@@ -6,9 +6,9 @@ import java.io.Serializable
 
 @Entity(tableName = "category_table", primaryKeys = ["ofUser", "title"])
 data class Category(
-    var ofUser : String,
-    var title: String,
+    var ofUser: String = "",
+    var title: String = "",
     var total: Float = 0f,
     var budget: Float = 0f,
-    var icon : Int = R.drawable.cat_other
+    var icon: Int = R.drawable.cat_other
 ) : Serializable

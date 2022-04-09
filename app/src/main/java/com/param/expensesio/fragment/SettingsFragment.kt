@@ -14,8 +14,10 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.firestore.FirebaseFirestore
+import com.param.expensesio.Convertor
 import com.param.expensesio.MyViewModel
 import com.param.expensesio.R
+import com.param.expensesio.data.ExpenseFirestore
 import com.param.expensesio.data.UserCategoryBackup
 import com.param.expensesio.data.UserExpenseBackup
 import com.param.expensesio.ui.ProfileViewPreference
@@ -94,15 +96,26 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 viewModel.backupUserCategories(UserCategoryBackup(it))
             }
 
-            viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner){
-                viewModel.backupUserExpenses(UserExpenseBackup(it))
+            viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner){allExps ->
+                val allExpsFirestore = allExps.map {
+                    ExpenseFirestore(
+                        it.ofUser,
+                        it.id,
+                        it.title,
+                        it.amount,
+                        it.ofCategory,
+                        Convertor().calendarToString(it.createdOn)
+                    )
+                }
+                viewModel.backupUserExpenses(UserExpenseBackup(allExpsFirestore))
             }
             true
         }
 
         // Restore data
         findPreference<Preference>("restore")!!.setOnPreferenceClickListener {
-            viewModel.restoreUserData()
+            viewModel.restoreUserCategories()
+            viewModel.restoreUserExpenses()
             true
         }
 
