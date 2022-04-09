@@ -250,9 +250,11 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             .collection("Categories")
             .document("cats")
             .get()
-            .addOnSuccessListener {
-                if (it.exists()) {
-                    val allCats = it.toObject(UserCategoryBackup::class.java)!!.allCategories
+            .addOnSuccessListener { docSnapshot ->
+                if (docSnapshot.exists()) {
+                    val allCats =
+                        docSnapshot.toObject(UserCategoryBackup::class.java)!!.allCategories
+                    allCats.forEach { addCategory(it) }
                 }
             }
             .addOnFailureListener {
@@ -270,17 +272,18 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             .addOnSuccessListener { docSnapshot ->
                 if (docSnapshot.exists()) {
                     val allExps =
-                        docSnapshot.toObject(UserExpenseBackup::class.java)!!.allExpense.map {
-                            Expense(
-                                it.ofUser,
-                                it.id,
-                                it.title,
-                                it.amount,
-                                it.ofCategory,
-                                Convertor().stringToCalendar(it.createdOn)
-                            )
-                        }
-                    println(allExps)
+                        docSnapshot.toObject(UserExpenseBackup::class.java)!!.allExpense
+                            .map {
+                                Expense(
+                                    it.ofUser,
+                                    it.id,
+                                    it.title,
+                                    it.amount,
+                                    it.ofCategory,
+                                    Convertor().stringToCalendar(it.createdOn)
+                                )
+                            }
+                            .forEach {addExpense(it)}
                 }
             }
             .addOnFailureListener {

@@ -14,10 +14,10 @@ class Convertor {
     @TypeConverter
     fun stringToCalendar(calendar: String): Calendar {
 
-        val splited = calendar.split(",")
+        val splitted = calendar.split(",")
 
         val cal = Calendar.getInstance()
-        cal.set(splited[0].toInt(), splited[1].toInt(), splited[2].toInt())
+        cal.set(splitted[0].toInt(), splitted[1].toInt(), splitted[2].toInt())
 
         return cal
     }
