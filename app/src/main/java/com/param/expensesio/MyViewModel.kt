@@ -19,6 +19,12 @@ import java.util.*
 
 class MyViewModel(application: Application) : AndroidViewModel(application) {
 
+    val FIRESTORE_DB = "UserBackup"
+    val CATEGORY_COLLECTION = "Categories"
+    val EXPENSE_COLLECTION = "Expenses"
+    val CATEGORY_DOC = "cats"
+    val EXPENSE_DOC = "exps"
+
     private val db = LocalDB.getDatabase(application)
     private val categoryDAO = db.categoryDAO()
     private val expenseDAO = db.expenseDAO()
@@ -27,6 +33,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     var selectedIcon = MutableLiveData(R.drawable.cat_other)
 
     private val firestore = FirebaseFirestore.getInstance()
+
 
     // Category
 
@@ -109,17 +116,14 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
-    fun updateExpenseTotal(title: String, newAmount: Float, ofUser: String) {
+    private fun updateExpenseTotal(title: String, newAmount: Float, ofUser: String) {
         viewModelScope.launch(Dispatchers.IO) {
             expenseDAO.updateTotal(title, newAmount, ofUser)
         }
     }
 
     fun delExpense(expense: Expense) {
-        viewModelScope.launch(Dispatchers.IO) {
-            expenseDAO.delExpense(expense)
-        }
+        viewModelScope.launch(Dispatchers.IO) { expenseDAO.delExpense(expense) }
     }
 
     fun delExpenseByTitle(title: String) {
@@ -223,10 +227,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun backupUserCategories(categories: UserCategoryBackup) {
         firestore
-            .collection("UsersBack")
+            .collection(FIRESTORE_DB)
             .document(userEmail())
-            .collection("Categories")
-            .document("cats")
+            .collection(CATEGORY_COLLECTION)
+            .document(CATEGORY_DOC)
             .set(categories)
             .addOnSuccessListener { Log.d("ViewModel", "user category back up success") }
             .addOnFailureListener { Log.d("ViewModel", "user category back up failure") }
@@ -234,10 +238,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun backupUserExpenses(userExpenseBackup: UserExpenseBackup) {
         firestore
-            .collection("UsersBack")
+            .collection(FIRESTORE_DB)
             .document(userEmail())
-            .collection("Expenses")
-            .document("exps")
+            .collection(EXPENSE_COLLECTION)
+            .document(EXPENSE_DOC)
             .set(userExpenseBackup)
             .addOnSuccessListener { Log.d("ViewModel", "user expense back up success") }
             .addOnFailureListener { Log.d("ViewModel", "user expense back up failure") }
@@ -245,10 +249,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun restoreUserCategories() {
         firestore
-            .collection("UsersBack")
+            .collection(FIRESTORE_DB)
             .document(userEmail())
-            .collection("Categories")
-            .document("cats")
+            .collection(CATEGORY_COLLECTION)
+            .document(CATEGORY_DOC)
             .get()
             .addOnSuccessListener { docSnapshot ->
                 if (docSnapshot.exists()) {
@@ -264,10 +268,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun restoreUserExpenses() {
         firestore
-            .collection("UsersBack")
+            .collection(FIRESTORE_DB)
             .document(userEmail())
-            .collection("Expenses")
-            .document("exps")
+            .collection(EXPENSE_COLLECTION)
+            .document(EXPENSE_DOC)
             .get()
             .addOnSuccessListener { docSnapshot ->
                 if (docSnapshot.exists()) {
@@ -283,24 +287,11 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                                     Convertor().stringToCalendar(it.createdOn)
                                 )
                             }
-                            .forEach {addExpense(it)}
+                            .forEach { addExpense(it) }
                 }
             }
             .addOnFailureListener {
                 Log.d("ViewModel.FirestoreRestore.Expenses", it.stackTraceToString())
-            }
-    }
-
-    fun restoreUserData() {
-        firestore
-            .collection("UsersBack")
-            .document("param")
-            .get()
-            .addOnSuccessListener {
-                println("got the data ${it.data}")
-            }
-            .addOnFailureListener {
-                Log.d("ViewModel", "user data restore failed")
             }
     }
 
@@ -320,7 +311,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    fun isPassValid(password: CharSequence?) =
-        !password.isNullOrEmpty() && password.isNotBlank()
+    fun isPassValid(password: CharSequence?) = !password.isNullOrEmpty() && password.isNotBlank()
 
 }
