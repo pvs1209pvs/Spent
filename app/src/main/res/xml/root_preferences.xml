@@ -17,13 +17,6 @@
             app:key="budgets"
             app:title="Budgets" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:icon="@drawable/ic_baseline_attach_money_24"
-        app:key="currencyCategory"
-        app:title="Currency">
-
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="useLocalCurrency"
