@@ -1,15 +1,15 @@
 package com.param.expensesio
 
 import android.app.Application
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
-import com.param.expensesio.data.Category
-import com.param.expensesio.data.CategoryIcon
-import com.param.expensesio.data.Expense
+import com.google.firebase.firestore.FirebaseFirestore
+import com.param.expensesio.data.*
 import com.param.expensesio.db.LocalDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +25,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     private val categoryIconDAO = db.categoryIconDAO()
 
     var selectedIcon = MutableLiveData(R.drawable.cat_other)
+
+    private val firestore = FirebaseFirestore.getInstance()
 
     // Category
 
@@ -86,16 +88,14 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             // Already existing in database
             val e = expenseDAO.readExpense(editedExpense.title, editedExpense.ofUser)
 
-            if(e==null){
+            if (e == null) {
                 expenseDAO.updateExpense(editedExpense)
-            }
-            else{
-                if(e.id != editedExpense.id){
-                    val newAmount = e.amount+editedExpense.amount
+            } else {
+                if (e.id != editedExpense.id) {
+                    val newAmount = e.amount + editedExpense.amount
                     updateExpenseTotal(e.title, newAmount, editedExpense.ofUser)
                     delExpense(editedExpense)
-                }
-                else{
+                } else {
                     expenseDAO.updateExpense(editedExpense)
                 }
             }
@@ -212,16 +212,53 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun getSortOrder() = PreferenceManager.getDefaultSharedPreferences(getApplication())
         .getString("sortHistoryBy", "-1")
 
-    // Misc
-
-    fun monthName(monthId: Int) = DateFormatSymbols().months[monthId]
-
-    // Firebase
+    // FirebaseAuth
 
     fun userEmail(): String {
         val email = FirebaseAuth.getInstance().currentUser?.email
         return email ?: ""
     }
+
+    // FirebaseFirestore
+
+    fun backupUserCategories(categories: UserCategoryBackup) {
+        firestore
+            .collection("UsersBack")
+            .document(userEmail())
+            .collection("Categories")
+            .document()
+            .set(categories)
+            .addOnSuccessListener { Log.d("ViewModel", "user category back up success") }
+            .addOnFailureListener { Log.d("ViewModel", "user category back up failure") }
+    }
+
+    fun backupUserExpenses(userExpenseBackup: UserExpenseBackup) {
+        firestore
+            .collection("UsersBack")
+            .document(userEmail())
+            .collection("Expenses")
+            .document()
+            .set(userExpenseBackup)
+            .addOnSuccessListener { Log.d("ViewModel", "user expense back up success") }
+            .addOnFailureListener { Log.d("ViewModel", "user expense back up failure") }
+    }
+
+    fun restoreUserData() {
+        firestore
+            .collection("UsersBack")
+            .document("param")
+            .get()
+            .addOnSuccessListener {
+                println("got the data ${it.data}")
+            }
+            .addOnFailureListener {
+                Log.d("ViewModel", "user data restore failed")
+            }
+    }
+
+    // Misc
+
+    fun monthName(monthId: Int) = DateFormatSymbols().months[monthId]
 
     // UI input checks
 

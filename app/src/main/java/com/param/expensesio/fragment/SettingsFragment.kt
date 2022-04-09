@@ -4,20 +4,21 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog.BUTTON_POSITIVE
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.*
-import com.param.expensesio.MyViewModel
-import com.param.expensesio.ui.ProfileViewPreference
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
+import com.google.firebase.firestore.FirebaseFirestore
+import com.param.expensesio.MyViewModel
 import com.param.expensesio.R
+import com.param.expensesio.data.UserCategoryBackup
+import com.param.expensesio.data.UserExpenseBackup
+import com.param.expensesio.ui.ProfileViewPreference
 import java.util.*
 
 
@@ -26,10 +27,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val viewModel: MyViewModel by viewModels()
 
     private val firebaseAuth = FirebaseAuth.getInstance()
+    private val firestore = FirebaseFirestore.getInstance()
 
     @SuppressLint("RestrictedApi")
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-              setPreferencesFromResource(R.xml.root_preferences, rootKey)
+        setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
         // Display name, email and profile pic
         val user = firebaseAuth.currentUser!!
@@ -83,6 +85,24 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val sortHistoryBy = findPreference<ListPreference>("sortHistoryBy")!!
         sortHistoryBy.setOnPreferenceChangeListener { _, newValue ->
             sortHistoryBy.value = newValue.toString()
+            true
+        }
+
+        // Backup Data
+        findPreference<Preference>("backup")!!.setOnPreferenceClickListener {
+            viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner) {
+                viewModel.backupUserCategories(UserCategoryBackup(it))
+            }
+
+            viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner){
+                viewModel.backupUserExpenses(UserExpenseBackup(it))
+            }
+            true
+        }
+
+        // Restore data
+        findPreference<Preference>("restore")!!.setOnPreferenceClickListener {
+            viewModel.restoreUserData()
             true
         }
 

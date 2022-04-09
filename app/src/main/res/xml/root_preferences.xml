@@ -53,6 +53,20 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:icon="@drawable/ic_baseline_backup_24"
+        app:title="Data">
+
+        <Preference
+            app:key="backup"
+            app:title="Backup" />
+
+        <Preference
+            app:key="restore"
+            app:title="Restore" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:icon="@drawable/ic_baseline_account_circle_24"
         app:title="Account">
 
