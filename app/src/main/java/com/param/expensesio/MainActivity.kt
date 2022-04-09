@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun bottomNavFragmentAnimation(){
+    private fun bottomNavFragmentAnimation() {
         val options = NavOptions.Builder()
             .setLaunchSingleTop(true)
             .setEnterAnim(R.anim.from_right)
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
-            if(navController.currentDestination?.id != it.itemId){
+            if (navController.currentDestination?.id != it.itemId) {
                 navController.navigate(it.itemId, null, options)
             }
             true
@@ -117,16 +117,44 @@ class MainActivity : AppCompatActivity() {
 
         when (newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
-                findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_100))
-                findViewById<CoordinatorLayout>(R.id.mainManageCategories).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_100))
-                findViewById<CoordinatorLayout>(R.id.mainBudget).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_100))
-                findViewById<CoordinatorLayout>(R.id.mainAllExpenses).setBackgroundColor(ContextCompat.getColor(this, R.color.gray_100))
+                findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.gray_100
+                    )
+                )
+                findViewById<CoordinatorLayout>(R.id.mainManageCategories).setBackgroundColor(
+                    ContextCompat.getColor(this, R.color.gray_100)
+                )
+                findViewById<CoordinatorLayout>(R.id.mainBudget).setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.gray_100
+                    )
+                )
+                findViewById<CoordinatorLayout>(R.id.mainAllExpenses).setBackgroundColor(
+                    ContextCompat.getColor(this, R.color.gray_100)
+                )
             } // Night mode is not active, we're using the light theme
             Configuration.UI_MODE_NIGHT_YES -> {
-                findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(ContextCompat.getColor(this, R.color.black))
-                findViewById<CoordinatorLayout>(R.id.mainManageCategories).setBackgroundColor(ContextCompat.getColor(this, R.color.black))
-                findViewById<CoordinatorLayout>(R.id.mainBudget).setBackgroundColor(ContextCompat.getColor(this, R.color.black))
-                findViewById<CoordinatorLayout>(R.id.mainAllExpenses).setBackgroundColor(ContextCompat.getColor(this, R.color.black))
+                findViewById<CoordinatorLayout>(R.id.mainHome).setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.black
+                    )
+                )
+                findViewById<CoordinatorLayout>(R.id.mainManageCategories).setBackgroundColor(
+                    ContextCompat.getColor(this, R.color.black)
+                )
+                findViewById<CoordinatorLayout>(R.id.mainBudget).setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.black
+                    )
+                )
+                findViewById<CoordinatorLayout>(R.id.mainAllExpenses).setBackgroundColor(
+                    ContextCompat.getColor(this, R.color.black)
+                )
             } // Night mode is active, we're using dark theme
         }
 
@@ -159,7 +187,7 @@ class MainActivity : AppCompatActivity() {
             binding.mainLayout,
             msg,
             Snackbar.LENGTH_SHORT
-        ).show()
+        ).setAnchorView(binding.bottomNavigationView).show()
     }
 
     @SuppressLint("RestrictedApi")

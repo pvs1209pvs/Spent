@@ -19,11 +19,11 @@ import java.util.*
 
 class MyViewModel(application: Application) : AndroidViewModel(application) {
 
-    val FIRESTORE_DB = "UserBackup"
-    val CATEGORY_COLLECTION = "Categories"
-    val EXPENSE_COLLECTION = "Expenses"
-    val CATEGORY_DOC = "cats"
-    val EXPENSE_DOC = "exps"
+    private val FIRESTORE_DB = "UserBackup"
+    private val CATEGORY_COLLECTION = "Categories"
+    private val EXPENSE_COLLECTION = "Expenses"
+    private val CATEGORY_DOC = "cats"
+    private val EXPENSE_DOC = "exps"
 
     private val db = LocalDB.getDatabase(application)
     private val categoryDAO = db.categoryDAO()
@@ -34,6 +34,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     private val firestore = FirebaseFirestore.getInstance()
 
+    val backupStat = MutableLiveData(0)
+    val restoreStat = MutableLiveData(0)
 
     // Category
 
@@ -226,25 +228,42 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     // FirebaseFirestore
 
     fun backupUserCategories(categories: UserCategoryBackup) {
+
         firestore
             .collection(FIRESTORE_DB)
             .document(userEmail())
             .collection(CATEGORY_COLLECTION)
             .document(CATEGORY_DOC)
             .set(categories)
-            .addOnSuccessListener { Log.d("ViewModel", "user category back up success") }
-            .addOnFailureListener { Log.d("ViewModel", "user category back up failure") }
+            .addOnSuccessListener {
+                Log.d("ViewModel", "user category back up success")
+                backupStat.value = backupStat.value!! + 1
+            }
+            .addOnFailureListener {
+                Log.d("ViewModel", "user category back up failure")
+                backupStat.value = backupStat.value!! - 2
+            }
+
     }
 
     fun backupUserExpenses(userExpenseBackup: UserExpenseBackup) {
+
         firestore
             .collection(FIRESTORE_DB)
             .document(userEmail())
             .collection(EXPENSE_COLLECTION)
             .document(EXPENSE_DOC)
             .set(userExpenseBackup)
-            .addOnSuccessListener { Log.d("ViewModel", "user expense back up success") }
-            .addOnFailureListener { Log.d("ViewModel", "user expense back up failure") }
+            .addOnSuccessListener {
+                Log.d("ViewModel", "user expense back up success")
+                backupStat.value = backupStat.value!! + 1
+
+            }
+            .addOnFailureListener {
+                Log.d("ViewModel", "user expense back up failure")
+                backupStat.value = backupStat.value!! - 2
+            }
+
     }
 
     fun restoreUserCategories() {
@@ -259,10 +278,12 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                     val allCats =
                         docSnapshot.toObject(UserCategoryBackup::class.java)!!.allCategories
                     allCats.forEach { addCategory(it) }
+                    restoreStat.value = restoreStat.value!! + 1
                 }
             }
             .addOnFailureListener {
                 Log.d("ViewModel.FirestoreRestore", it.stackTraceToString())
+                restoreStat.value = restoreStat.value!! - 2
             }
     }
 
@@ -275,23 +296,24 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             .get()
             .addOnSuccessListener { docSnapshot ->
                 if (docSnapshot.exists()) {
-                    val allExps =
-                        docSnapshot.toObject(UserExpenseBackup::class.java)!!.allExpense
-                            .map {
-                                Expense(
-                                    it.ofUser,
-                                    it.id,
-                                    it.title,
-                                    it.amount,
-                                    it.ofCategory,
-                                    Convertor().stringToCalendar(it.createdOn)
-                                )
-                            }
-                            .forEach { addExpense(it) }
+                    docSnapshot.toObject(UserExpenseBackup::class.java)!!.allExpense
+                        .map {
+                            Expense(
+                                it.ofUser,
+                                it.id,
+                                it.title,
+                                it.amount,
+                                it.ofCategory,
+                                Convertor().stringToCalendar(it.createdOn)
+                            )
+                        }
+                        .forEach { addExpense(it) }
+                    restoreStat.value = restoreStat.value!! + 1
                 }
             }
             .addOnFailureListener {
                 Log.d("ViewModel.FirestoreRestore.Expenses", it.stackTraceToString())
+                restoreStat.value = restoreStat.value!! - 2
             }
     }
 
