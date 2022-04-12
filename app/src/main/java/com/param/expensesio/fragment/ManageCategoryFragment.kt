@@ -64,18 +64,7 @@ class ManageCategoryFragment : Fragment() {
             Navigation.findNavController(binding.root).navigate(action)
         }
 
-
-        // Popup-menu delete callback
-        adapterManageCategory.setDelOnClickListener(object :
-            AdapterManageCategory.DelOnClickListener {
-
-            override fun delListener(category: Category) {
-                viewModel.deleteCategory(category.title, viewModel.userEmail())
-                viewModel.moveExpensesToMiscCategory(category.title)
-            }
-
-        })
-
+        // Edit manage category callback
         adapterManageCategory.setEditOnClickListener(object :
             AdapterManageCategory.EditOnClickListener {
             override fun editListener(category: Category) {

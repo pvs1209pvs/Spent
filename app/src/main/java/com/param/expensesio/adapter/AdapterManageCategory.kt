@@ -20,32 +20,8 @@ class AdapterManageCategory : RecyclerView.Adapter<AdapterManageCategory.MyViewH
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.categoryVM.setOnClickListener {
-
-                PopupMenu(it.context, it).apply {
-                    inflate(R.menu.pop_up_del)
-
-                    setOnMenuItemClickListener { menuItem ->
-
-                        when (menuItem.itemId) {
-
-                            R.id.delItem -> {
-                                delOnClick.delListener(list[adapterPosition])
-                                true
-                            }
-
-                            R.id.editManageCategory -> {
-                                editOnClick.editListener(list[adapterPosition])
-                                true
-                            }
-
-                            else -> false
-
-                        }
-                    }
-                    show()
-                }
-
+            binding.itemManageCategory.setOnClickListener {
+                editOnClick.editListener(list[adapterPosition])
             }
         }
 
@@ -83,18 +59,6 @@ class AdapterManageCategory : RecyclerView.Adapter<AdapterManageCategory.MyViewH
         list.addAll(newList)
         diffResult.dispatchUpdatesTo(this)
         rv.invalidateItemDecorations()
-    }
-
-    // Del callback
-
-    lateinit var delOnClick: DelOnClickListener
-
-    interface DelOnClickListener {
-        fun delListener(category: Category)
-    }
-
-    fun setDelOnClickListener(listener: DelOnClickListener) {
-        this.delOnClick = listener
     }
 
     // Edit callback

@@ -28,13 +28,16 @@
         <entry key="app/src/main/res/layout/item_dropdown_category.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/item_expense.xml" value="0.33489583333333334" />
         <entry key="app/src/main/res/layout/item_history.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_managae_category.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_managae_category.xml" value="0.33489583333333334" />
         <entry key="app/src/main/res/layout/login_secondary_action.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/picker_category_icon.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/pref_profile.xml" value="0.32974358974358975" />
         <entry key="app/src/main/res/layout/toolbar_custom.xml" value="0.32974358974358975" />
+        <entry key="app/src/main/res/menu/menu_all_expenses.xml" value="0.16822916666666668" />
+        <entry key="app/src/main/res/menu/menu_home_fragment.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/menu/menu_item_expense.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/menu/pop_up_del.xml" value="0.33489583333333334" />
+        <entry key="app/src/main/res/menu/pop_up_expense.xml" value="0.33489583333333334" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.33489583333333334" />
       </map>
     </option>

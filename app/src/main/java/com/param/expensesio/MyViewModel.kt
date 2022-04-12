@@ -65,14 +65,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun orderTotalLowestFirst(ofUser: String) = categoryDAO.orderTotalLowestFirst(ofUser)
-
-    fun orderTotalHighestFirst(ofUser: String) = categoryDAO.orderTotalHighestFirst(ofUser)
-
-    fun orderBudgetLowestFirst(ofUser: String) = categoryDAO.orderBudgetLowestFirst(ofUser)
-
-    fun orderBudgetHighestFirst(ofUser: String) = categoryDAO.orderBudgetHighestFirst(ofUser)
-
     // Expense
 
     fun addExpense(expense: Expense) {

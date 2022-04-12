@@ -32,7 +32,6 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(false)
         auth = FirebaseAuth.getInstance()
     }
 
@@ -101,44 +100,6 @@ class HomeFragment : Fragment() {
 
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_home_fragment, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-
-            R.id.lowestTotalFirst -> {
-
-            }
-//            viewModel.orderTotalLowestFirst(viewModel.userEmail())
-//                .observe(viewLifecycleOwner) {
-//                    adapterHome.setList(it)
-//                }
-
-            R.id.highestTotalFirst -> viewModel.orderTotalHighestFirst(viewModel.userEmail())
-                .observe(viewLifecycleOwner) {
-                    adapterHome.setList(it)
-                }
-
-            R.id.lowestBudgetFirst -> viewModel.orderBudgetLowestFirst(viewModel.userEmail())
-                .observe(viewLifecycleOwner) {
-                    adapterHome.setList(it)
-                }
-
-            R.id.highestBudgetFirst -> viewModel.orderBudgetHighestFirst(viewModel.userEmail())
-                .observe(viewLifecycleOwner) {
-                    adapterHome.setList(it)
-                }
-
-        }
-
-        return super.onOptionsItemSelected(item)
-
-    }
 
     @SuppressLint("RestrictedApi")
     fun BS() = findNavController().backStack

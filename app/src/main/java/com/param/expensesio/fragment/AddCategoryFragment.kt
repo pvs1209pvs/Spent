@@ -2,9 +2,7 @@ package com.param.expensesio.fragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,6 +29,10 @@ class AddCategoryFragment : Fragment() {
     private val args: AddCategoryFragmentArgs by navArgs()
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(args.categoryToEdit != null)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -179,6 +181,28 @@ class AddCategoryFragment : Fragment() {
     private fun setCategoryDisplayIcon(iconId: Int) {
         binding.categoryIcon.setImageResource(iconId)
         binding.categoryIcon.tag = iconId
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.pop_up_del, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+
+            R.id.delManageCategory -> {
+                val deletedCategoryTitle = args.categoryToEdit!!.title
+                viewModel.deleteCategory(deletedCategoryTitle, viewModel.userEmail())
+                viewModel.moveExpensesToMiscCategory(deletedCategoryTitle)
+                findNavController().popBackStack()
+            }
+
+        }
+
+        return super.onOptionsItemSelected(item)
+
     }
 
 }
