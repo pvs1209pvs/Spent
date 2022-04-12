@@ -30,10 +30,7 @@ class AddCategoryFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
     private val args: AddCategoryFragmentArgs by navArgs()
 
-    private fun setCategoryDisplayIcon(iconId: Int) {
-        binding.categoryIcon.setImageResource(iconId)
-        binding.categoryIcon.tag = iconId
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -115,7 +112,6 @@ class AddCategoryFragment : Fragment() {
 
     }
 
-
     private fun selectIconDialogBox() {
 
         val list = listOf(
@@ -180,5 +176,9 @@ class AddCategoryFragment : Fragment() {
 
     }
 
+    private fun setCategoryDisplayIcon(iconId: Int) {
+        binding.categoryIcon.setImageResource(iconId)
+        binding.categoryIcon.tag = iconId
+    }
 
 }

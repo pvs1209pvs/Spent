@@ -19,32 +19,11 @@ class AdapterExpenses(private val myViewModel: MyViewModel) :
     private lateinit var rv: RecyclerView
 
 
-    inner class MyViewHolder(val binding: ItemExpenseBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.expenseVM.setOnClickListener {
-
-                PopupMenu(it.context, it).apply {
-                    inflate(R.menu.pop_up_expense)
-
-                    setOnMenuItemClickListener { menuItem ->
-                        when (menuItem.itemId) {
-                            R.id.editExpense -> {
-                                popUpMenuListener.editListener(list[adapterPosition])
-                                true
-                            }
-                            R.id.delExpense -> {
-                                popUpMenuListener.delListener(list[adapterPosition])
-                                println("WTF")
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-                    show()
-                }
-
+            binding.itemExpenseCard.setOnClickListener {
+                popUpMenuListener.editListener(list[adapterPosition])
             }
         }
 
@@ -105,7 +84,6 @@ class AdapterExpenses(private val myViewModel: MyViewModel) :
     lateinit var popUpMenuListener: PopUpMenuListener
 
     interface PopUpMenuListener {
-        fun delListener(expense: Expense)
         fun editListener(expense: Expense)
     }
 

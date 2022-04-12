@@ -83,20 +83,6 @@ class ExpensesByCategoryFragment : Fragment() {
         // Callback for popup menu
         adapterExpenses.setDelOnClickListener(object : AdapterExpenses.PopUpMenuListener {
 
-            override fun delListener(expense: Expense) {
-
-                viewModel.delExpense(expense)
-
-                // Delete Misc category is it doesn't contain any expenses
-                viewModel.readAllExpense("Misc", Calendar.getInstance(), viewModel.userEmail())
-                    .observe(viewLifecycleOwner) {
-                        if (it.isEmpty()) {
-                            viewModel.deleteCategory("Misc", viewModel.userEmail())
-                        }
-                    }
-
-            }
-
             override fun editListener(expense: Expense) {
                 val action =
                     ExpensesByCategoryFragmentDirections.actionExpenseByCategoryFragmentToAddExpenseFragment(

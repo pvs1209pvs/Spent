@@ -1,9 +1,7 @@
 package com.param.expensesio.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -23,6 +21,12 @@ class AddExpenseFragment : Fragment() {
     private lateinit var binding: FragmentAddExpenseBinding
     private val viewModel: MyViewModel by viewModels()
     private val args: AddExpenseFragmentArgs by navArgs()
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(args.expenseToEdit != null)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,7 +79,6 @@ class AddExpenseFragment : Fragment() {
 
                 }
 
-
                 findNavController().popBackStack()
 
             } else {
@@ -118,6 +121,25 @@ class AddExpenseFragment : Fragment() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_item_expense, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+
+            R.id.delExpenseNew -> {
+                viewModel.delExpense(args.expenseToEdit!!)
+                findNavController().popBackStack()
+            }
+
+        }
+
+        return super.onOptionsItemSelected(item)
+
+    }
 
     override fun onResume() {
         super.onResume()

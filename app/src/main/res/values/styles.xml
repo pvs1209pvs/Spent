@@ -6,28 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/teal_200</item>
-
-        <!--        <item name="main_background">@color/gray_100</item>-->
-
-        <!--        <item name="card_color">@color/white</item>-->
-
-        <!--        <item name="text_color_primary">@color/black</item>-->
-        <!--        <item name="text_color_secondary">@color/gray_250</item>-->
     </style>
-
-    <!-- Dark theme -->
-    <!--    <style name="AppThemeDark" parent="Theme.AppCompat.Light.DarkActionBar">-->
-    <!--        <item name="colorPrimary">@color/colorPrimary</item>-->
-    <!--        <item name="colorPrimaryDark">@color/purple_700</item>-->
-    <!--        <item name="colorAccent">@color/teal_200</item>-->
-
-    <!--        <item name="main_background">@color/gray_500</item>-->
-
-    <!--        <item name="card_color">@color/gray_400</item>-->
-
-    <!--        <item name="text_color_primary">@color/white</item>-->
-    <!--        <item name="text_color_secondary">@color/gray_250</item>-->
-    <!--    </style>-->
 
     <!--     Misc -->
     <style name="CustomCardView" parent="Widget.MaterialComponents.CardView">
