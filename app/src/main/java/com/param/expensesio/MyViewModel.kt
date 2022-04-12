@@ -30,8 +30,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     private val expenseDAO = db.expenseDAO()
     private val categoryIconDAO = db.categoryIconDAO()
 
-    var selectedIcon = MutableLiveData(R.drawable.cat_other)
-
     private val firestore = FirebaseFirestore.getInstance()
 
     val backupStat = MutableLiveData(0)
@@ -42,6 +40,12 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun addCategory(category: Category) {
         viewModelScope.launch(Dispatchers.IO) {
             categoryDAO.addCategory(category)
+        }
+    }
+
+    fun updateCategory(category: Category) {
+        viewModelScope.launch(Dispatchers.IO) {
+            categoryDAO.updateCategory(category)
         }
     }
 

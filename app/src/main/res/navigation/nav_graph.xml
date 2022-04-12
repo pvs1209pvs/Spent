@@ -59,7 +59,12 @@
         android:id="@+id/addCategoryFragment"
         android:name="com.param.expensesio.fragment.AddCategoryFragment"
         android:label="Add Category"
-        tools:layout="@layout/fragment_add_category" />
+        tools:layout="@layout/fragment_add_category" >
+        <argument
+            android:name="categoryToEdit"
+            app:argType="com.param.expensesio.data.Category"
+            app:nullable="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/addExpenseFragment"

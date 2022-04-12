@@ -13,9 +13,9 @@
             app:key="categories"
             app:title="Categories" />
 
-        <Preference
-            app:key="budgets"
-            app:title="Budgets" />
+<!--        <Preference-->
+<!--            app:key="budgets"-->
+<!--            app:title="Budgets" />-->
 
         <SwitchPreferenceCompat
             app:defaultValue="true"

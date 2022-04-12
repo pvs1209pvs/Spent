@@ -2,19 +2,24 @@ package com.param.expensesio.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.param.expensesio.MyViewModel
 import com.param.expensesio.databinding.CategoryIconBinding
 import com.param.expensesio.diffutils.CategoryIconDiffUtil
 
-class AdapterCategoryIconPicker(val vm : MyViewModel, val dialog: AlertDialog) : RecyclerView.Adapter<AdapterCategoryIconPicker.MyViewHolder>() {
+class AdapterCategoryIconPicker :
+    RecyclerView.Adapter<AdapterCategoryIconPicker.MyViewHolder>() {
 
-    private var list = mutableListOf<Int>()
+    private val list = mutableListOf<Int>()
 
     inner class MyViewHolder(val binding: CategoryIconBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.categoryIconIV.setOnClickListener {
+                categoryIconPickerListener.selectIcon(list[adapterPosition])
+            }
+        }
 
     }
 
@@ -29,13 +34,10 @@ class AdapterCategoryIconPicker(val vm : MyViewModel, val dialog: AlertDialog) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.binding.categoryIconIV.setImageResource(list[position])
-        holder.binding.categoryIconIV.setOnClickListener {
-            vm.selectedIcon.value = list[position]
-            dialog.dismiss()
-        }
     }
 
     override fun getItemCount() = list.size
+
     fun setList(newList: List<Int>) {
         val diffUtil = CategoryIconDiffUtil(list, newList)
         val diffResult = DiffUtil.calculateDiff(diffUtil)
@@ -43,4 +45,15 @@ class AdapterCategoryIconPicker(val vm : MyViewModel, val dialog: AlertDialog) :
         list.addAll(newList)
         diffResult.dispatchUpdatesTo(this)
     }
+
+    lateinit var categoryIconPickerListener: CategoryIconPickerListener
+
+    interface CategoryIconPickerListener {
+        fun selectIcon(iconID: Int)
+    }
+
+    fun setCategoryIconPickerSelector(listener: CategoryIconPickerListener) {
+        this.categoryIconPickerListener = listener
+    }
+
 }

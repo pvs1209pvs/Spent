@@ -64,12 +64,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
 
         // Budgets
-        findPreference<Preference>("budgets")!!.onPreferenceClickListener =
-            Preference.OnPreferenceClickListener {
-                val action = SettingsFragmentDirections.actionSettingsFragmentToBudgetFragment()
-                findNavController().navigate(action)
-                true
-            }
+//        findPreference<Preference>("budgets")!!.onPreferenceClickListener =
+//            Preference.OnPreferenceClickListener {
+//                val action = SettingsFragmentDirections.actionSettingsFragmentToBudgetFragment()
+//                findNavController().navigate(action)
+//                true
+//            }
 
         // Currency
         val useLocalCurrency = findPreference<SwitchPreferenceCompat>("useLocalCurrency")!!

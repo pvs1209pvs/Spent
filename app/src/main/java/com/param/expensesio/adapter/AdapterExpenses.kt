@@ -100,6 +100,7 @@ class AdapterExpenses(private val myViewModel: MyViewModel) :
         rv.invalidateItemDecorations()
     }
 
+    // Call back
 
     lateinit var popUpMenuListener: PopUpMenuListener
 

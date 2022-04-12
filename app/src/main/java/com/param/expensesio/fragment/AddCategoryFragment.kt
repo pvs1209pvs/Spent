@@ -2,15 +2,17 @@ package com.param.expensesio.fragment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.param.expensesio.MyViewModel
 import com.param.expensesio.R
 import com.param.expensesio.adapter.AdapterCategoryIconPicker
@@ -18,21 +20,38 @@ import com.param.expensesio.data.Category
 import com.param.expensesio.data.CategoryIcon
 import com.param.expensesio.databinding.FragmentAddCategoryBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.item_category.*
 
+// 2131230841
 
 class AddCategoryFragment : Fragment() {
 
     private lateinit var binding: FragmentAddCategoryBinding
     private val viewModel: MyViewModel by viewModels()
+    private val args: AddCategoryFragmentArgs by navArgs()
 
+    private fun setCategoryDisplayIcon(iconId: Int) {
+        binding.categoryIcon.setImageResource(iconId)
+        binding.categoryIcon.tag = iconId
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = FragmentAddCategoryBinding.inflate(inflater, container, false)
+
+        val categoryToEdit = args.categoryToEdit
+
+        if (categoryToEdit != null) {
+            binding.categoryIcon.setImageResource(categoryToEdit.icon) // Set image
+            binding.categoryIcon.tag = categoryToEdit.icon // Set image tag
+
+            binding.catTitle.isEnabled = false
+            binding.catTitle.editText!!.setText(categoryToEdit.title)
+            binding.catBudget.editText!!.setText(categoryToEdit.budget.toString())
+        }
 
         // Confirm add Category
         binding.confirmAddFAB.setOnClickListener {
@@ -41,16 +60,31 @@ class AddCategoryFragment : Fragment() {
             val budget = binding.catBudget.editText!!.text.toString()
 
             if (viewModel.isTitleValid(title) && viewModel.isAmountValid(budget)) {
-                val category = Category(
-                    ofUser = viewModel.userEmail(),
-                    title,
-                    budget = budget.toFloat(),
-                    icon = categoryIcon.tag as Int
-                )
-                Log.d("AddCategoryFragment.addCategory", "${viewModel.userEmail()} $category")
-                viewModel.addCategory(category)
-                viewModel.addCategoryIcon(CategoryIcon(title, categoryIcon.tag as Int))
+
+                when (categoryToEdit) {
+                    null -> {
+                        val category = Category(
+                            ofUser = viewModel.userEmail(),
+                            title,
+                            budget = budget.toFloat(),
+                            icon = categoryIcon.tag as Int
+                        )
+                        Log.d(
+                            "AddCategoryFragment.addCategory",
+                            "${viewModel.userEmail()} $category"
+                        )
+                        viewModel.addCategory(category)
+                        viewModel.addCategoryIcon(CategoryIcon(title, categoryIcon.tag as Int))
+                    }
+                    else -> {
+                        categoryToEdit.budget = budget.toFloat()
+                        categoryToEdit.icon = binding.categoryIcon.tag as Int
+                        viewModel.updateCategory(categoryToEdit)
+                    }
+                }
+
                 findNavController().popBackStack()
+
             } else {
                 ViewBehavior.tilErrorMsg(
                     binding.catTitle,
@@ -58,7 +92,7 @@ class AddCategoryFragment : Fragment() {
                     "Please enter a title"
                 )
                 ViewBehavior.tilErrorMsg(
-                    binding.catTitle,
+                    binding.catBudget,
                     viewModel.isAmountValid(budget),
                     "Please enter a valid number greater than zero"
                 )
@@ -71,11 +105,6 @@ class AddCategoryFragment : Fragment() {
 
         binding.catBudget.editText!!.doOnTextChanged { _, _, _, _ ->
             binding.catBudget.error = null
-        }
-
-        viewModel.selectedIcon.observe(viewLifecycleOwner) {
-            binding.categoryIcon.setImageResource(it)
-            binding.categoryIcon.tag = it
         }
 
         binding.changeCategoryIcon.setOnClickListener {
@@ -130,7 +159,8 @@ class AddCategoryFragment : Fragment() {
             .setTitle("Pick category icon")
             .show()
 
-        val adapterCategoryIconPicker = AdapterCategoryIconPicker(viewModel, selectIconDialogBox)
+
+        val adapterCategoryIconPicker = AdapterCategoryIconPicker()
 
         dialogView.findViewById<RecyclerView>(R.id.categoryIconPickerRV).apply {
             layoutManager = GridLayoutManager(requireContext(), 3)
@@ -138,6 +168,15 @@ class AddCategoryFragment : Fragment() {
         }
 
         adapterCategoryIconPicker.setList(list)
+
+        // Change category profile icon
+        adapterCategoryIconPicker.setCategoryIconPickerSelector(object :
+            AdapterCategoryIconPicker.CategoryIconPickerListener {
+            override fun selectIcon(iconID: Int) {
+                setCategoryDisplayIcon(iconID)
+                selectIconDialogBox.dismiss()
+            }
+        })
 
     }
 

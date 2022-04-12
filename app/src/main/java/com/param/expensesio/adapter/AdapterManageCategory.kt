@@ -26,12 +26,21 @@ class AdapterManageCategory : RecyclerView.Adapter<AdapterManageCategory.MyViewH
                     inflate(R.menu.pop_up_del)
 
                     setOnMenuItemClickListener { menuItem ->
+
                         when (menuItem.itemId) {
+
                             R.id.delItem -> {
                                 delOnClick.delListener(list[adapterPosition])
                                 true
                             }
+
+                            R.id.editManageCategory -> {
+                                editOnClick.editListener(list[adapterPosition])
+                                true
+                            }
+
                             else -> false
+
                         }
                     }
                     show()
@@ -76,7 +85,7 @@ class AdapterManageCategory : RecyclerView.Adapter<AdapterManageCategory.MyViewH
         rv.invalidateItemDecorations()
     }
 
-    // Callback
+    // Del callback
 
     lateinit var delOnClick: DelOnClickListener
 
@@ -87,5 +96,18 @@ class AdapterManageCategory : RecyclerView.Adapter<AdapterManageCategory.MyViewH
     fun setDelOnClickListener(listener: DelOnClickListener) {
         this.delOnClick = listener
     }
+
+    // Edit callback
+
+    lateinit var editOnClick: EditOnClickListener
+
+    interface EditOnClickListener {
+        fun editListener(category: Category)
+    }
+
+    fun setEditOnClickListener(listener: EditOnClickListener) {
+        this.editOnClick = listener
+    }
+
 
 }

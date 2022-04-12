@@ -13,6 +13,9 @@ interface CategoryDAO {
     @Query("DELETE FROM category_table WHERE title = :categoryTitle AND ofUser = :ofUser")
     suspend fun delCategory(categoryTitle: String, ofUser: String)
 
+    @Update
+    suspend fun updateCategory(category: Category)
+
     @Query("UPDATE category_table SET total = :newTotal WHERE title = :title AND ofUser = :ofUser ")
     suspend fun updateCategoryTotal(title: String, newTotal: Float, ofUser: String)
 
