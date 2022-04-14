@@ -3,8 +3,9 @@ package com.param.expensesio.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import androidx.core.content.ContextCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavGraph
@@ -19,8 +20,8 @@ import com.param.expensesio.data.Category
 import com.param.expensesio.databinding.FragmentHomeBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
+import java.time.LocalDate
 import java.util.*
-import androidx.navigation.findNavController
 
 class HomeFragment : Fragment() {
 
@@ -44,7 +45,6 @@ class HomeFragment : Fragment() {
 
         Log.d("HomeFragment.onCreateView", "Welcome Home ${BS()}")
 
-
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_1)
 
@@ -56,13 +56,12 @@ class HomeFragment : Fragment() {
             addItemDecoration(ViewBehavior.addMarginToLastItem())
         }
 
-        val now = Calendar.getInstance()
-
         // Display all categories with total
+        val now = LocalDate.now()
         viewModel.categoryWithTotal(
             viewModel.userEmail(),
-            now.get(Calendar.YEAR),
-            now.get(Calendar.MONTH),
+            now.year,
+            now.monthValue,
         ).observe(viewLifecycleOwner) { universe ->
 
             val categories = universe

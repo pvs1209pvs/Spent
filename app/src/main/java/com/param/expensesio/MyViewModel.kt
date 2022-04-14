@@ -10,10 +10,12 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.param.expensesio.data.*
+import com.param.expensesio.db.Convertor
 import com.param.expensesio.db.LocalDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
+import java.time.LocalDate
 import java.util.*
 
 
@@ -132,8 +134,11 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun readAllExpense(ofUser: String) = expenseDAO.readAllExpense(ofUser)
 
-    fun readAllExpense(category: String, now: Calendar, ofUser: String) =
-        expenseDAO.readAllExpense(category, now.get(Calendar.YEAR), now.get(Calendar.MONTH), ofUser)
+    fun readAllExpenseFromNow(ofUser: String, now: LocalDate) =
+        expenseDAO.readAllExpenseFromNow(ofUser, now.year, now.monthValue)
+
+    fun readAllExpense(category: String, now: LocalDate, ofUser: String) =
+        expenseDAO.readAllExpense(category, now.year, now.monthValue, ofUser)
 
     fun moveExpensesToMiscCategory(deletedCategory: String) {
 
@@ -161,8 +166,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun readAllExpenseFromNow(ofUser: String, now: Calendar) =
-        expenseDAO.readAllExpenseFromNow(ofUser, now.get(Calendar.YEAR), now.get(Calendar.MONTH))
 
     fun orderExpenseAmountHighestFirst(category: String, period: Calendar, ofUser: String) =
         expenseDAO.orderExpenseAmountHighestFirst(
@@ -312,10 +315,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                 restoreStat.value = restoreStat.value!! - 2
             }
     }
-
-    // Misc
-
-    fun monthName(monthId: Int) = DateFormatSymbols().months[monthId]
 
     // UI input checks
 

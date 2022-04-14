@@ -54,9 +54,9 @@ class AdapterExpenses(private val myViewModel: MyViewModel) :
             val createdOn = list[position].createdOn
             expenseCreatedOn.text = String.format(
                 holder.itemView.context.resources.getString(R.string.creation_date),
-                createdOn.get(Calendar.YEAR),
-                createdOn.get(Calendar.MONTH),
-                createdOn.get(Calendar.DATE),
+                createdOn.year,
+                createdOn.monthValue,
+                createdOn.dayOfMonth,
             )
 
         }

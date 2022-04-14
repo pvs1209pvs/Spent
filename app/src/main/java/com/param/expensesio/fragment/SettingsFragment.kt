@@ -14,7 +14,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.firestore.FirebaseFirestore
-import com.param.expensesio.Convertor
+import com.param.expensesio.db.Convertor
 import com.param.expensesio.MainActivity
 import com.param.expensesio.MyViewModel
 import com.param.expensesio.R

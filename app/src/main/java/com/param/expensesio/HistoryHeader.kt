@@ -6,16 +6,18 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.history_expandable_header.*
 import java.text.DateFormatSymbols
+import java.time.Month
+import java.time.format.TextStyle
+import java.util.*
 
-class HistoryHeader(private val yearMonth: Pair<Int, Int>, private val historyTotal : String) : Item(), ExpandableItem {
+class HistoryHeader(private val yearMonth: Pair<Month, Int>, private val locale: Locale,private val historyTotal : String) : Item(), ExpandableItem {
 
     private lateinit var expandableGroup: ExpandableGroup
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
-        val month = DateFormatSymbols().months[yearMonth.first]
-        val year = yearMonth.second
-        viewHolder.crntMonth.text = "$month $year"
+        val (month, year) = yearMonth
+        viewHolder.crntMonth.text = "${month.getDisplayName(TextStyle.FULL, locale)} $year"
 
         viewHolder.historyTotal.text = historyTotal
 

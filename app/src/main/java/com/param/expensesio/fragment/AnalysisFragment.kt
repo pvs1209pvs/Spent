@@ -21,7 +21,9 @@ import com.param.expensesio.R
 import com.param.expensesio.data.Expense
 import com.param.expensesio.databinding.FragmentAnalysisBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
-import java.util.*
+import java.time.LocalDate
+import java.time.Month
+import java.time.format.TextStyle
 
 
 class AnalysisFragment : Fragment() {
@@ -40,24 +42,9 @@ class AnalysisFragment : Fragment() {
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_7)
 
-        val monthNameToInt = listOf(
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December",
-        )
+        autoSetMonthYearSelector()
 
-        autoSetMonthYearSelector(monthNameToInt)
-
-        viewModel.readAllExpenseFromNow(viewModel.userEmail(), Calendar.getInstance())
+        viewModel.readAllExpenseFromNow(viewModel.userEmail(), LocalDate.now())
             .observe(viewLifecycleOwner) {
 
                 ViewBehavior.getNoDataViewVisibility(
@@ -69,20 +56,14 @@ class AnalysisFragment : Fragment() {
                 if (it.isNotEmpty()) {
                     makePieChart(it)
                     binding.pieChart.visibility = View.VISIBLE
-                }
-                else{
+                } else {
                     binding.pieChart.visibility = View.GONE
                 }
             }
 
         binding.monthYearDropDown.setOnItemClickListener { _, _, _, _ ->
 
-            val selectPeriod = Calendar.getInstance().apply {
-                set(Calendar.YEAR, getDropDownField(Calendar.YEAR, monthNameToInt))
-                set(Calendar.MONTH, getDropDownField(Calendar.MONTH, monthNameToInt))
-            }
-
-            viewModel.readAllExpenseFromNow(viewModel.userEmail(), selectPeriod)
+            viewModel.readAllExpenseFromNow(viewModel.userEmail(), getDropDownField())
                 .observe(viewLifecycleOwner) {
 
                     ViewBehavior.getNoDataViewVisibility(
@@ -94,8 +75,7 @@ class AnalysisFragment : Fragment() {
                     if (it.isNotEmpty()) {
                         makePieChart(it)
                         binding.pieChart.visibility = View.VISIBLE
-                    }
-                    else{
+                    } else {
                         binding.pieChart.visibility = View.GONE
                     }
                 }
@@ -103,18 +83,16 @@ class AnalysisFragment : Fragment() {
         }
 
 
-
         return binding.root
 
     }
 
+    private fun autoSetMonthYearSelector() {
 
-    private fun autoSetMonthYearSelector(monthName: List<String>) {
+        val now = LocalDate.now()
 
-        val monthYear = Calendar.getInstance()
-
-        val month = monthName[monthYear.get(Calendar.MONTH)]
-        val year = monthYear.get(Calendar.YEAR)
+        val month = now.month.getDisplayName(TextStyle.FULL, resources.configuration.locales[0])
+        val year = now.year
 
         binding.monthYearDropDown.setText("$month $year")
 
@@ -173,16 +151,9 @@ class AnalysisFragment : Fragment() {
 
     }
 
-    private fun getDropDownField(field: Int, monthName: List<String>): Int {
-
+    private fun getDropDownField(): LocalDate {
         val dropDownText = binding.monthYearDropDown.text.toString().split(" ")
-
-        return when (field) {
-            Calendar.YEAR -> dropDownText[1].toInt()
-            Calendar.MONTH -> monthName.indexOf(dropDownText[0])
-            else -> -1
-        }
-
+        return LocalDate.of(dropDownText[1].toInt(), Month.valueOf(dropDownText[0].uppercase()), 1)
     }
 
     override fun onResume() {
@@ -190,10 +161,16 @@ class AnalysisFragment : Fragment() {
 
         viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner) { allExpenses ->
 
-            val allMonthYear = allExpenses.map {
-                "${viewModel.monthName(it.createdOn.get(Calendar.MONTH))} " +
-                        "${it.createdOn.get(Calendar.YEAR)}"
-            }.distinct()
+            val allMonthYear = allExpenses
+                .map {
+                    "${
+                        it.createdOn.month.getDisplayName(
+                            TextStyle.FULL,
+                            resources.configuration.locales[0]
+                        )
+                    } ${it.createdOn.year}"
+                }
+                .distinct()
 
             binding.monthYearDropDown.setAdapter(
                 ArrayAdapter(
@@ -206,6 +183,5 @@ class AnalysisFragment : Fragment() {
         }
 
     }
-
 
 }

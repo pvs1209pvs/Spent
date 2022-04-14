@@ -1,12 +1,16 @@
 package com.param.expensesio.fragment
 
 import android.os.Bundle
-import android.view.*
-import androidx.core.content.ContextCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.param.expensesio.*
+import com.param.expensesio.History
+import com.param.expensesio.HistoryHeader
+import com.param.expensesio.MyViewModel
+import com.param.expensesio.R
 import com.param.expensesio.data.Expense
 import com.param.expensesio.databinding.FragmentHistoryBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
@@ -15,9 +19,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.*
-import java.util.*
+import java.time.LocalDate
 
 
 class HistoryFragment : Fragment() {
@@ -48,13 +50,14 @@ class HistoryFragment : Fragment() {
         viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner) { allExpenses ->
 
             allExpenses.groupBy {
-                Pair(it.createdOn.get(Calendar.MONTH), it.createdOn.get(Calendar.YEAR))
-            }.toSortedMap(
-                compareBy(Pair<Int, Int>::first, Pair<Int, Int>::second)
-            ).toList().reversed().forEach { (monthYear, expenses) ->
+                Pair(it.createdOn.month, it.createdOn.year)
+            }.toSortedMap { o1, o2 ->
+                compareValuesBy(o1, o2, { it.first.value }, { it.second })
+            }.toList().reversed().forEach { (monthYear, expenses) ->
 
                 val currency = viewModel.getCurrency()
                 val historyTotal = expenses.sumOf { it.amount.toDouble() }
+
                 val monthTotal = if (currency.length == 1)
                     String.format(
                         resources.getString(R.string.monetary_amount),
@@ -68,9 +71,9 @@ class HistoryFragment : Fragment() {
                         currency
                     )
 
-                val now = Calendar.getInstance()
+                val now = LocalDate.now()
                 val isExpanded =
-                    (now.get(Calendar.MONTH) == monthYear.first && now.get(Calendar.YEAR) == monthYear.second)
+                    now.monthValue == monthYear.first.value && now.year == monthYear.second
 
                 val historyFieldComparator = Comparator<Expense> { o1, o2 ->
                     if (viewModel.getSortOrder() == "by_category") o1.ofCategory.compareTo(o2.ofCategory)
@@ -80,13 +83,18 @@ class HistoryFragment : Fragment() {
                 viewModel.readAllCategoryIcon().observe(viewLifecycleOwner) { cIcon ->
 
                     val history = expenses.sortedWith(historyFieldComparator).map {
-
                         val icon = cIcon.find { c -> c.title == it.ofCategory }?.icon
                             ?: R.drawable.cat_other
                         History(it, currency, icon)
                     }
 
-                    ExpandableGroup(HistoryHeader(monthYear, monthTotal), isExpanded).apply {
+                    ExpandableGroup(
+                        HistoryHeader(
+                            monthYear,
+                            resources.configuration.locales[0],
+                            monthTotal
+                        ), isExpanded
+                    ).apply {
                         add(Section(history))
                         groupAdapter.add(this)
                     }

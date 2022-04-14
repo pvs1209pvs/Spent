@@ -66,7 +66,6 @@ class AddExpenseFragment : Fragment() {
                             title = title,
                             amount = amount.toFloat(),
                             ofCategory = ofCategory,
-                            createdOn = Calendar.getInstance()
                         )
                         viewModel.addExpense(expense)
                     }
