@@ -14,13 +14,9 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.firestore.FirebaseFirestore
-import com.param.expensesio.db.Convertor
 import com.param.expensesio.MainActivity
 import com.param.expensesio.MyViewModel
 import com.param.expensesio.R
-import com.param.expensesio.data.ExpenseFirestore
-import com.param.expensesio.data.UserCategoryBackup
-import com.param.expensesio.data.UserExpenseBackup
 import com.param.expensesio.ui.ProfileViewPreference
 import java.util.*
 
@@ -94,36 +90,30 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Backup Data
         findPreference<Preference>("backup")!!.setOnPreferenceClickListener {
 
-            viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner) {
-                viewModel.backupUserCategories(UserCategoryBackup(it))
+            val expensesToBackup = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
+
+            expensesToBackup.observe(viewLifecycleOwner) {
+                println("everything $it")
+                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
+                println("to backup $unbackedPastExpenses")
+                if (unbackedPastExpenses.isNotEmpty()) {
+                    viewModel.backupUserExpenses(unbackedPastExpenses)
+                }
+                expensesToBackup.removeObservers(viewLifecycleOwner)
             }
 
-            viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner) { allExps ->
-                val allExpsFirestore = allExps.map {
-                    ExpenseFirestore(
-                        it.ofUser,
-                        it.id,
-                        it.title,
-                        it.amount,
-                        it.ofCategory,
-                        Convertor().calendarToString(it.createdOn)
-                    )
-                }
-                viewModel.backupUserExpenses(UserExpenseBackup(allExpsFirestore))
-            }
 
-            viewModel.backupStat.observe(viewLifecycleOwner) {
-                println("$it $it $it")
-                if (it == 2) {
-                    (requireActivity() as MainActivity).buildSnackBar("Backup complete")
-                    viewModel.backupStat.value = 0
-                }
-                if (it < 0) {
-                    (requireActivity() as MainActivity).buildSnackBar("Backup failed")
-                    viewModel.backupStat.value = 0
-                }
-                // Reset backup status
-            }
+//            viewModel.backupStat.observe(viewLifecycleOwner) {
+//                if (it == 2) {
+//                    (requireActivity() as MainActivity).buildSnackBar("Backup complete")
+//                    viewModel.backupStat.value = 0
+//                }
+//                if (it < 0) {
+//                    (requireActivity() as MainActivity).buildSnackBar("Backup failed")
+//                    viewModel.backupStat.value = 0
+//                }
+//                // Reset backup status
+//            }
 
             true
         }

@@ -14,7 +14,6 @@ import com.param.expensesio.db.Convertor
 import com.param.expensesio.db.LocalDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.DateFormatSymbols
 import java.time.LocalDate
 import java.util.*
 
@@ -166,6 +165,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    fun getUnbackedUpExpenses(ofUser: String) = expenseDAO.getUnbackedUpExpenses(ofUser)
 
     fun orderExpenseAmountHighestFirst(category: String, period: Calendar, ofUser: String) =
         expenseDAO.orderExpenseAmountHighestFirst(
@@ -245,18 +245,34 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun backupUserExpenses(userExpenseBackup: UserExpenseBackup) {
+    fun backupUserExpenses(expenses: List<Expense>) {
+
+        val allExpsFirestore = UserExpenseBackup(expenses.map { exp ->
+            ExpenseFirestore(
+                exp.ofUser,
+                exp.id,
+                exp.title,
+                exp.amount,
+                exp.ofCategory,
+                Convertor().calendarToString(exp.createdOn),
+                1
+            )
+        })
 
         firestore
             .collection(FIRESTORE_DB)
             .document(userEmail())
             .collection(EXPENSE_COLLECTION)
             .document(EXPENSE_DOC)
-            .set(userExpenseBackup)
+            .update("allExpense", allExpsFirestore)
             .addOnSuccessListener {
                 Log.d("ViewModel", "user expense back up success")
                 backupStat.value = backupStat.value!! + 1
-
+                expenses.forEach {
+                    it.backedUp = 1
+                    println(it.title)
+                }
+                expenses.forEach { updateExpense(it) }
             }
             .addOnFailureListener {
                 Log.d("ViewModel", "user expense back up failure")

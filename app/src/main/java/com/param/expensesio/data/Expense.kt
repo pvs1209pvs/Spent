@@ -1,5 +1,6 @@
 package com.param.expensesio.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
@@ -12,7 +13,8 @@ data class Expense(
     var title: String = "",
     var amount: Float = 0f,
     var ofCategory: String = "",
-    var createdOn: LocalDate = LocalDate.now()
+    var createdOn: LocalDate = LocalDate.now(),
+    @ColumnInfo(defaultValue = "0") var backedUp: Int = 0
 ) : Serializable {
 
     fun isFromNow(): Boolean {
@@ -22,7 +24,7 @@ data class Expense(
 
     override fun toString(): String {
         return "Expense(id=$id, title='$title', amount=$amount, ofCategory='$ofCategory', " +
-                "createdOn='${createdOn.year},${createdOn.monthValue}')"
+                "createdOn='${createdOn.year},${createdOn.monthValue}', backup=$backedUp )"
     }
 
 }

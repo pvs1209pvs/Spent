@@ -16,7 +16,7 @@ import com.param.expensesio.data.Expense
 
 @Database(
     entities = [Category::class, Expense::class, CategoryIcon::class],
-    version = 9,
+    version = 10,
     exportSchema = true
 )
 @TypeConverters(Convertor::class)
@@ -52,6 +52,7 @@ abstract class LocalDB : RoomDatabase() {
                     .addMigrations(MIGRATION_6_7_1)
                     .addMigrations(MIGRATION_7_8)
                     .addMigrations(MIGRATION_8_9)
+                    .addMigrations(MIGRATION_9_10)
                     .build()
 
                 INSTANCE = instance
@@ -126,6 +127,13 @@ abstract class LocalDB : RoomDatabase() {
         private val MIGRATION_8_9 = object : Migration(8, 9) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE IF EXISTS registered_user")
+            }
+        }
+
+        private val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE IF EXISTS expense_table")
+                database.execSQL("CREATE TABLE IF NOT EXISTS expense_table (ofUser text not null, id integer primary key autoincrement not null, title text not null, amount real not null, ofCategory text not null, createdOn text not null, backedUp integer not null default 0)")
             }
         }
 

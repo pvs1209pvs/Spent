@@ -45,6 +45,12 @@ interface ExpenseDAO {
     @Query("SELECT * FROM expense_table WHERE ofCategory = :categoryTitle AND ofUser = :ofUser")
     fun readAllExpenseList(categoryTitle: String, ofUser: String): List<Expense>
 
+    @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%'")
+    fun readAllExpenseFromNow(ofUser: String, y: Int, m: Int): LiveData<List<Expense>>
+
+    @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser AND backedUp = 0")
+    fun getUnbackedUpExpenses(ofUser: String) : LiveData<List<Expense>>
+
     @Query("SELECT * FROM expense_table WHERE ofCategory = :category AND ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%' ORDER BY amount DESC")
     fun orderExpenseAmountHighestFirst(
         category: String,
@@ -61,7 +67,6 @@ interface ExpenseDAO {
         ofUser: String
     ): LiveData<List<Expense>>
 
-    @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%'")
-    fun readAllExpenseFromNow(ofUser: String, y: Int, m: Int): LiveData<List<Expense>>
+
 
 }

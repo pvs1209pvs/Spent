@@ -5,8 +5,11 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.preference.*
+import androidx.preference.Preference
+import androidx.preference.PreferenceViewHolder
+import com.bumptech.*
 import com.bumptech.glide.Glide
+
 
 class ProfileViewPreference(
     private val mContext: Context,
@@ -34,6 +37,7 @@ class ProfileViewPreference(
         userImage = holder.findViewById(com.param.expensesio.R.id.userImage) as ImageView
 
         if (imageUrl != null) { // Set image from Google and Facebook
+
             Glide.with(mContext).load(imageUrl).into(userImage)
             initImage.visibility = View.GONE
             userImage.visibility = View.VISIBLE

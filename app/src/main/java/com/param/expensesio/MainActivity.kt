@@ -79,6 +79,8 @@ class MainActivity : AppCompatActivity() {
 
         toggleBottomNavAndToolbarVisibility()
 
+
+
     }
 
     private fun bottomNavFragmentAnimation() {
