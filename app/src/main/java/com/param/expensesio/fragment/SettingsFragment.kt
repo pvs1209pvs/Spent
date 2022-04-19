@@ -103,24 +103,23 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
             unwarranted.observe(viewLifecycleOwner) {
                 val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
-                println("to backup $unbackedPastExpenses")
                 if (unbackedPastExpenses.isNotEmpty()) {
                     viewModel.backupUserExpenses(unbackedPastExpenses)
                 }
                 unwarranted.removeObservers(viewLifecycleOwner)
             }
 
-            viewModel.backupStat.observe(viewLifecycleOwner) {
-                if (it == 2) {
-                    (requireActivity() as MainActivity).buildSnackBar("Backup complete")
-                    viewModel.backupStat.value = 0
-                }
-                if (it < 0) {
-                    (requireActivity() as MainActivity).buildSnackBar("Backup failed")
-                    viewModel.backupStat.value = 0
-                }
-                // Reset backup status
-            }
+//            viewModel.backupStat.observe(viewLifecycleOwner) {
+//                if (it == 2) {
+//                    (requireActivity() as MainActivity).buildSnackBar("Backup complete")
+//                    viewModel.backupStat.value = 0
+//                }
+//                if (it < 0) {
+//                    (requireActivity() as MainActivity).buildSnackBar("Backup failed")
+//                    viewModel.backupStat.value = 0
+//                }
+//                // Reset backup status
+//            }
 
             true
         }
@@ -131,17 +130,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
             viewModel.restoreUserCategories()
             viewModel.restoreUserExpenses()
 
-            viewModel.restoreStat.observe(viewLifecycleOwner) {
-                if (it == 2) {
-                    (requireActivity() as MainActivity).buildSnackBar("Restore complete")
-                    viewModel.restoreStat.value = 0
-                }
-                if (it < 0) {
-                    (requireActivity() as MainActivity).buildSnackBar("Restore failed")
-                    viewModel.restoreStat.value = 0
-                }
-                // Reset backup status
-            }
+//            viewModel.restoreStat.observe(viewLifecycleOwner) {
+//                if (it == 2) {
+//                    (requireActivity() as MainActivity).buildSnackBar("Restore complete")
+//                    viewModel.restoreStat.value = 0
+//                }
+//                if (it < 0) {
+//                    (requireActivity() as MainActivity).buildSnackBar("Restore failed")
+//                    viewModel.restoreStat.value = 0
+//                }
+//                // Reset backup status
+//            }
 
             true
         }

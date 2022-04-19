@@ -3,13 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:paddingLeft="@dimen/fragment_horizontal_margin"
     android:paddingTop="@dimen/fragment_vertical_margin"
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".fragment.LoginFragment">
+
+
+    <TextView
+        android:padding="16dp"
+        android:id="@+id/welcomeToApp"
+        style="@style/CustomHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Expensesio!"
+        android:textSize="56sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/signInTitle"
@@ -23,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/welcomeToApp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailTIL"
@@ -31,7 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:autofillHints="@string/prompt_email"
         android:hint="@string/prompt_email"
@@ -175,15 +189,14 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
-<!--        android:textColor="?attr/text_color_primary"-->
+        <!--        android:textColor="?attr/text_color_primary"-->
         <TextView
             android:id="@+id/helperText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="2dp"
             android:paddingVertical="16dp"
-            android:text="@string/register_helper"
-          />
+            android:text="@string/register_helper" />
 
         <TextView
             android:id="@+id/actionText"
@@ -196,5 +209,7 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

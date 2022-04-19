@@ -334,12 +334,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun restoreUserExpenses() {
 
-//        private val FIRESTORE_DB = "UserBackup"
-//        private val CATEGORY_COLLECTION = "Categories"
-//        private val EXPENSE_COLLECTION = "Expenses"
-//        private val CATEGORY_DOC = "cats"
-//        private val EXPENSE_DOC = "exps"
-
         firestore
             .collection(FIRESTORE_DB)
             .document(userEmail())

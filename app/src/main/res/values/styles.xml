@@ -18,7 +18,7 @@
 
     <style name="CustomHeading">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">48sp</item>
+        <item name="android:textSize">36sp</item>
     </style>
 
     <style name="CustomPrimaryText">
