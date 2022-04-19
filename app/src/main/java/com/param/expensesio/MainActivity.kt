@@ -19,16 +19,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.facebook.FacebookSdk
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
+import com.param.expensesio.data.Expense
 import com.param.expensesio.databinding.ActivityMainBinding
 import com.param.expensesio.fragment.HomeFragmentDirections
-import org.jetbrains.anko.internals.AnkoInternals.createAnkoContext
 import java.time.LocalDate
-import java.time.Month
-import java.time.format.TextStyle
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 

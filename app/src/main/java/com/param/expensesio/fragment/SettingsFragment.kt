@@ -17,12 +17,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.param.expensesio.MainActivity
 import com.param.expensesio.MyViewModel
 import com.param.expensesio.R
+import com.param.expensesio.data.UserCategoryBackup
 import com.param.expensesio.ui.ProfileViewPreference
 import java.util.*
 
 
-data class Person(public var name: String, public var age: String)
-data class MyData(public var names: List<Person> = listOf())
+//data class Person(public var name: String, public var age: String)
+//data class MyData(public var names: List<Person> = listOf())
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -94,49 +95,39 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Backup Data
         findPreference<Preference>("backup")!!.setOnPreferenceClickListener {
 
-            val people = listOf(
-                Person("param", "22"),
-                Person("dea", "22"),
-                Person("asam", "21"),
-                Person("chahat", "23"),
-                Person("simar", "24")
-            )
+            viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner){
+                viewModel.backupUserCategories(UserCategoryBackup(it))
+            }
 
+            val unwarranted = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
 
-            viewModel.backupUserExpenses(people)
+            unwarranted.observe(viewLifecycleOwner) {
+                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
+                println("to backup $unbackedPastExpenses")
+                if (unbackedPastExpenses.isNotEmpty()) {
+                    viewModel.backupUserExpenses(unbackedPastExpenses)
+                }
+                unwarranted.removeObservers(viewLifecycleOwner)
+            }
 
-
-
-
-//            val expensesToBackup = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
-//
-//            expensesToBackup.observe(viewLifecycleOwner) {
-//                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
-//                println("to backup $unbackedPastExpenses")
-//                if (unbackedPastExpenses.isNotEmpty()) {
-//                    viewModel.backupUserExpenses(unbackedPastExpenses)
-//                }
-//                expensesToBackup.removeObservers(viewLifecycleOwner)
-//            }
-
-
-//            viewModel.backupStat.observe(viewLifecycleOwner) {
-//                if (it == 2) {
-//                    (requireActivity() as MainActivity).buildSnackBar("Backup complete")
-//                    viewModel.backupStat.value = 0
-//                }
-//                if (it < 0) {
-//                    (requireActivity() as MainActivity).buildSnackBar("Backup failed")
-//                    viewModel.backupStat.value = 0
-//                }
-//                // Reset backup status
-//            }
+            viewModel.backupStat.observe(viewLifecycleOwner) {
+                if (it == 2) {
+                    (requireActivity() as MainActivity).buildSnackBar("Backup complete")
+                    viewModel.backupStat.value = 0
+                }
+                if (it < 0) {
+                    (requireActivity() as MainActivity).buildSnackBar("Backup failed")
+                    viewModel.backupStat.value = 0
+                }
+                // Reset backup status
+            }
 
             true
         }
 
         // Restore data
         findPreference<Preference>("restore")!!.setOnPreferenceClickListener {
+
             viewModel.restoreUserCategories()
             viewModel.restoreUserExpenses()
 
@@ -148,7 +139,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 if (it < 0) {
                     (requireActivity() as MainActivity).buildSnackBar("Restore failed")
                     viewModel.restoreStat.value = 0
-
                 }
                 // Reset backup status
             }
