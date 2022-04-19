@@ -229,6 +229,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     // FirebaseFirestore
 
+    // Backup
+
     fun backupUserCategories(categories: UserCategoryBackup) {
 
         firestore
@@ -287,6 +289,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }.forEach { expF -> backUpExpense(expenseDoc, expF) }
     }
 
+    // TODO Backup status should be moved to backupUserExpenses
     private fun backUpExpense(dr: DocumentReference, p: ExpenseFirestore) {
         dr.update("values", FieldValue.arrayUnion(p))
             .addOnSuccessListener {
@@ -304,6 +307,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         expense.forEach { updateExpense(it) }
     }
 
+    // Restore
 
     fun restoreUserCategories() {
         firestore
@@ -316,7 +320,9 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                 if (docSnapshot.exists()) {
                     val allCats =
                         docSnapshot.toObject(UserCategoryBackup::class.java)!!.allCategories
-                    allCats.forEach { addCategory(it) }
+                    allCats.forEach {
+                        println("category restore ${it.title}")
+                        addCategory(it) }
                     restoreStat.value = restoreStat.value!! + 1
                 }
             }
@@ -327,6 +333,13 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun restoreUserExpenses() {
+
+//        private val FIRESTORE_DB = "UserBackup"
+//        private val CATEGORY_COLLECTION = "Categories"
+//        private val EXPENSE_COLLECTION = "Expenses"
+//        private val CATEGORY_DOC = "cats"
+//        private val EXPENSE_DOC = "exps"
+
         firestore
             .collection(FIRESTORE_DB)
             .document(userEmail())
@@ -335,7 +348,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             .get()
             .addOnSuccessListener { docSnapshot ->
                 if (docSnapshot.exists()) {
-                    docSnapshot.toObject(UserExpenseBackup::class.java)!!.allExpense
+                    println("nice tits")
+                    docSnapshot.toObject(UserExpenseBackup::class.java)!!.values
                         .map {
                             Expense(
                                 it.ofUser,
@@ -346,7 +360,9 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                                 Convertor().stringToCalendar(it.createdOn)
                             )
                         }
-                        .forEach { addExpense(it) }
+                        .forEach {
+                            println("expense restore ${it.title}")
+                            addExpense(it) }
                     restoreStat.value = restoreStat.value!! + 1
                 }
             }
