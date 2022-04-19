@@ -8,10 +8,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.param.expensesio.data.*
 import com.param.expensesio.db.Convertor
 import com.param.expensesio.db.LocalDB
+import com.param.expensesio.fragment.Person
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -245,41 +248,73 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun backupUserExpenses(expenses: List<Expense>) {
+    fun backupUserExpenses(toBackUp: List<Person>) {
 
-        val allExpsFirestore = UserExpenseBackup(expenses.map { exp ->
-            ExpenseFirestore(
-                exp.ofUser,
-                exp.id,
-                exp.title,
-                exp.amount,
-                exp.ofCategory,
-                Convertor().calendarToString(exp.createdOn),
-                1
-            )
-        })
+        fun sendBackUp(dr: DocumentReference, p: Person) {
+            dr.update("values", FieldValue.arrayUnion(p))
+                .addOnSuccessListener {
+                    Log.d("ViewModel", "user expense back up success")
+                    backupStat.value = backupStat.value!! + 1
 
-        firestore
+                }
+                .addOnFailureListener {
+                    Log.d("ViewModel", "user expense back up failure")
+                    backupStat.value = backupStat.value!! - 2
+                }
+        }
+
+        val userEmailDocRef = firestore
             .collection(FIRESTORE_DB)
             .document(userEmail())
+
+        val expenseDoc = userEmailDocRef
             .collection(EXPENSE_COLLECTION)
             .document(EXPENSE_DOC)
-            .update("allExpense", allExpsFirestore)
-            .addOnSuccessListener {
-                Log.d("ViewModel", "user expense back up success")
-                backupStat.value = backupStat.value!! + 1
-                expenses.forEach {
-                    it.backedUp = 1
-                    println(it.title)
+
+        expenseDoc.get().addOnSuccessListener {
+            if (it.exists()) {
+                toBackUp.forEach {p-> sendBackUp(expenseDoc, p) }
+            } else {
+                expenseDoc.set(mapOf("values" to listOf<Person>())).addOnSuccessListener {
+                    toBackUp.forEach { p -> sendBackUp(expenseDoc, p) }
                 }
-                expenses.forEach { updateExpense(it) }
-            }
-            .addOnFailureListener {
-                Log.d("ViewModel", "user expense back up failure")
-                backupStat.value = backupStat.value!! - 2
             }
 
+        }.addOnFailureListener {
+            println("doc ref $it")
+        }
+
+
+//
+//        firestore
+//            .collection(FIRESTORE_DB)
+//            .document(userEmail())
+//            .collection(EXPENSE_COLLECTION)
+//            .document(EXPENSE_DOC)
+////            .set(mapOf("people" to listOf<Person>()))
+//            .update("people", FieldValue.arrayUnion(toBackUp))
+//            .addOnSuccessListener {
+//                Log.d("ViewModel", "user expense back up success")
+//                backupStat.value = backupStat.value!! + 1
+////                expenses.forEach {
+////                    it.backedUp = 1
+////                    println(it.title)
+////                }
+////                expenses.forEach { updateExpense(it) }
+//            }
+//            .addOnFailureListener {
+//                Log.d("ViewModel", "user expense back up failure")
+//                backupStat.value = backupStat.value!! - 2
+//            }
+
     }
+
+
+    //                expenses.forEach {
+//                    it.backedUp = 1
+//                    println(it.title)
+//                }
+//                expenses.forEach { updateExpense(it) }
 
     fun restoreUserCategories() {
         firestore

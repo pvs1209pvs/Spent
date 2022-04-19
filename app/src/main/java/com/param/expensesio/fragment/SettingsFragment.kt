@@ -21,6 +21,10 @@ import com.param.expensesio.ui.ProfileViewPreference
 import java.util.*
 
 
+data class Person(public var name: String, public var age: String)
+data class MyData(public var names: List<Person> = listOf())
+
+
 class SettingsFragment : PreferenceFragmentCompat() {
 
     private val viewModel: MyViewModel by viewModels()
@@ -90,17 +94,30 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Backup Data
         findPreference<Preference>("backup")!!.setOnPreferenceClickListener {
 
-            val expensesToBackup = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
+            val people = listOf(
+                Person("param", "22"),
+                Person("dea", "22"),
+                Person("asam", "21"),
+                Person("chahat", "23"),
+                Person("simar", "24")
+            )
 
-            expensesToBackup.observe(viewLifecycleOwner) {
-                println("everything $it")
-                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
-                println("to backup $unbackedPastExpenses")
-                if (unbackedPastExpenses.isNotEmpty()) {
-                    viewModel.backupUserExpenses(unbackedPastExpenses)
-                }
-                expensesToBackup.removeObservers(viewLifecycleOwner)
-            }
+
+            viewModel.backupUserExpenses(people)
+
+
+
+
+//            val expensesToBackup = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
+//
+//            expensesToBackup.observe(viewLifecycleOwner) {
+//                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
+//                println("to backup $unbackedPastExpenses")
+//                if (unbackedPastExpenses.isNotEmpty()) {
+//                    viewModel.backupUserExpenses(unbackedPastExpenses)
+//                }
+//                expensesToBackup.removeObservers(viewLifecycleOwner)
+//            }
 
 
 //            viewModel.backupStat.observe(viewLifecycleOwner) {
