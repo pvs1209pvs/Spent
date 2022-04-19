@@ -1,7 +1,6 @@
 package com.param.expensesio.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -19,8 +18,6 @@ import com.param.expensesio.data.CategoryIcon
 import com.param.expensesio.databinding.FragmentAddCategoryBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
 import kotlinx.android.synthetic.main.item_category.*
-
-// 2131230841
 
 class AddCategoryFragment : Fragment() {
 
@@ -46,10 +43,11 @@ class AddCategoryFragment : Fragment() {
         if (categoryToEdit != null) {
             binding.categoryIcon.setImageResource(categoryToEdit.icon) // Set image
             binding.categoryIcon.tag = categoryToEdit.icon // Set image tag
-
             binding.catTitle.isEnabled = false
             binding.catTitle.editText!!.setText(categoryToEdit.title)
             binding.catBudget.editText!!.setText(categoryToEdit.budget.toString())
+        } else {
+            binding.categoryIcon.tag = R.drawable.cat_other
         }
 
         // Confirm add Category
@@ -64,14 +62,11 @@ class AddCategoryFragment : Fragment() {
                     null -> {
                         val category = Category(
                             ofUser = viewModel.userEmail(),
-                            title,
+                            title = title,
                             budget = budget.toFloat(),
                             icon = categoryIcon.tag as Int
                         )
-                        Log.d(
-                            "AddCategoryFragment.addCategory",
-                            "${viewModel.userEmail()} $category"
-                        )
+
                         viewModel.addCategory(category)
                         viewModel.addCategoryIcon(CategoryIcon(title, categoryIcon.tag as Int))
                     }
@@ -156,7 +151,6 @@ class AddCategoryFragment : Fragment() {
             .setView(dialogView)
             .setTitle("Pick category icon")
             .show()
-
 
         val adapterCategoryIconPicker = AdapterCategoryIconPicker()
 
