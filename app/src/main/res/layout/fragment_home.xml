@@ -1,41 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_dodgeInsetEdges="bottom"
-    android:id="@+id/mainHome"
     android:background="@color/gray_100"
+    app:layoutDescription="@xml/fragment_home_scene"
+    app:layout_dodgeInsetEdges="bottom"
     tools:context=".fragment.HomeFragment">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/noData" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         tools:listitem="@layout/item_category" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addExpenseFAB"
-        android:transitionName="@{@string/email_transition_name(email.id)}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="@string/fab"
         android:src="@drawable/ic_baseline_add_24"
+        android:transitionName="@{@string/email_transition_name(email.id)}"
         app:layout_anchor="@id/homeRecyclerView"
         app:layout_anchorGravity="bottom|right|end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-        <include android:id="@+id/noData" layout="@layout/no_data"/>
+    <include
+        android:id="@+id/noData"
+        layout="@layout/no_data" />
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
 
 <!--    app:layout_behavior="com.example.expensery.ScrollAwareFABBehavior"-->

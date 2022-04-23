@@ -64,8 +64,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.0'
 
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.0'
 
     // Test
     testImplementation 'junit:junit:'
