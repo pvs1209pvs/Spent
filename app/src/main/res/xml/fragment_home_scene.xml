@@ -9,10 +9,12 @@
         motion:duration="1000">
        <KeyFrameSet>
            <KeyAttribute
-               motion:motionTarget="@+id/monthlyTotal" />
+               motion:motionTarget="@+id/monthTotalLL"
+               motion:framePosition="100"
+               android:alpha="0" />
        </KeyFrameSet>
         <OnSwipe
-            motion:touchAnchorId="@+id/monthlyTotal"
+            motion:touchAnchorId="@+id/monthTotalLL"
             motion:touchAnchorSide="bottom" />
     </Transition>
 
@@ -21,9 +23,9 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
+            motion:layout_editor_absoluteY="8dp"
             android:layout_height="0.1dp"
             android:layout_width="match_parent"
-            android:id="@+id/monthlyTotal" />
+            android:id="@+id/monthTotalLL" />
     </ConstraintSet>
-
 </MotionScene>

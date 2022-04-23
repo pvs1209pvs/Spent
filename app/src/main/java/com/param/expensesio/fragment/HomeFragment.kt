@@ -74,7 +74,18 @@ class HomeFragment : Fragment() {
                 viewModel.getCurrency()
             )
 
-            binding.monthlyTotal.text = "Total Spending\n$monthTotal"
+            val monthBudget = String.format(
+                resources.getString(R.string.monetary_amount),
+                categories.sumOf { it.budget.toDouble() },
+                viewModel.getCurrency()
+            )
+
+            binding.monthlyTotal.text = monthTotal
+            binding.monthlyBudget.text = monthBudget
+
+            viewModel.expenseCount(viewModel.userEmail(), now).observe(viewLifecycleOwner){
+                binding.transCount.text = "$it expense(s)"
+            }
 
             adapterHome.setList(categories)
 

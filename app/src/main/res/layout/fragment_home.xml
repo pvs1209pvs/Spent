@@ -6,27 +6,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_100"
-    app:layout_dodgeInsetEdges="bottom"
     app:layoutDescription="@xml/fragment_home_scene"
-    tools:context=".fragment.HomeFragment"
-    tools:ignore="MotionLayoutInvalidSceneFileReference">
-<!--    android:paddingBottom="?android:attr/actionBarSize"-->
+    app:layout_dodgeInsetEdges="bottom"
+    tools:context=".fragment.HomeFragment">
 
-    <TextView
-        android:layout_margin="8dp"
-        android:padding="16dp"
-        android:id="@+id/monthlyTotal"
+    <LinearLayout
+        android:id="@+id/monthTotalLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
         android:background="@drawable/border_month_total"
         android:gravity="center"
-        android:text="Monthly total"
-        android:textColor="@color/white"
-        android:textSize="32sp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/noData" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/totalSpending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Total spending"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/monthlyTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="Monthly total"
+            android:textColor="@color/white"
+            android:textSize="32sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:weightSum="100"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/transCount"
+                android:layout_weight="50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12 transactions"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/monthlyBudget"
+                android:layout_weight="50"
+                android:gravity="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="budget"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeRecyclerView"
@@ -36,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/monthlyTotal"
+        app:layout_constraintTop_toBottomOf="@+id/monthTotalLL"
         tools:listitem="@layout/item_category" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

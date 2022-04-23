@@ -67,6 +67,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             categoryDAO.updateCategoryBudget(title, newBudget, ofUser)
         }
     }
+
     // Expense
 
     fun addExpense(expense: Expense) {
@@ -169,6 +170,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getUnbackedUpExpenses(ofUser: String) = expenseDAO.getUnbackedUpExpenses(ofUser)
+
+    fun expenseCount(ofUser: String, now: LocalDate) = expenseDAO.expenseCount(ofUser, now.year, now.monthValue)
 
     fun orderExpenseAmountHighestFirst(category: String, period: Calendar, ofUser: String) =
         expenseDAO.orderExpenseAmountHighestFirst(
@@ -322,7 +325,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                         docSnapshot.toObject(UserCategoryBackup::class.java)!!.allCategories
                     allCats.forEach {
                         println("category restore ${it.title}")
-                        addCategory(it) }
+                        addCategory(it)
+                    }
                     restoreStat.value = restoreStat.value!! + 1
                 }
             }
@@ -356,7 +360,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                         }
                         .forEach {
                             println("expense restore ${it.title}")
-                            addExpense(it) }
+                            addExpense(it)
+                        }
                     restoreStat.value = restoreStat.value!! + 1
                 }
             }
