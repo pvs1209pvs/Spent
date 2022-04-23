@@ -17,7 +17,7 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
 
         <action
             android:id="@+id/actionHomeFragmentTooExpensesByCategoryFragment"
@@ -25,7 +25,7 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
 
         <action
             android:id="@+id/actionHomeFragmentToLoginFragment"

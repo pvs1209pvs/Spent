@@ -40,17 +40,9 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.Theme_Expensery)
         setContentView(binding.root)
 
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
-//
-//        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-//            setTheme(R.style.AppThemeDark) //when dark mode is enabled, we use the dark theme
-//        } else {
-//            setTheme(R.style.AppTheme)  //default app theme
-//        }
 
         setSupportActionBar(binding.customToolbar.root)
-
         // Init Facebook SDK
         FacebookSdk.sdkInitialize(this@MainActivity);
 

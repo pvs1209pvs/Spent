@@ -11,13 +11,15 @@
     tools:context=".fragment.HomeFragment">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/monthlyTotal"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="TextView"
+        android:background="@color/purple_500"
+        android:padding="16dp"
+        android:text="Monthly total"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/monthlyTotal"
         tools:listitem="@layout/item_category" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -55,4 +57,4 @@
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
 
-<!--    app:layout_behavior="com.example.expensery.ScrollAwareFABBehavior"-->
+    <!--    app:layout_behavior="com.example.expensery.ScrollAwareFABBehavior"-->

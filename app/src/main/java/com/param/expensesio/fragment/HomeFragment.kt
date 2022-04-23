@@ -20,8 +20,8 @@ import com.param.expensesio.data.Category
 import com.param.expensesio.databinding.FragmentHomeBinding
 import com.param.expensesio.viewbehavior.ViewBehavior
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
+import kotlinx.android.synthetic.main.activity_main.*
 import java.time.LocalDate
-import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -68,6 +68,14 @@ class HomeFragment : Fragment() {
                 .filter { !(it.title == "Misc" && it.total <= 0) }
                 .map { Category(it.ofUser, it.title, it.total, it.budget, it.icon) }
 
+            val monthTotal = String.format(
+                resources.getString(R.string.monetary_amount),
+                categories.sumOf { it.total.toDouble() },
+                viewModel.getCurrency()
+            )
+
+            binding.monthlyTotal.text = monthTotal
+
             adapterHome.setList(categories)
 
             ViewBehavior.getNoDataViewVisibility(
@@ -94,6 +102,7 @@ class HomeFragment : Fragment() {
             }
 
         })
+
 
         return binding.root
 
