@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
                 viewModel.getCurrency()
             )
 
-            binding.monthlyTotal.text = monthTotal
+            binding.monthlyTotal.text = "Total Spending\n$monthTotal"
 
             adapterHome.setList(categories)
 

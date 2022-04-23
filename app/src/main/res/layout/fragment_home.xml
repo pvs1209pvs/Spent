@@ -7,16 +7,19 @@
     android:layout_height="match_parent"
     android:background="@color/gray_100"
     app:layout_dodgeInsetEdges="bottom"
+    app:layoutDescription="@xml/fragment_home_scene"
     tools:context=".fragment.HomeFragment"
     tools:ignore="MotionLayoutInvalidSceneFileReference">
+<!--    android:paddingBottom="?android:attr/actionBarSize"-->
 
     <TextView
+        android:layout_margin="8dp"
+        android:padding="16dp"
         android:id="@+id/monthlyTotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/border_month_total"
         android:gravity="center"
-        android:background="@color/purple_500"
-        android:padding="16dp"
         android:text="Monthly total"
         android:textColor="@color/white"
         android:textSize="32sp"
@@ -33,6 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthlyTotal"
         tools:listitem="@layout/item_category" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
