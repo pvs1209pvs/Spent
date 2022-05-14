@@ -25,8 +25,8 @@ interface ExpenseDAO {
     @Query("UPDATE expense_table SET ofCategory = :newCategory WHERE title = :title AND ofUser = :ofUser")
     suspend fun updateCategoryOf(title: String, newCategory: String, ofUser: String)
 
-    @Query("SELECT * FROM expense_table WHERE title = :title AND ofUser = :ofUser")
-    fun readExpense(title: String, ofUser: String): Expense?
+    @Query("SELECT * FROM expense_table WHERE title = :title AND ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%'")
+    fun readExpense(title: String, ofUser: String, y: Int, m: Int): Expense? // change this
 
     @Query("SELECT * FROM expense_table WHERE id = :id AND ofUser = :ofUser")
     suspend fun readExpense(id: Int, ofUser: String): Expense?

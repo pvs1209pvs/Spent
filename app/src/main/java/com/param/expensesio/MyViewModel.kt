@@ -75,16 +75,15 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
 
             // already present?
-            val e = expenseDAO.readExpense(expense.title, expense.ofUser)
+            val e = expenseDAO.readExpense(expense.title, expense.ofUser, expense.createdOn.year, expense.createdOn.monthValue)
 
             if (e == null) {
-                println("new add")
+                Log.d("MyViewModel.addExpense", "Add")
                 expenseDAO.addExpense(expense)
             } else {
                 Log.d("MyViewMode.addExpense","modify")
-
-                    expenseDAO.updateTotal(e.title, expense.amount + e.amount, userEmail())
                 // modifies the already present expense with new expense
+                expenseDAO.updateTotal(e.title, expense.amount + e.amount, userEmail())
             }
 
         }
@@ -96,7 +95,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
 
             // Already existing in database
-            val e = expenseDAO.readExpense(editedExpense.title, editedExpense.ofUser)
+            val e = expenseDAO.readExpense(editedExpense.title, editedExpense.ofUser, editedExpense.createdOn.year, editedExpense.createdOn.monthValue)
 
             if (e == null) {
                 expenseDAO.updateExpense(editedExpense)
