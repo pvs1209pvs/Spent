@@ -11,4 +11,10 @@ data class Category(
     var total: Float = 0f,
     var budget: Float = 0f,
     var icon: Int = R.drawable.cat_other
-) : Serializable
+) : Serializable{
+
+    init {
+        title = title.trim()
+    }
+
+}

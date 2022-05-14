@@ -17,6 +17,10 @@ data class Expense(
     @ColumnInfo(defaultValue = "0") var backedUp: Int = 0
 ) : Serializable {
 
+    init {
+        title = title.trim()
+    }
+
     fun isFromNow(): Boolean {
         val now = LocalDate.now()
         return createdOn.year == now.year && createdOn.monthValue == now.monthValue

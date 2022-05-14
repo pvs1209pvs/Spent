@@ -71,7 +71,7 @@ class AddExpenseFragment : Fragment() {
                         viewModel.addExpense(expense)
                     }
                     else -> { // edit
-                        expenseToEdit.title = title
+                        expenseToEdit.title = title.trim()
                         expenseToEdit.amount = amount.toFloat()
                         expenseToEdit.ofCategory = ofCategory
                         viewModel.mergeExpense(expenseToEdit)
@@ -142,6 +142,7 @@ class AddExpenseFragment : Fragment() {
     }
 
     override fun onResume() {
+
         super.onResume()
 
         viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner) { allCats ->
