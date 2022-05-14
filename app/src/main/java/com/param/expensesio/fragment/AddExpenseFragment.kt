@@ -67,6 +67,7 @@ class AddExpenseFragment : Fragment() {
                             amount = amount.toFloat(),
                             ofCategory = ofCategory,
                         )
+                        println("testing purposes ${expense.createdOn}")
                         viewModel.addExpense(expense)
                     }
                     else -> { // edit

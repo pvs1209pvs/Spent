@@ -81,9 +81,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                 println("new add")
                 expenseDAO.addExpense(expense)
             } else {
-                println("modify")
+                Log.d("MyViewMode.addExpense","modify")
+
+                    expenseDAO.updateTotal(e.title, expense.amount + e.amount, userEmail())
                 // modifies the already present expense with new expense
-                expenseDAO.updateTotal(e.title, expense.amount + e.amount, userEmail())
             }
 
         }
