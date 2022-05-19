@@ -14,8 +14,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.param.expensesio.data.*
 import com.param.expensesio.db.Convertor
 import com.param.expensesio.db.LocalDB
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.*
 
@@ -37,6 +39,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     val backupStat = MutableLiveData(0)
     val restoreStat = MutableLiveData(0)
+
+    val backupSize = MutableLiveData(0)
 
     // Category
 
@@ -75,13 +79,18 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
 
             // already present?
-            val e = expenseDAO.readExpense(expense.title, expense.ofUser, expense.createdOn.year, expense.createdOn.monthValue)
+            val e = expenseDAO.readExpense(
+                expense.title,
+                expense.ofUser,
+                expense.createdOn.year,
+                expense.createdOn.monthValue
+            )
 
             if (e == null) {
                 Log.d("MyViewModel.addExpense", "Add")
                 expenseDAO.addExpense(expense)
             } else {
-                Log.d("MyViewMode.addExpense","modify")
+                Log.d("MyViewMode.addExpense", "modify")
                 // modifies the already present expense with new expense
                 expenseDAO.updateTotal(e.title, expense.amount + e.amount, userEmail())
             }
@@ -95,7 +104,12 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
 
             // Already existing in database
-            val e = expenseDAO.readExpense(editedExpense.title, editedExpense.ofUser, editedExpense.createdOn.year, editedExpense.createdOn.monthValue)
+            val e = expenseDAO.readExpense(
+                editedExpense.title,
+                editedExpense.ofUser,
+                editedExpense.createdOn.year,
+                editedExpense.createdOn.monthValue
+            )
 
             if (e == null) {
                 expenseDAO.updateExpense(editedExpense)
@@ -113,7 +127,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun updateExpense(expense: Expense) {
+    private fun updateExpense(expense: Expense) {
+        Log.d(javaClass.canonicalName, "updating $expense")
         viewModelScope.launch(Dispatchers.IO) {
             expenseDAO.updateExpense(expense)
         }
@@ -171,7 +186,11 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getUnbackedUpExpenses(ofUser: String) = expenseDAO.getUnbackedUpExpenses(ofUser)
 
-    fun expenseCount(ofUser: String, now: LocalDate) = expenseDAO.expenseCount(ofUser, now.year, now.monthValue)
+    fun expenseCount(ofUser: String, now: LocalDate) =
+        expenseDAO.expenseCount(ofUser, now.year, now.monthValue)
+
+    fun expenseCountOld(ofUser: String, now: LocalDate) =
+        expenseDAO.expenseCountOld(ofUser, now.year, now.monthValue)
 
     fun orderExpenseAmountHighestFirst(category: String, period: Calendar, ofUser: String) =
         expenseDAO.orderExpenseAmountHighestFirst(
@@ -230,6 +249,18 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         return email ?: ""
     }
 
+    fun <P, R> CoroutineScope.executeAsyncTask(
+        doInBackground: suspend (suspend (P) -> Unit) -> R,
+        onPostExecute: (R) -> Unit,
+    ) = launch {
+
+        val result = withContext(Dispatchers.IO) {
+            doInBackground {
+            }
+        }
+        onPostExecute(result)
+    }
+
     // FirebaseFirestore
 
     // Backup
@@ -264,21 +295,30 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             .document(EXPENSE_DOC)
 
         expenseDoc.get().addOnSuccessListener {
+
             if (it.exists()) {
-                doBackUp(unwarranted, expenseDoc)
-                markAsBackedUp(unwarranted)
+                Log.d(javaClass.canonicalName, "adding to existing doc snapshot")
+                backupAllExpenses(unwarranted, expenseDoc)
             } else {
-                expenseDoc.set(mapOf("values" to listOf<ExpenseFirestore>()))
-                    .addOnSuccessListener { doBackUp(unwarranted, expenseDoc) }
-                markAsBackedUp(unwarranted)
+                Log.d(javaClass.canonicalName, "creating new doc snapshot and adding")
+                expenseDoc
+                    .set(mapOf("values" to listOf<ExpenseFirestore>()))
+                    .addOnSuccessListener { backupAllExpenses(unwarranted, expenseDoc) }
             }
+
+            Log.d(javaClass.canonicalName, "start marking expenses as backed up")
+            markAsBackedUp(unwarranted)
+            Log.d(javaClass.canonicalName, "finish marking expenses as backed up")
+
+
         }.addOnFailureListener {
             println(it.toString())
         }
 
     }
 
-    private fun doBackUp(unwarranted: List<Expense>, expenseDoc: DocumentReference) {
+    private fun backupAllExpenses(unwarranted: List<Expense>, expenseDoc: DocumentReference) {
+        Log.d(javaClass.canonicalName, "starting backing up up all expenses")
         unwarranted.map { exp ->
             ExpenseFirestore(
                 exp.ofUser,
@@ -290,24 +330,29 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                 exp.backedUp
             )
         }.forEach { expF -> backUpExpense(expenseDoc, expF) }
+        Log.d(javaClass.canonicalName, "finished backing up all expenses")
     }
 
     // TODO Backup status should be moved to backupUserExpenses
     private fun backUpExpense(dr: DocumentReference, p: ExpenseFirestore) {
+
+        Log.d(javaClass.canonicalName, "backing up $p")
+
         dr.update("values", FieldValue.arrayUnion(p))
             .addOnSuccessListener {
-                Log.d("ViewModel", "user expense back up success")
-                backupStat.value = backupStat.value!! + 1
+                Log.d(javaClass.canonicalName, "$p backup success")
             }
             .addOnFailureListener {
-                Log.d("ViewModel", "user expense back up failure")
-                backupStat.value = backupStat.value!! - 2
+                Log.d(javaClass.canonicalName, "$p backup fail $it")
             }
+
     }
 
     private fun markAsBackedUp(expense: List<Expense>) {
         expense.forEach { it.backedUp = 1 }
-        expense.forEach { updateExpense(it) }
+        expense.forEach {
+            updateExpense(it)
+        }
     }
 
     // Restore
