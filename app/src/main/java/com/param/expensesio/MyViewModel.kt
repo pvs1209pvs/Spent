@@ -37,10 +37,9 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    val backupStat = MutableLiveData(0)
     val restoreStat = MutableLiveData(0)
 
-    val backupSize = MutableLiveData(0)
+    val backupStat = MutableLiveData(false)
 
     // Category
 
@@ -275,16 +274,17 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             .set(categories)
             .addOnSuccessListener {
                 Log.d("ViewModel", "user category back up success")
-                backupStat.value = backupStat.value!! + 1
             }
             .addOnFailureListener {
                 Log.d("ViewModel", "user category back up failure")
-                backupStat.value = backupStat.value!! - 2
             }
 
     }
 
     fun backupUserExpenses(unwarranted: List<Expense>) {
+
+        backupStat.value = false
+
 
         val userEmailDocRef = firestore
             .collection(FIRESTORE_DB)
@@ -348,11 +348,18 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+
+    private fun updateAll(list: List<Expense>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            expenseDAO.updateExpenseBatch(list)
+        }.invokeOnCompletion {
+            backupStat.postValue(true)
+        }
+    }
+
     private fun markAsBackedUp(expense: List<Expense>) {
         expense.forEach { it.backedUp = 1 }
-        expense.forEach {
-            updateExpense(it)
-        }
+        updateAll(expense)
     }
 
     // Restore

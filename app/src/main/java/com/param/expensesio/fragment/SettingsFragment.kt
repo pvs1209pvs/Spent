@@ -14,10 +14,10 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.firestore.FirebaseFirestore
-import com.param.expensesio.MainActivity
 import com.param.expensesio.MyViewModel
 import com.param.expensesio.R
 import com.param.expensesio.data.UserCategoryBackup
+import com.param.expensesio.ui.AlertBackup
 import com.param.expensesio.ui.ProfileViewPreference
 import java.util.*
 
@@ -95,22 +95,34 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Backup Data
         findPreference<Preference>("backup")!!.setOnPreferenceClickListener {
 
-            viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner){
+            Log.d(javaClass.canonicalName, "backup button clicked ${viewModel.backupStat.value}")
+
+            viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner) {
                 viewModel.backupUserCategories(UserCategoryBackup(it))
             }
+
+            val dialogBackup = AlertBackup(requireActivity())
 
             val unwarranted = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
 
             unwarranted.observe(viewLifecycleOwner) {
                 val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
-                Log.d(javaClass.canonicalName, "backup button clicked")
                 if (unbackedPastExpenses.isNotEmpty()) {
+                    dialogBackup.show()
+                    Log.d(javaClass.canonicalName, "backing up takes place in view model")
                     viewModel.backupUserExpenses(unbackedPastExpenses)
                 }
-                Log.d(javaClass.canonicalName, "backing up takes place in view model")
                 unwarranted.removeObservers(viewLifecycleOwner)
             }
 
+
+
+            viewModel.backupStat.observe(viewLifecycleOwner) {
+                Log.d(javaClass.canonicalName, "backup result $it")
+                if(it){
+                    dialogBackup.dismiss()
+                }
+            }
 
             true
         }
@@ -121,17 +133,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
             viewModel.restoreUserCategories()
             viewModel.restoreUserExpenses()
 
-//            viewModel.restoreStat.observe(viewLifecycleOwner) {
-//                if (it == 2) {
-//                    (requireActivity() as MainActivity).buildSnackBar("Restore complete")
-//                    viewModel.restoreStat.value = 0
-//                }
-//                if (it < 0) {
-//                    (requireActivity() as MainActivity).buildSnackBar("Restore failed")
-//                    viewModel.restoreStat.value = 0
-//                }
-//                // Reset backup status
-//            }
 
             true
         }

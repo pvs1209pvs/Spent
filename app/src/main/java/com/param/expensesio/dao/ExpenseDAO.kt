@@ -17,7 +17,12 @@ interface ExpenseDAO {
     suspend fun delExpenseByTitle(title: String)
 
     @Update
-    suspend fun updateExpense(expense: Expense)
+    suspend fun updateExpense(expense: Expense): Int
+
+    @Transaction
+    suspend fun updateExpenseBatch(list: List<Expense>) {
+        list.forEach { updateExpense(it) }
+    }
 
     @Query("UPDATE expense_table SET amount = :newAmount WHERE title = :title AND ofUser = :ofUser")
     suspend fun updateTotal(title: String, newAmount: Float, ofUser: String)
@@ -55,7 +60,7 @@ interface ExpenseDAO {
     fun expenseCount(ofUser: String, y: Int, m: Int): LiveData<Int>
 
     @Query("SELECT COUNT(DISTINCT id) from expense_table WHERE ofUser = :ofUser AND backedUp = 0 AND createdOn NOT LIKE :y||','||:m||','||'%' ")
-    fun expenseCountOld(ofUser: String, y:Int,m:Int) : Int
+    fun expenseCountOld(ofUser: String, y: Int, m: Int): Int
 
     @Query("SELECT * FROM expense_table WHERE ofCategory = :category AND ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%' ORDER BY amount DESC")
     fun orderExpenseAmountHighestFirst(

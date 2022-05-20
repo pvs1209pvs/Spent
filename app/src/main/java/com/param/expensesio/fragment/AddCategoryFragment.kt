@@ -56,7 +56,7 @@ class AddCategoryFragment : Fragment() {
             val title = binding.catTitle.editText!!.text.toString()
             val budget = binding.catBudget.editText!!.text.toString()
 
-            if (viewModel.isTitleValid(title) && viewModel.isAmountValid(budget)) {
+            if (viewModel.isTitleValid(title) && viewModel.isAmountValid(budget) && title.lowercase() != "misc") {
 
                 when (categoryToEdit) {
                     null -> {
@@ -80,6 +80,13 @@ class AddCategoryFragment : Fragment() {
                 findNavController().popBackStack()
 
             } else {
+
+                ViewBehavior.tilErrorMsg(
+                    binding.catTitle,
+                    title.lowercase() != "misc",
+                    "Misc category name is reserved"
+                )
+
                 ViewBehavior.tilErrorMsg(
                     binding.catTitle,
                     viewModel.isTitleValid(title),
@@ -90,6 +97,7 @@ class AddCategoryFragment : Fragment() {
                     viewModel.isAmountValid(budget),
                     "Please enter a valid number greater than zero"
                 )
+
             }
         }
 
