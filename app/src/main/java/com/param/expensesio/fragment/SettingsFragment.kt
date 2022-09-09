@@ -115,8 +115,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 unwarranted.removeObservers(viewLifecycleOwner)
             }
 
-
-
             viewModel.backupStat.observe(viewLifecycleOwner) {
                 Log.d(javaClass.canonicalName, "backup result $it")
                 if(it){
@@ -129,11 +127,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Restore data
         findPreference<Preference>("restore")!!.setOnPreferenceClickListener {
-
             viewModel.restoreUserCategories()
             viewModel.restoreUserExpenses()
-
-
             true
         }
 
