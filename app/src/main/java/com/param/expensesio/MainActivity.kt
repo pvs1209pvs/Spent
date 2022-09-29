@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.facebook.FacebookSdk
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.param.expensesio.data.Expense
 import com.param.expensesio.databinding.ActivityMainBinding
@@ -35,9 +36,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_Expensery)
         super.onCreate(savedInstanceState)
 
-        setTheme(R.style.Theme_Expensery)
+        FirebaseApp.initializeApp(this)
+        auth = FirebaseAuth.getInstance()
+
         setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
@@ -76,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             .setExitAnim(R.anim.to_left)
             .setPopEnterAnim(R.anim.from_left)
             .setPopExitAnim(R.anim.to_right)
-            .setPopUpTo(navController.graph.startDestination, false)
+            .setPopUpTo(navController.graph.startDestDisplayName, false)
             .build()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -187,53 +191,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("RestrictedApi")
-    fun BS() = navController.backStack
+    fun BS() = navController.backQueue
         .map { it.destination }
         .filterNot { it is NavGraph }
         .joinToString(" > ") { it.displayName.split('/')[1] }
 
 
-    fun mockDB() {
-
-//        val categoryList = listOf(
-//            Category("Food"),
-//            Category("Car"),
-//            Category("Home"),
-//            Category("Phone"),
-//        )
-//
-//        val jan = Calendar.getInstance().apply { set(2022, 0, 9) }
-//        val feb = Calendar.getInstance().apply { set(2022, 1, 25) }
-////        val march = Calendar.getInstance().apply { set(2022, 2, 12) }
-//
-//
-//        val expenseList = listOf(
-//            Expense(title = "Bill", amount = 50f, ofCategory = "Phone", createdOn = jan),
-//            Expense(title = "Pepper", amount = 5f, ofCategory = "Food", createdOn = jan),
-//
-//            Expense(
-//                title = "Windshield washer",
-//                amount = 5f,
-//                ofCategory = "Car",
-//                createdOn = feb
-//            ),
-//            Expense(title = "Rent", amount = 550f, ofCategory = "Home", createdOn = feb),
-//            Expense(title = "Bed", amount = 700f, ofCategory = "Home", createdOn = feb),
-//
-////            Expense(title = "Gas", amount = 60f, ofCategory = "Car", createdOn = march),
-////            Expense(title = "Cilantro", amount = 2f, ofCategory = "Food", createdOn = march),
-////            Expense(title = "Rice", amount = 10f, ofCategory = "Food", createdOn = march),
-////            Expense(title = "Chocolates", amount = 5f, ofCategory = "Food", createdOn = march),
-//        )
-//
-//        GlobalScope.async {
-//            categoryList.forEach { myViewModel.addCategory(it) }
-//        }.invokeOnCompletion {
-//            expenseList.forEach { myViewModel.addExpense(it) }
-//        }
-
-
-    }
 
 
 }

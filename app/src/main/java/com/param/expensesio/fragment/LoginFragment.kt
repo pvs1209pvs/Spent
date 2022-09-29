@@ -294,7 +294,7 @@ class LoginFragment : Fragment() {
 
 
     @SuppressLint("RestrictedApi")
-    fun BS() = findNavController().backStack
+    fun BS() = findNavController().backQueue
         .map { it.destination }
         .filterNot { it is NavGraph }
         .joinToString(" > ") { it.displayName.split('/')[1] }

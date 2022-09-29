@@ -1,10 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'kotlin-android'
     id 'androidx.navigation.safeargs'
     id 'kotlin-kapt'
     id 'kotlinx-serialization'
-    id 'kotlin-android'
     id 'kotlin-android-extensions'
 }
 
@@ -14,12 +14,12 @@ androidExtensions {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.param.expensesio"
         minSdk 26
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -57,15 +57,14 @@ android {
         enabled = true
     }
 
-    buildFeatures {
-        viewBinding true
-    }
+//    buildFeatures {
+//        viewBinding true
+//    }
+    namespace 'com.param.expensesio'
 
 }
 
 dependencies {
-
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.1.0'
 
     // Test
     testImplementation 'junit:junit:'
@@ -84,26 +83,33 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:0.10.0"
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:29.0.0')
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.3'
-    implementation 'com.google.firebase:firebase-auth:21.0.3'
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
+    implementation 'com.google.firebase:firebase-auth:21.0.8'
     implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+
+    implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation 'com.google.firebase:firebase-firestore:17.1.0'
 
     // Facebook
     implementation 'com.facebook.android:facebook-android-sdk:latest.release'
 
     // Room
-    implementation "androidx.room:room-runtime:2.3.0"
-    implementation "androidx.room:room-ktx:2.3.0"
-    kapt "androidx.room:room-compiler:2.3.0"
-    androidTestImplementation "androidx.room:room-testing:2.3.0"
+    implementation "androidx.room:room-runtime:2.4.3"
+    implementation "androidx.room:room-ktx:2.4.3"
+    kapt "androidx.room:room-compiler:2.4.3"
+    androidTestImplementation "androidx.room:room-testing:2.4.3"
+    //
+//    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
 
     // Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     // Lifecycle and ViewModel

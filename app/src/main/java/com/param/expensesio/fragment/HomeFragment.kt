@@ -29,12 +29,13 @@ class HomeFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
     private val adapterHome by lazy { AdapterCategory(viewModel) }
 
-    private lateinit var auth: FirebaseAuth
+    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        auth = FirebaseAuth.getInstance()
-    }
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        auth = FirebaseAuth.getInstance()
+//    }
 
     @SuppressLint("RestrictedApi")
     override fun onCreateView(
@@ -121,7 +122,7 @@ class HomeFragment : Fragment() {
 
 
     @SuppressLint("RestrictedApi")
-    fun BS() = findNavController().backStack
+    fun BS() = findNavController().backQueue
         .map { it.destination }
         .filterNot { it is NavGraph }
         .joinToString(" > ") { it.displayName.split('/')[1] }
