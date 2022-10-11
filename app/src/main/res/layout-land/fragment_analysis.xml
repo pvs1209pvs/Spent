@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="16dp"
-    tools:context="fragment.AnalysisFragment">
+    tools:context="com.pvs.expensesio.fragment.AnalysisFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/monthYearPicker"

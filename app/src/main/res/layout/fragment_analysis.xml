@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="fragment.AnalysisFragment">
+    tools:context="com.pvs.expensesio.fragment.AnalysisFragment">
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"

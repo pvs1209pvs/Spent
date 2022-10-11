@@ -17,7 +17,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.param.expensesio"
+        applicationId "com.pvs.expensesio"
         minSdk 26
         targetSdk 33
         versionCode 1
@@ -57,10 +57,7 @@ android {
         enabled = true
     }
 
-//    buildFeatures {
-//        viewBinding true
-//    }
-    namespace 'com.param.expensesio'
+    namespace 'com.pvs.expensesio'
 
 }
 

@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/fragment_vertical_margin"
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
-    tools:context=".fragment.RegisterFragment">
+    tools:context="com.pvs.expensesio.fragment.RegisterFragment">
 
     <TextView
         android:id="@+id/signUpTitle"

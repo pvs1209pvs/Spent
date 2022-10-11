@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:696063268360:android:33f0e3e0ae8cacbb3063bd",
         "android_client_info": {
-          "package_name": "com.param.expensesio"
+          "package_name": "com.pvs.expensesio"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "696063268360-1leu50d75cdh6h623goavlc058f8gdpc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.param.expensesio",
+            "package_name": "com.pvs.expensesio",
             "certificate_hash": "6f46bc5e30fa3ff1a65e82f8b868ecec2c4d26f2"
           }
         },

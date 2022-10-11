@@ -1,51 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="app/src/main/res/drawable-v24/button_style_email_pass.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/cat_food.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/cat_other.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/ic_baseline_home_24.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/ic_launcher_background.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/splash_bg.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/border_month_total.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/button_gradient.xml" value="0.1485" />
-        <entry key="app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/layout_border.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/splash_bg.xml" value="0.177" />
-        <entry key="app/src/main/res/layout/category_icon.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/fragment_add_category.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/fragment_add_expense.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/fragment_budget.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/fragment_history.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/layout/fragment_manage_category.xml" value="0.16822916666666668" />
-        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.2111111111111111" />
-        <entry key="app/src/main/res/layout/history_expandable_header.xml" value="0.16822916666666668" />
-        <entry key="app/src/main/res/layout/item_budget.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_category.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_dropdown_category.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/item_expense.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/layout/item_history.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/item_managae_category.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/layout/login_secondary_action.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/no_data.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/layout/picker_category_icon.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/pref_profile.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/layout/toolbar_custom.xml" value="0.32974358974358975" />
-        <entry key="app/src/main/res/menu/menu_all_expenses.xml" value="0.16822916666666668" />
-        <entry key="app/src/main/res/menu/menu_home_fragment.xml" value="0.16822916666666668" />
-        <entry key="app/src/main/res/menu/menu_item_expense.xml" value="0.16822916666666668" />
-        <entry key="app/src/main/res/menu/pop_up_del.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/menu/pop_up_expense.xml" value="0.33489583333333334" />
-        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.33489583333333334" />
-      </map>
-    </option>
-  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

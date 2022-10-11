@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/main"
     android:background="@color/gray_100"
-    tools:context="fragment.HistoryFragment">
+    tools:context="com.pvs.expensesio.fragment.HistoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/historyRV"
