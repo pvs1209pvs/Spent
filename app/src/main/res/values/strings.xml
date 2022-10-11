@@ -2,9 +2,9 @@
     <string name="app_name">Spent</string>
 
     <!-- Firebase Facebook login -->
-    <string name="facebook_app_id">1174078533364693</string>
-    <string name="fb_login_protocol_scheme">fb1174078533364693</string>
-    <string name="facebook_client_token">38d9d48c6024dd2a2872a7fb80e6e731</string>
+    <string name="facebook_app_id">774780157195204</string>
+    <string name="fb_login_protocol_scheme">fb774780157195204</string>
+    <string name="facebook_client_token">4c5371fddb247eedfbfff7744c84e84f</string>
 
     <!-- Login -->
     <string name="sign_in">Sign In</string>
