@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Expensesio</string>
+    <string name="app_name">Spent</string>
 
     <!-- Firebase Facebook login -->
     <string name="facebook_app_id">1174078533364693</string>
