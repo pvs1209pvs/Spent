@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/mainAllExpenses"
     android:background="@color/gray_100"
-    tools:context="com.pvs.expensesio.fragment.ExpensesByCategoryFragment">
+    tools:context="com.pvs.spent.fragment.ExpensesByCategoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allExpensesRV"

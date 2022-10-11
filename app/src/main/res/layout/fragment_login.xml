@@ -9,7 +9,7 @@
     android:paddingBottom="@dimen/fragment_vertical_margin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pvs.expensesio.fragment.LoginFragment">
+    tools:context="com.pvs.spent.fragment.LoginFragment">
 
 
     <TextView
@@ -18,7 +18,7 @@
         style="@style/CustomHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Expensesio!"
+        android:text="@string/welcome_msg"
         android:textSize="56sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

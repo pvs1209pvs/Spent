@@ -17,7 +17,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.pvs.expensesio"
+        applicationId "com.pvs.spent"
         minSdk 26
         targetSdk 33
         versionCode 1
@@ -57,7 +57,7 @@ android {
         enabled = true
     }
 
-    namespace 'com.pvs.expensesio'
+    namespace 'com.pvs.spent'
 
 }
 

@@ -2,12 +2,5 @@
 <resources>
     <declare-styleable name="ds">
 
-<!--        <attr name="main_background" format="color"/>-->
-
-<!--        <attr name="card_color" format="color"/>-->
-
-<!--        <attr name="text_color_primary" format="color"/>-->
-<!--        <attr name="text_color_secondary" format="color"/>-->
-
     </declare-styleable>
 </resources>

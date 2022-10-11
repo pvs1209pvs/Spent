@@ -44,7 +44,7 @@
             android:value="@string/facebook_client_token" />
 
         <activity
-            android:name="com.pvs.expensesio.MainActivity"
+            android:name="com.pvs.spent.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
