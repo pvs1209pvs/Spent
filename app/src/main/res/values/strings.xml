@@ -14,6 +14,11 @@
     <string name="register_helper">Don\'t have an account?</string>
     <string name="account_exists_helper">Already have an account?</string>
     <string name="register_action">Register here</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="welcome_msg">Welcome to SPENT!</string>
     <string name="or">or</string>
 
     <!-- Data -->
@@ -40,10 +45,8 @@
     <string name="empty_amount">0.00</string>
     <string name="empty_date">0000/00/00</string>
     <string name="budget">Budget</string>
-    <string name="sign_in_with_facebook">Sign in with Facebook</string>
-    <string name="sign_in_with_google">Sign in with Google</string>
-    <string name="first_name">First name</string>
-    <string name="last_name">Last name</string>
-    <string name="welcome_msg">Welcome to SPENT!</string>
+
+    <!-- Login -->
+
 
 </resources>

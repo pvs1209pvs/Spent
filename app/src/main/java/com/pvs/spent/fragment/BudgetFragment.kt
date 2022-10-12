@@ -30,7 +30,6 @@ class BudgetFragment : Fragment() {
     ): View {
         binding = FragmentBudgetBinding.inflate(inflater, container, false)
 
-
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_5)
 

@@ -57,7 +57,7 @@ class AdapterCategory(private val myViewModel: MyViewModel) :
                 else
                     String.format(
                         holder.itemView.context.resources.getString(R.string.monetary_amount_long),
-                        list[position].budget,
+                        list[position].total,
                         myViewModel.getCurrency()
                     )
 
@@ -71,7 +71,7 @@ class AdapterCategory(private val myViewModel: MyViewModel) :
             else
                 String.format(
                     holder.itemView.context.resources.getString(R.string.monetary_amount_long),
-                    list[position].total,
+                    list[position].budget,
                     myViewModel.getCurrency()
                 )
 
