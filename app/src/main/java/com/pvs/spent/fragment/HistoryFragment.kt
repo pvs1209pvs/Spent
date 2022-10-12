@@ -58,18 +58,16 @@ class HistoryFragment : Fragment() {
                 val currency = viewModel.getCurrency()
                 val historyTotal = expenses.sumOf { it.amount.toDouble() }
 
-                val monthTotal = if (currency.length == 1)
-                    String.format(
-                        resources.getString(R.string.monetary_amount),
-                        historyTotal,
-                        currency
+                val historyTotalStrFormat =
+                    if (currency.length == 1) resources.getString(R.string.monetary_amount) else resources.getString(
+                        R.string.monetary_amount_long
                     )
-                else
-                    String.format(
-                        resources.getString(R.string.monetary_amount_long),
-                        historyTotal,
-                        currency
-                    )
+
+                val monthTotal = String.format(
+                    historyTotalStrFormat,
+                    viewModel.formatNumber(historyTotal),
+                    currency
+                )
 
                 val now = LocalDate.now()
                 val isExpanded =

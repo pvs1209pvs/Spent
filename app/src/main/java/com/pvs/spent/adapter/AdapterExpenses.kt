@@ -18,7 +18,8 @@ class AdapterExpenses(private val myViewModel: MyViewModel) :
     private lateinit var rv: RecyclerView
 
 
-    inner class MyViewHolder(val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(val binding: ItemExpenseBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.itemExpenseCard.setOnClickListener {
@@ -37,16 +38,16 @@ class AdapterExpenses(private val myViewModel: MyViewModel) :
 
             expenseTitle.text = list[position].title
 
-            expenseAmount.text = if (myViewModel.getCurrency().length == 1)
+            val expenseAmountStrFormat =
+                if (myViewModel.getCurrency().length == 1)
+                    holder.itemView.context.resources.getString(R.string.monetary_amount)
+                else
+                    holder.itemView.context.resources.getString(R.string.monetary_amount_long)
+
+            expenseAmount.text =
                 String.format(
-                    holder.itemView.context.resources.getString(R.string.monetary_amount),
-                    list[position].amount,
-                    myViewModel.getCurrency()
-                )
-            else
-                String.format(
-                    holder.itemView.context.resources.getString(R.string.monetary_amount_long),
-                    list[position].amount,
+                    expenseAmountStrFormat,
+                    myViewModel.formatNumber(list[position].amount),
                     myViewModel.getCurrency()
                 )
 

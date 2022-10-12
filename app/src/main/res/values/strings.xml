@@ -22,8 +22,8 @@
     <string name="or">or</string>
 
     <!-- Data -->
-    <string name="monetary_amount">%2$s%1$.2f</string>
-    <string name="monetary_amount_long">%2$s %1$.2f</string>
+    <string name="monetary_amount">%2$s%1$s</string>
+    <string name="monetary_amount_long">%2$s %1$s</string>
 
     <!-- Category -->
     <string name="category_total_out_of_budget">%3$s%1$.2f / %3$s%2$.2f</string>

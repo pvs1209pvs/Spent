@@ -69,15 +69,17 @@ class HomeFragment : Fragment() {
                 .filter { !(it.title == "Misc" && it.total <= 0) }
                 .map { Category(it.ofUser, it.title, it.total, it.budget, it.icon) }
 
+            val resStringFormat = if(viewModel.getCurrency().length == 1) resources.getString(R.string.monetary_amount) else resources.getString(R.string.monetary_amount_long)
+
             val monthTotal = String.format(
-                resources.getString(R.string.monetary_amount),
-                categories.sumOf { it.total.toDouble() },
+                resStringFormat,
+                viewModel.formatNumber(categories.sumOf { it.total.toDouble() }),
                 viewModel.getCurrency()
             )
 
             val monthBudget = String.format(
-                resources.getString(R.string.monetary_amount),
-                categories.sumOf { it.budget.toDouble() },
+                resStringFormat,
+                viewModel.formatNumber(categories.sumOf { it.budget.toDouble() }),
                 viewModel.getCurrency()
             )
 

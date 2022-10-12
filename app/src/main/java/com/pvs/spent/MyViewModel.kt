@@ -437,4 +437,25 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isPassValid(password: CharSequence?) = !password.isNullOrEmpty() && password.isNotBlank()
 
+    /**
+     * Format number of adding locale's digit separator and limit number of  decimal places to 2.
+     * @param number Number to format
+     * @return Returns formatted string.
+     */
+    fun formatNumber(number: Number): String {
+
+        Log.d("MyViewModel -> formatNumber", number.toString())
+
+        val nf = java.text.NumberFormat.getInstance()
+
+        nf.maximumFractionDigits = 2
+
+        val formattedNumber = nf.format(number)
+
+        Log.d("MyViewModel -> formatNumber", formattedNumber)
+
+        return formattedNumber
+
+    }
+
 }

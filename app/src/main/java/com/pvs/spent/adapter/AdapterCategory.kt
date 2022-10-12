@@ -47,34 +47,23 @@ class AdapterCategory(private val myViewModel: MyViewModel) :
 
             titleTextView.text = list[position].title
 
-            totalTextView.text =
+            val monetaryFormat =
                 if (myViewModel.getCurrency().length == 1)
-                    String.format(
-                        holder.itemView.context.resources.getString(R.string.monetary_amount),
-                        list[position].total,
-                        myViewModel.getCurrency()
-                    )
+                    holder.itemView.context.resources.getString(R.string.monetary_amount)
                 else
-                    String.format(
-                        holder.itemView.context.resources.getString(R.string.monetary_amount_long),
-                        list[position].total,
-                        myViewModel.getCurrency()
-                    )
+                    holder.itemView.context.resources.getString(R.string.monetary_amount_long)
 
+            totalTextView.text = String.format(
+                monetaryFormat,
+                myViewModel.formatNumber(list[position].total),
+                myViewModel.getCurrency()
+            )
 
-            budgetTV.text = if (myViewModel.getCurrency().length == 1)
-                String.format(
-                    holder.itemView.context.resources.getString(R.string.monetary_amount),
-                    list[position].budget,
-                    myViewModel.getCurrency()
-                )
-            else
-                String.format(
-                    holder.itemView.context.resources.getString(R.string.monetary_amount_long),
-                    list[position].budget,
-                    myViewModel.getCurrency()
-                )
-
+            budgetTV.text = String.format(
+                monetaryFormat,
+                myViewModel.formatNumber(list[position].budget),
+                myViewModel.getCurrency()
+            )
 
             if (list[position].total > list[position].budget) {
                 holder.binding.totalTextView.setTextColor(Color.RED)
