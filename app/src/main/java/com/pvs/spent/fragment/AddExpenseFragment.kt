@@ -53,11 +53,11 @@ class AddExpenseFragment : Fragment() {
         // Add or update Expense
         binding.expenseAddConfirmFAB.setOnClickListener {
 
-            val title = binding.expenseTitle.editText!!.text.toString()
-            val amount = binding.expenseAmount.editText!!.text.toString()
-            val ofCategory = binding.categoryDropDownTitle.text.toString()
+            val title = binding.expenseTitle.editText!!.text.toString().trim()
+            val amount = binding.expenseAmount.editText!!.text.toString().trim()
+            val ofCategory = binding.categoryDropDownTitle.text.toString().trim()
 
-            if (title.isNotEmpty() && amount.isNotEmpty()) {
+            if (title.isNotEmpty() && title.isNotBlank() && amount.isNotEmpty() && amount.isNotBlank() && ofCategory.isNotEmpty() && ofCategory.isNotBlank()) {
 
                 when (expenseToEdit) {
                     null -> { // add

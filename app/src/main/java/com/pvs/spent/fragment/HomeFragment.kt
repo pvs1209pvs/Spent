@@ -115,6 +115,9 @@ class HomeFragment : Fragment() {
 
         })
 
+        Log.d("MainActivity: all expenses", viewModel.readAllExpense(viewModel.userEmail()).toString())
+
+
 
         return binding.root
 
