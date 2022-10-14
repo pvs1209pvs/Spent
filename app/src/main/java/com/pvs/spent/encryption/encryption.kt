@@ -52,10 +52,10 @@ object AES {
         BadPaddingException::class,
         IllegalBlockSizeException::class
     )
-    fun String.encrypt(key: SecretKey?, iv: IvParameterSpec?): String {
+    fun encrypt(plainText:String,key: SecretKey?, iv: IvParameterSpec?): String {
         val cipher: Cipher = Cipher.getInstance(CIPHER_ALGORITHM)
         cipher.init(Cipher.ENCRYPT_MODE, key, iv)
-        val cipherText: ByteArray = cipher.doFinal(toByteArray())
+        val cipherText: ByteArray = cipher.doFinal(plainText.toByteArray())
         return Base64.getEncoder().encodeToString(cipherText)
     }
 
@@ -67,12 +67,10 @@ object AES {
         BadPaddingException::class,
         IllegalBlockSizeException::class
     )
-    fun String.decrypt(key: SecretKey, iv: IvParameterSpec): String {
+    fun decrypt(cipherText:String,key: SecretKey, iv: IvParameterSpec): String {
         val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
         cipher.init(Cipher.DECRYPT_MODE, key, iv)
-        val plainText = cipher.doFinal(
-            Base64.getDecoder().decode(this)
-        )
+        val plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText))
         return String(plainText)
     }
 

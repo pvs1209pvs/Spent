@@ -62,15 +62,6 @@ class ExpensesByCategoryFragment : Fragment() {
         )
             .observe(viewLifecycleOwner) { allExpenses ->
 
-                allExpenses.forEach {
-                    val sk = AES.generateKey(viewModel.userEmail(), viewModel.userEmail())
-                    val iv = AES.generateIV()
-                    val encrypted = it.toString().encrypt(sk, iv)
-                    val decrypted = encrypted.decrypt(sk, iv)
-                    Log.d("HomeFragment.onCreateView", "AES Encrypt $encrypted")
-                    Log.d("HomeFragment.onCreateView", "AES Decrypt $decrypted")
-                }
-
                 adapterExpenses.setList(allExpenses)
 
                 ViewBehavior.getNoDataViewVisibility(

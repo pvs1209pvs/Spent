@@ -97,30 +97,39 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
             Log.d(javaClass.canonicalName, "backup button clicked ${viewModel.backupStat.value}")
 
-            viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner) {
-                viewModel.backupUserCategories(UserCategoryBackup(it))
-            }
+//            viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner) {
+//                viewModel.backupUserCategories(UserCategoryBackup(it))
+//            }
 
-            val dialogBackup = AlertBackup(requireActivity())
+//            val dialogBackup = AlertBackup(requireActivity())
 
             val unwarranted = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
 
-            unwarranted.observe(viewLifecycleOwner) {
+            unwarranted.observe(viewLifecycleOwner){
                 val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
                 if (unbackedPastExpenses.isNotEmpty()) {
-                    dialogBackup.show()
                     Log.d(javaClass.canonicalName, "backing up takes place in view model")
-                    viewModel.backupUserExpenses(unbackedPastExpenses)
+                    viewModel.backupExpensesEncrypted(unbackedPastExpenses)
                 }
                 unwarranted.removeObservers(viewLifecycleOwner)
             }
 
-            viewModel.backupStat.observe(viewLifecycleOwner) {
-                Log.d(javaClass.canonicalName, "backup result $it")
-                if (it) {
-                    dialogBackup.dismiss()
-                }
-            }
+//            unwarranted.observe(viewLifecycleOwner) {
+//                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
+//                if (unbackedPastExpenses.isNotEmpty()) {
+//                    dialogBackup.show()
+//                    Log.d(javaClass.canonicalName, "backing up takes place in view model")
+//                    viewModel.backupUserExpenses(unbackedPastExpenses)
+//                }
+//                unwarranted.removeObservers(viewLifecycleOwner)
+//            }
+
+//            viewModel.backupStat.observe(viewLifecycleOwner) {
+//                Log.d(javaClass.canonicalName, "backup result $it")
+//                if (it) {
+//                    dialogBackup.dismiss()
+//                }
+//            }
 
             true
         }

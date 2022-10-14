@@ -11,9 +11,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import com.pvs.spent.data.*
 import com.pvs.spent.db.Convertor
 import com.pvs.spent.db.LocalDB
+import com.pvs.spent.encryption.AES
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -243,10 +245,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     // FirebaseAuth
 
-    fun userEmail(): String {
-        val email = FirebaseAuth.getInstance().currentUser?.email
-        return email ?: ""
-    }
+    fun userEmail() = FirebaseAuth.getInstance().currentUser?.email ?: ""
+
 
     fun <P, R> CoroutineScope.executeAsyncTask(
         doInBackground: suspend (suspend (P) -> Unit) -> R,
@@ -260,7 +260,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         onPostExecute(result)
     }
 
-    // FirebaseFirestore
+    // Firebase Firestore
 
     // Backup
 
@@ -284,7 +284,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun backupUserExpenses(unwarranted: List<Expense>) {
 
         backupStat.value = false
-
 
         val userEmailDocRef = firestore
             .collection(FIRESTORE_DB)
@@ -316,6 +315,53 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }
 
     }
+
+    fun backupExpensesEncrypted(unwarranted: List<Expense>) {
+
+        val userEmailDocRef = firestore
+            .collection(FIRESTORE_DB)
+            .document(userEmail())
+
+        val expenseDoc = userEmailDocRef
+            .collection(EXPENSE_COLLECTION)
+            .document(EXPENSE_DOC)
+
+        expenseDoc.get().addOnSuccessListener {
+            if (it.exists()) {
+                Log.d(javaClass.canonicalName, "adding to existing doc snapshot")
+                unwarranted.forEach { exp ->
+                    backupExpenseEncrypted(expenseDoc, exp)
+                }
+            } else {
+                Log.d(javaClass.canonicalName, "creating new doc snapshot and adding")
+                expenseDoc
+                    .set(mapOf("values" to listOf<ExpenseFirestore>()))
+                    .addOnSuccessListener {
+                        unwarranted.forEach { exp ->
+                            backupExpenseEncrypted(expenseDoc, exp)
+                        }
+//                        backupAllExpenses(unwarranted, expenseDoc) }
+                    }
+            }
+
+        }
+    }
+
+    private fun backupExpenseEncrypted(docRef: DocumentReference, expense: Expense) {
+
+        Log.d(javaClass.canonicalName, "Backing up encrypted expense")
+
+        docRef.update("values", FieldValue.arrayUnion(encrypt(expense)))
+            .addOnSuccessListener { Log.d(javaClass.canonicalName, "$expense backup success") }
+            .addOnFailureListener {
+                Log.d(
+                    javaClass.canonicalName,
+                    "$expense backup fail due to $it"
+                )
+            }
+
+    }
+
 
     private fun backupAllExpenses(unwarranted: List<Expense>, expenseDoc: DocumentReference) {
         Log.d(javaClass.canonicalName, "starting backing up up all expenses")
@@ -362,7 +408,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         updateAll(expense)
     }
 
-    // Restore
+// Restore
 
     fun restoreUserCategories() {
         firestore
@@ -423,19 +469,18 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    // UI input checks
+// UI input checks
 
     fun isTitleValid(text: String) = text.isNotEmpty() && text != ""
 
     fun isAmountValid(text: String) =
         text.matches("-?\\d+(\\.\\d+)?".toRegex()) && text.toFloat() > 0
 
-    fun isEmailValid(email: CharSequence?): Boolean {
-        if (email == null) return false
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
+    fun isEmailValid(email: CharSequence?) =
+        if (email == null) false else Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
-    fun isPassValid(password: CharSequence?) = !password.isNullOrEmpty() && password.isNotBlank()
+    fun isPassValid(password: CharSequence?) =
+        !password.isNullOrEmpty() && password.isNotBlank()
 
     /**
      * Format number of adding locale's digit separator and limit number of  decimal places to 2.
@@ -457,5 +502,15 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         return formattedNumber
 
     }
+
+    // Encryption
+    fun encrypt(expense: Expense): String {
+        val plainText = Gson().toJson(expense)
+        val secretKey = AES.generateKey(userEmail(), userEmail())
+        val iv = AES.generateIV()
+        val encrypted = AES.encrypt(plainText, secretKey, iv)
+        return encrypted
+    }
+
 
 }
