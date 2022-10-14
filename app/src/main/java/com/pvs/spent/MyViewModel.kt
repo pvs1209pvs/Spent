@@ -18,11 +18,8 @@ import com.pvs.spent.db.LocalDB
 import com.pvs.spent.encryption.AES
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import org.json.JSONObject
 import java.util.*
-import com.pvs.spent.data.LocalDate
+import com.pvs.spent.data.CreationPeriod
 
 
 class MyViewModel(application: Application) : AndroidViewModel(application) {
@@ -162,10 +159,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun readAllExpense(ofUser: String) = expenseDAO.readAllExpense(ofUser)
 
-    fun readAllExpenseFromNow(ofUser: String, now: LocalDate) =
+    fun readAllExpenseFromNow(ofUser: String, now: CreationPeriod) =
         expenseDAO.readAllExpenseFromNow(ofUser, now.year, now.monthValue)
 
-    fun readAllExpense(category: String, now: LocalDate, ofUser: String) =
+    fun readAllExpense(category: String, now: CreationPeriod, ofUser: String) =
         expenseDAO.readAllExpense(category, now.year, now.monthValue, ofUser)
 
     fun moveExpensesToMiscCategory(deletedCategory: String) {
@@ -196,10 +193,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getUnbackedUpExpenses(ofUser: String) = expenseDAO.getUnbackedUpExpenses(ofUser)
 
-    fun expenseCount(ofUser: String, now: LocalDate) =
+    fun expenseCount(ofUser: String, now: CreationPeriod) =
         expenseDAO.expenseCount(ofUser, now.year, now.monthValue)
 
-    fun expenseCountOld(ofUser: String, now: LocalDate) =
+    fun expenseCountOld(ofUser: String, now: CreationPeriod) =
         expenseDAO.expenseCountOld(ofUser, now.year, now.monthValue)
 
     fun orderExpenseAmountHighestFirst(category: String, period: Calendar, ofUser: String) =

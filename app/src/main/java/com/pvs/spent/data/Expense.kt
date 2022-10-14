@@ -15,7 +15,7 @@ data class Expense(
     var title: String = "",
     var amount: Float = 0f,
     var ofCategory: String = "",
-    var createdOn: LocalDate = LocalDate.now(),
+    var createdOn: CreationPeriod = CreationPeriod.now(),
     @ColumnInfo(defaultValue = "0") var backedUp: Int = 0,
 ) : Serializable {
 
@@ -24,7 +24,7 @@ data class Expense(
     }
 
     fun isFromNow(): Boolean {
-        val now = LocalDate.now()
+        val now = CreationPeriod.now()
         return createdOn.year == now.year && createdOn.monthValue == now.monthValue
     }
 

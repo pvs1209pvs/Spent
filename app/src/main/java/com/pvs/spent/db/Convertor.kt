@@ -2,19 +2,19 @@ package com.pvs.spent.db
 
 import android.util.Log
 import androidx.room.TypeConverter
-import com.pvs.spent.data.LocalDate
+import com.pvs.spent.data.CreationPeriod
 import javax.crypto.spec.IvParameterSpec
 
 class Convertor {
 
     @TypeConverter
-    fun calendarToString(date: LocalDate) = "${date.year},${date.monthValue},${date.dayOfMonth},"
+    fun calendarToString(date: CreationPeriod) = "${date.year},${date.monthValue},${date.dayOfMonth},"
 
     @TypeConverter
-    fun stringToCalendar(dateString: String): LocalDate {
+    fun stringToCalendar(dateString: String): CreationPeriod {
         val yearMonthDay = dateString.split(",")
         Log.d(javaClass.canonicalName, "stringToCalender $yearMonthDay")
-        return LocalDate(yearMonthDay[0].toInt(), yearMonthDay[1].toInt(), yearMonthDay[2].toInt())
+        return CreationPeriod(yearMonthDay[0].toInt(), yearMonthDay[1].toInt(), yearMonthDay[2].toInt())
     }
 
     @TypeConverter

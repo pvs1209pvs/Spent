@@ -104,7 +104,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             val unwarranted = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
 
             unwarranted.observe(viewLifecycleOwner){
-                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow()}
+                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() && exp.backedUp == 0}
                 if (unbackedPastExpenses.isNotEmpty()) {
                     viewModel.backupExpenseEncrypted(unbackedPastExpenses)
                 }

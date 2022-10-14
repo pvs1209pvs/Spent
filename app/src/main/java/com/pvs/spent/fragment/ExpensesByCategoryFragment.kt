@@ -1,7 +1,6 @@
 package com.pvs.spent.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,10 +12,7 @@ import com.pvs.spent.MyViewModel
 import com.pvs.spent.R
 import com.pvs.spent.adapter.AdapterExpenses
 import com.pvs.spent.data.Expense
-import com.pvs.spent.data.LocalDate
-import com.pvs.spent.encryption.AES
-import com.pvs.spent.encryption.AES.decrypt
-import com.pvs.spent.encryption.AES.encrypt
+import com.pvs.spent.data.CreationPeriod
 import com.pvs.spent.viewbehavior.ViewBehavior
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
 import java.util.*
@@ -57,7 +53,7 @@ class ExpensesByCategoryFragment : Fragment() {
         // Display all expenses by category on recyclerview
         viewModel.readAllExpense(
             args.categoryTitleArg,
-            LocalDate.now(),
+            CreationPeriod.now(),
             viewModel.userEmail()
         )
             .observe(viewLifecycleOwner) { allExpenses ->

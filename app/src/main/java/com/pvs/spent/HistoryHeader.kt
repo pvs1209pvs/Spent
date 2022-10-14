@@ -5,6 +5,7 @@ import com.xwray.groupie.ExpandableItem
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.history_expandable_header.*
+import java.text.DateFormatSymbols
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
@@ -17,7 +18,8 @@ class HistoryHeader(private val yearMonth: Pair<Int, Int>, private val locale: L
 
         val (month, year) = yearMonth
 //        viewHolder.crntMonth.text = "${month.getDisplayName(TextStyle.FULL, locale)} $year"
-        viewHolder.crntMonth.text = "$month $year"
+        viewHolder.crntMonth.text = "${DateFormatSymbols().months[month-1]} $year"
+
 
         viewHolder.historyTotal.text = historyTotal
 

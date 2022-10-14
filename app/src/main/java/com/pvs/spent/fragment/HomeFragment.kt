@@ -18,10 +18,9 @@ import com.pvs.spent.MyViewModel
 import com.pvs.spent.R
 import com.pvs.spent.adapter.AdapterCategory
 import com.pvs.spent.data.Category
-import com.pvs.spent.data.LocalDate
+import com.pvs.spent.data.CreationPeriod
 import com.pvs.spent.viewbehavior.ViewBehavior
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
-import kotlinx.android.synthetic.main.activity_main.*
 
 class HomeFragment : Fragment() {
 
@@ -58,7 +57,7 @@ class HomeFragment : Fragment() {
         }
 
         // Display all categories with total
-        val now = LocalDate.now()
+        val now = CreationPeriod.now()
         viewModel.categoryWithTotal(
             viewModel.userEmail(),
             now.year,

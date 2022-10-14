@@ -20,9 +20,9 @@ import com.pvs.spent.R
 import com.pvs.spent.databinding.FragmentAnalysisBinding
 import com.pvs.spent.MyViewModel
 import com.pvs.spent.data.Expense
-import com.pvs.spent.data.LocalDate
+import com.pvs.spent.data.CreationPeriod
 import com.pvs.spent.viewbehavior.ViewBehavior
-import java.time.format.TextStyle
+import java.text.DateFormatSymbols
 
 
 class AnalysisFragment : Fragment() {
@@ -43,7 +43,7 @@ class AnalysisFragment : Fragment() {
 
         autoSetMonthYearSelector()
 
-        viewModel.readAllExpenseFromNow(viewModel.userEmail(), LocalDate.now())
+        viewModel.readAllExpenseFromNow(viewModel.userEmail(), CreationPeriod.now())
             .observe(viewLifecycleOwner) {
 
                 ViewBehavior.getNoDataViewVisibility(
@@ -88,13 +88,13 @@ class AnalysisFragment : Fragment() {
 
     private fun autoSetMonthYearSelector() {
 
-        val now = LocalDate.now()
+        val now = CreationPeriod.now()
 
 //        val month = now.month.geLocalDatetDisplayName(TextStyle.FULL, resources.configuration.locales[0])
         val month = now.monthValue
         val year = now.year
 
-        binding.monthYearDropDown.setText("$month $year")
+        binding.monthYearDropDown.setText("${DateFormatSymbols().months[now.monthValue-1]} $year")
 
     }
 
@@ -151,9 +151,9 @@ class AnalysisFragment : Fragment() {
 
     }
 
-    private fun getDropDownField(): LocalDate {
+    private fun getDropDownField(): CreationPeriod {
         val dropDownText = binding.monthYearDropDown.text.toString().split(" ")
-        return LocalDate(dropDownText[1].toInt(), dropDownText[0].toInt(),1)
+        return CreationPeriod(dropDownText[1].toInt(), dropDownText[0].toInt(),1)
 //        return LocalDate.of(dropDownText[1].toInt(), Month.valueOf(dropDownText[0].uppercase()), 1)
     }
 
@@ -162,21 +162,10 @@ class AnalysisFragment : Fragment() {
 
         viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner) { allExpenses ->
 
-//            val allMonthYear = allExpenses
-//                .map {
-//                    "${
-//                        it.createdOn.month.getDisplayName(
-//                            TextStyle.FULL,
-//                            resources.configuration.locales[0]
-//                        )
-//                    } ${it.createdOn.year}"
-//                }
-//                .distinct()
-
             val allMonthYear = allExpenses
                 .map {
                     "${
-                        it.createdOn.monthValue
+                        DateFormatSymbols().months[it.createdOn.monthValue-1]
                     } ${it.createdOn.year}"
                 }
                 .distinct()

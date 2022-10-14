@@ -19,7 +19,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
-import com.pvs.spent.data.LocalDate
+import com.pvs.spent.data.CreationPeriod
 
 
 class HistoryFragment : Fragment() {
@@ -69,7 +69,7 @@ class HistoryFragment : Fragment() {
                     currency
                 )
 
-                val now = LocalDate.now()
+                val now = CreationPeriod.now()
                 val isExpanded =
                     now.monthValue == monthYear.first && now.year == monthYear.second
 
