@@ -20,9 +20,8 @@ import com.pvs.spent.R
 import com.pvs.spent.databinding.FragmentAnalysisBinding
 import com.pvs.spent.MyViewModel
 import com.pvs.spent.data.Expense
+import com.pvs.spent.data.LocalDate
 import com.pvs.spent.viewbehavior.ViewBehavior
-import java.time.LocalDate
-import java.time.Month
 import java.time.format.TextStyle
 
 
@@ -91,7 +90,8 @@ class AnalysisFragment : Fragment() {
 
         val now = LocalDate.now()
 
-        val month = now.month.getDisplayName(TextStyle.FULL, resources.configuration.locales[0])
+//        val month = now.month.geLocalDatetDisplayName(TextStyle.FULL, resources.configuration.locales[0])
+        val month = now.monthValue
         val year = now.year
 
         binding.monthYearDropDown.setText("$month $year")
@@ -153,7 +153,8 @@ class AnalysisFragment : Fragment() {
 
     private fun getDropDownField(): LocalDate {
         val dropDownText = binding.monthYearDropDown.text.toString().split(" ")
-        return LocalDate.of(dropDownText[1].toInt(), Month.valueOf(dropDownText[0].uppercase()), 1)
+        return LocalDate(dropDownText[1].toInt(), dropDownText[0].toInt(),1)
+//        return LocalDate.of(dropDownText[1].toInt(), Month.valueOf(dropDownText[0].uppercase()), 1)
     }
 
     override fun onResume() {
@@ -161,13 +162,21 @@ class AnalysisFragment : Fragment() {
 
         viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner) { allExpenses ->
 
+//            val allMonthYear = allExpenses
+//                .map {
+//                    "${
+//                        it.createdOn.month.getDisplayName(
+//                            TextStyle.FULL,
+//                            resources.configuration.locales[0]
+//                        )
+//                    } ${it.createdOn.year}"
+//                }
+//                .distinct()
+
             val allMonthYear = allExpenses
                 .map {
                     "${
-                        it.createdOn.month.getDisplayName(
-                            TextStyle.FULL,
-                            resources.configuration.locales[0]
-                        )
+                        it.createdOn.monthValue
                     } ${it.createdOn.year}"
                 }
                 .distinct()

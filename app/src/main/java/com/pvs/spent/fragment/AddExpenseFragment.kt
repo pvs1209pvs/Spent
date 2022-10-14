@@ -12,6 +12,7 @@ import com.pvs.spent.MyViewModel
 import com.pvs.spent.R
 import com.pvs.spent.databinding.FragmentAddExpenseBinding
 import com.pvs.spent.data.Expense
+import com.pvs.spent.data.LocalDate
 import com.pvs.spent.db.Convertor
 import com.pvs.spent.encryption.AES
 import com.pvs.spent.viewbehavior.ViewBehavior
@@ -68,6 +69,7 @@ class AddExpenseFragment : Fragment() {
                             title = title,
                             amount = amount.toFloat(),
                             ofCategory = ofCategory,
+                            createdOn = LocalDate.now()
                         )
                         println("testing purposes ${expense.createdOn}")
                         viewModel.addExpense(expense)

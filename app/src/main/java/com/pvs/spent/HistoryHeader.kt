@@ -9,14 +9,15 @@ import java.time.Month
 import java.time.format.TextStyle
 import java.util.*
 
-class HistoryHeader(private val yearMonth: Pair<Month, Int>, private val locale: Locale,private val historyTotal : String) : Item(), ExpandableItem {
+class HistoryHeader(private val yearMonth: Pair<Int, Int>, private val locale: Locale,private val historyTotal : String) : Item(), ExpandableItem {
 
     private lateinit var expandableGroup: ExpandableGroup
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         val (month, year) = yearMonth
-        viewHolder.crntMonth.text = "${month.getDisplayName(TextStyle.FULL, locale)} $year"
+//        viewHolder.crntMonth.text = "${month.getDisplayName(TextStyle.FULL, locale)} $year"
+        viewHolder.crntMonth.text = "$month $year"
 
         viewHolder.historyTotal.text = historyTotal
 

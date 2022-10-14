@@ -2,7 +2,7 @@ package com.pvs.spent.db
 
 import android.util.Log
 import androidx.room.TypeConverter
-import java.time.LocalDate
+import com.pvs.spent.data.LocalDate
 import javax.crypto.spec.IvParameterSpec
 
 class Convertor {
@@ -14,7 +14,7 @@ class Convertor {
     fun stringToCalendar(dateString: String): LocalDate {
         val yearMonthDay = dateString.split(",")
         Log.d(javaClass.canonicalName, "stringToCalender $yearMonthDay")
-        return LocalDate.of(yearMonthDay[0].toInt(), yearMonthDay[1].toInt(), yearMonthDay[2].toInt())
+        return LocalDate(yearMonthDay[0].toInt(), yearMonthDay[1].toInt(), yearMonthDay[2].toInt())
     }
 
     @TypeConverter

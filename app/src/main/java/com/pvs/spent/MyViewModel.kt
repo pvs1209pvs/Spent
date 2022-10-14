@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import org.json.JSONObject
-import java.time.LocalDate
 import java.util.*
+import com.pvs.spent.data.LocalDate
 
 
 class MyViewModel(application: Application) : AndroidViewModel(application) {
@@ -324,15 +324,15 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
         val encryptedExpense = EncryptedExpense(cipher, Convertor().ivToString(iv))
 
-//        docRef.update("values", FieldValue.arrayUnion(encryptedExpense))
-//            .addOnSuccessListener {
-//                Log.d(javaClass.canonicalName, "$expense backup succeed")
-//                expense.backedUp = 1
-//                updateExpense(expense)
-//            }
-//            .addOnFailureListener {
-//                Log.d(javaClass.canonicalName, "$expense backup failed $it")
-//            }
+        docRef.update("values", FieldValue.arrayUnion(encryptedExpense))
+            .addOnSuccessListener {
+                Log.d(javaClass.canonicalName, "$expense backup succeed")
+                expense.backedUp = 1
+                updateExpense(expense)
+            }
+            .addOnFailureListener {
+                Log.d(javaClass.canonicalName, "$expense backup failed $it")
+            }
 
     }
 
@@ -394,7 +394,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
                     exps.forEach {
                         Log.d(javaClass.canonicalName, "obj list $it")
-//                        addExpense(it)
+                        addExpense(it)
                     }
 
 //                    restoreStat.value = restoreStat.value!! + 1

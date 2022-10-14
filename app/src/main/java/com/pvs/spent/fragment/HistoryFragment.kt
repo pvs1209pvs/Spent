@@ -19,7 +19,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
-import java.time.LocalDate
+import com.pvs.spent.data.LocalDate
 
 
 class HistoryFragment : Fragment() {
@@ -50,9 +50,9 @@ class HistoryFragment : Fragment() {
         viewModel.readAllExpense(viewModel.userEmail()).observe(viewLifecycleOwner) { allExpenses ->
 
             allExpenses.groupBy {
-                Pair(it.createdOn.month, it.createdOn.year)
+                Pair(it.createdOn.monthValue, it.createdOn.year)
             }.toSortedMap { o1, o2 ->
-                compareValuesBy(o1, o2, { it.first.value }, { it.second })
+                compareValuesBy(o1, o2, { it.first }, { it.second })
             }.toList().reversed().forEach { (monthYear, expenses) ->
 
                 val currency = viewModel.getCurrency()
@@ -71,7 +71,7 @@ class HistoryFragment : Fragment() {
 
                 val now = LocalDate.now()
                 val isExpanded =
-                    now.monthValue == monthYear.first.value && now.year == monthYear.second
+                    now.monthValue == monthYear.first && now.year == monthYear.second
 
                 val historyFieldComparator = Comparator<Expense> { o1, o2 ->
                     if (viewModel.getSortOrder() == "by_category") o1.ofCategory.compareTo(o2.ofCategory)

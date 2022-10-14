@@ -3,18 +3,8 @@ package com.pvs.spent.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import com.pvs.spent.db.Convertor
-import com.pvs.spent.encryption.AES
-import kotlinx.android.parcel.Parcelize
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+
 import java.io.Serializable
-import java.time.LocalDate
 
 
 
