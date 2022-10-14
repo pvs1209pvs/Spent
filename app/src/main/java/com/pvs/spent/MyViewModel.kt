@@ -259,21 +259,79 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     // Backup
 
-    fun backupUserCategories(categories: UserCategoryBackup) {
+    fun backupUserCategories(unwarranted: List<Category>) {
 
+        Log.d(javaClass.canonicalName, "Backing up encrypted category (${unwarranted.size} items)")
+
+        val categoryDocRef = firestore
+            .collection(FIRESTORE_DB)
+            .document(userEmail())
+            .collection(CATEGORY_COLLECTION)
+            .document(CATEGORY_DOC)
+
+        categoryDocRef.get().addOnSuccessListener {
+            if (it.exists()) {
+                Log.d(javaClass.canonicalName, "Adding to existing doc snapshot.")
+                unwarranted.forEach { category ->
+                    backupCategoryEncrypted(category, categoryDocRef)
+                }
+            } else {
+                Log.d(javaClass.canonicalName, "Creating new doc snapshot + adding")
+                categoryDocRef
+                    .set(mapOf("values" to listOf<ExpenseFirestore>()))
+                    .addOnSuccessListener {
+                        unwarranted.forEach { category ->
+                            backupCategoryEncrypted(category, categoryDocRef)
+                        }
+                    }
+            }
+
+        }
+
+    }
+
+    private fun backupCategoryEncrypted(category: Category, docRef: DocumentReference){
+
+        Log.d(javaClass.canonicalName, "Backing up encrypted expense $category.")
+
+        val sk = AES.generateKey(userEmail(), userEmail())
+        val iv = AES.generateIV()
+        val plainText = Gson().toJson(category)
+        val cipher = AES.encrypt(plainText, sk, iv)
+        val categoryEncrypted =  AESCategory(cipher, Convertor().ivToString(iv))
+
+        docRef.update("values", FieldValue.arrayUnion(categoryEncrypted))
+            .addOnSuccessListener {
+                Log.d(javaClass.canonicalName, "$category backup succeed")
+            }
+            .addOnFailureListener {
+                Log.d(javaClass.canonicalName, "$category backup failed $it")
+            }
+
+    }
+
+    fun restoreUserCategories() {
         firestore
             .collection(FIRESTORE_DB)
             .document(userEmail())
             .collection(CATEGORY_COLLECTION)
             .document(CATEGORY_DOC)
-            .set(categories)
-            .addOnSuccessListener {
-                Log.d("ViewModel", "user category back up success")
+            .get()
+            .addOnSuccessListener { docSnapshot ->
+                if (docSnapshot.exists()) {
+                    val allCats =
+                        docSnapshot.toObject(UserCategoryBackup::class.java)!!.allCategories
+                    allCats.forEach {
+                        println("category restore ${it.title}")
+                        addCategory(it)
+                    }
+                    restoreStat.value = restoreStat.value!! + 1
+                }
             }
             .addOnFailureListener {
-                Log.d("ViewModel", "user category back up failure")
+                Log.d("ViewModel.FirestoreRestore", it.stackTraceToString())
+                restoreStat.value = restoreStat.value!! - 2
             }
-
     }
 
     fun backupExpenseEncrypted(unwarranted: List<Expense>) {
@@ -331,33 +389,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                 Log.d(javaClass.canonicalName, "$expense backup failed $it")
             }
 
-    }
-
-
-    // Restore
-
-    fun restoreUserCategories() {
-        firestore
-            .collection(FIRESTORE_DB)
-            .document(userEmail())
-            .collection(CATEGORY_COLLECTION)
-            .document(CATEGORY_DOC)
-            .get()
-            .addOnSuccessListener { docSnapshot ->
-                if (docSnapshot.exists()) {
-                    val allCats =
-                        docSnapshot.toObject(UserCategoryBackup::class.java)!!.allCategories
-                    allCats.forEach {
-                        println("category restore ${it.title}")
-                        addCategory(it)
-                    }
-                    restoreStat.value = restoreStat.value!! + 1
-                }
-            }
-            .addOnFailureListener {
-                Log.d("ViewModel.FirestoreRestore", it.stackTraceToString())
-                restoreStat.value = restoreStat.value!! - 2
-            }
     }
 
     fun restoreUserExpenses() {

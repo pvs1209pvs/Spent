@@ -69,8 +69,6 @@ class MainActivity : AppCompatActivity() {
         toggleBottomNavAndToolbarVisibility()
 
 
-
-
     }
 
     private fun bottomNavFragmentAnimation() {
@@ -197,8 +195,9 @@ class MainActivity : AppCompatActivity() {
         .filterNot { it is NavGraph }
         .joinToString(" > ") { it.displayName.split('/')[1] }
 
-
-
-
 }
+
+/**
+ * TODO: Bundle Expense and Category before encrypting to avoid repeated calls to AES.
+ */
 
