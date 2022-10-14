@@ -1,6 +1,7 @@
 package com.pvs.spent.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,9 @@ import com.pvs.spent.MyViewModel
 import com.pvs.spent.R
 import com.pvs.spent.adapter.AdapterExpenses
 import com.pvs.spent.data.Expense
+import com.pvs.spent.encryption.AES
+import com.pvs.spent.encryption.AES.decrypt
+import com.pvs.spent.encryption.AES.encrypt
 import com.pvs.spent.viewbehavior.ViewBehavior
 import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator
 import java.time.LocalDate
@@ -57,6 +61,15 @@ class ExpensesByCategoryFragment : Fragment() {
             viewModel.userEmail()
         )
             .observe(viewLifecycleOwner) { allExpenses ->
+
+                allExpenses.forEach {
+                    val sk = AES.generateKey(viewModel.userEmail(), viewModel.userEmail())
+                    val iv = AES.generateIV()
+                    val encrypted = it.toString().encrypt(sk, iv)
+                    val decrypted = encrypted.decrypt(sk, iv)
+                    Log.d("HomeFragment.onCreateView", "AES Encrypt $encrypted")
+                    Log.d("HomeFragment.onCreateView", "AES Decrypt $decrypted")
+                }
 
                 adapterExpenses.setList(allExpenses)
 

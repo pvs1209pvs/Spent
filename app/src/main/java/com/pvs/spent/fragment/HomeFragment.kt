@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        Log.d("HomeFragment.onCreateView", "Welcome Home ${BS()}")
+        Log.d("HomeFragment.onCreateView", "Back stack ${BS()}")
 
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_1)
