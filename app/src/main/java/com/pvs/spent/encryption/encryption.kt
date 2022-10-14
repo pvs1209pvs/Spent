@@ -13,7 +13,11 @@ import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 
-public object AES {
+object AES {
+
+    private const val CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding"
+    private const val SECRET_KEY_ALGORITHM = "PBKDF2WithHmacSHA256"
+    private const val ALGORITHM = "AES"
 
     /**
      * @param keySize Key-size used for AES.
@@ -22,7 +26,7 @@ public object AES {
      */
     @Throws(NoSuchAlgorithmException::class)
     fun generateKey(keySize: Int): SecretKey? {
-        val keyGenerator: KeyGenerator = KeyGenerator.getInstance("AES")
+        val keyGenerator: KeyGenerator = KeyGenerator.getInstance(ALGORITHM)
         keyGenerator.init(keySize)
         return keyGenerator.generateKey()
     }
@@ -35,9 +39,9 @@ public object AES {
 
     @Throws(NoSuchAlgorithmException::class, InvalidKeySpecException::class)
     fun generateKey(password: String, salt: String): SecretKey {
-        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+        val factory = SecretKeyFactory.getInstance(SECRET_KEY_ALGORITHM)
         val spec: KeySpec = PBEKeySpec(password.toCharArray(), salt.toByteArray(), 65536, 256)
-        return SecretKeySpec(factory.generateSecret(spec).encoded, "AES")
+        return SecretKeySpec(factory.generateSecret(spec).encoded, ALGORITHM)
     }
 
     @Throws(
@@ -49,7 +53,7 @@ public object AES {
         IllegalBlockSizeException::class
     )
     fun String.encrypt(key: SecretKey?, iv: IvParameterSpec?): String {
-        val cipher: Cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        val cipher: Cipher = Cipher.getInstance(CIPHER_ALGORITHM)
         cipher.init(Cipher.ENCRYPT_MODE, key, iv)
         val cipherText: ByteArray = cipher.doFinal(toByteArray())
         return Base64.getEncoder().encodeToString(cipherText)
@@ -64,7 +68,7 @@ public object AES {
         IllegalBlockSizeException::class
     )
     fun String.decrypt(key: SecretKey, iv: IvParameterSpec): String {
-        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
         cipher.init(Cipher.DECRYPT_MODE, key, iv)
         val plainText = cipher.doFinal(
             Base64.getDecoder().decode(this)
