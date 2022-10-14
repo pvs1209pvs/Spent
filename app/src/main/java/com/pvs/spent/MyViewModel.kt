@@ -16,10 +16,11 @@ import com.pvs.spent.data.*
 import com.pvs.spent.db.Convertor
 import com.pvs.spent.db.LocalDB
 import com.pvs.spent.encryption.AES
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+import org.json.JSONObject
 import java.time.LocalDate
 import java.util.*
 
@@ -88,7 +89,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             )
 
             if (e == null) {
-                Log.d("MyViewModel.addExpense", "Add")
+                Log.d("MyViewModel.addExpense", "Add $expense")
                 expenseDAO.addExpense(expense)
             } else {
                 Log.d("MyViewMode.addExpense", "modify")
@@ -129,7 +130,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun updateExpense(expense: Expense) {
-        Log.d(javaClass.canonicalName, "updating $expense")
+        Log.d(javaClass.canonicalName, "Updating $expense")
         viewModelScope.launch(Dispatchers.IO) {
             expenseDAO.updateExpense(expense)
         }
@@ -138,6 +139,14 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     private fun updateExpenseTotal(title: String, newAmount: Float, ofUser: String) {
         viewModelScope.launch(Dispatchers.IO) {
             expenseDAO.updateTotal(title, newAmount, ofUser)
+        }
+    }
+
+    private fun updateAll(list: List<Expense>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            expenseDAO.updateExpenseBatch(list)
+        }.invokeOnCompletion {
+            backupStat.postValue(true)
         }
     }
 
@@ -209,6 +218,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             ofUser
         )
 
+
     // CategoryIcon
 
     fun addCategoryIcon(categoryIcon: CategoryIcon) {
@@ -248,18 +258,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun userEmail() = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
 
-    fun <P, R> CoroutineScope.executeAsyncTask(
-        doInBackground: suspend (suspend (P) -> Unit) -> R,
-        onPostExecute: (R) -> Unit,
-    ) = launch {
-
-        val result = withContext(Dispatchers.IO) {
-            doInBackground {
-            }
-        }
-        onPostExecute(result)
-    }
-
     // Firebase Firestore
 
     // Backup
@@ -281,42 +279,9 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun backupUserExpenses(unwarranted: List<Expense>) {
+    fun backupExpenseEncrypted(unwarranted: List<Expense>) {
 
-        backupStat.value = false
-
-        val userEmailDocRef = firestore
-            .collection(FIRESTORE_DB)
-            .document(userEmail())
-
-        val expenseDoc = userEmailDocRef
-            .collection(EXPENSE_COLLECTION)
-            .document(EXPENSE_DOC)
-
-        expenseDoc.get().addOnSuccessListener {
-
-            if (it.exists()) {
-                Log.d(javaClass.canonicalName, "adding to existing doc snapshot")
-                backupAllExpenses(unwarranted, expenseDoc)
-            } else {
-                Log.d(javaClass.canonicalName, "creating new doc snapshot and adding")
-                expenseDoc
-                    .set(mapOf("values" to listOf<ExpenseFirestore>()))
-                    .addOnSuccessListener { backupAllExpenses(unwarranted, expenseDoc) }
-            }
-
-            Log.d(javaClass.canonicalName, "start marking expenses as backed up")
-            markAsBackedUp(unwarranted)
-            Log.d(javaClass.canonicalName, "finish marking expenses as backed up")
-
-
-        }.addOnFailureListener {
-            println(it.toString())
-        }
-
-    }
-
-    fun backupExpensesEncrypted(unwarranted: List<Expense>) {
+        Log.d(javaClass.canonicalName, "Starting backup (${unwarranted.size} items)")
 
         val userEmailDocRef = firestore
             .collection(FIRESTORE_DB)
@@ -328,19 +293,18 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
         expenseDoc.get().addOnSuccessListener {
             if (it.exists()) {
-                Log.d(javaClass.canonicalName, "adding to existing doc snapshot")
+                Log.d(javaClass.canonicalName, "Adding to existing doc snapshot.")
                 unwarranted.forEach { exp ->
                     backupExpenseEncrypted(expenseDoc, exp)
                 }
             } else {
-                Log.d(javaClass.canonicalName, "creating new doc snapshot and adding")
+                Log.d(javaClass.canonicalName, "Creating new doc snapshot + adding")
                 expenseDoc
                     .set(mapOf("values" to listOf<ExpenseFirestore>()))
                     .addOnSuccessListener {
                         unwarranted.forEach { exp ->
                             backupExpenseEncrypted(expenseDoc, exp)
                         }
-//                        backupAllExpenses(unwarranted, expenseDoc) }
                     }
             }
 
@@ -349,66 +313,31 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun backupExpenseEncrypted(docRef: DocumentReference, expense: Expense) {
 
-        Log.d(javaClass.canonicalName, "Backing up encrypted expense")
+        Log.d(javaClass.canonicalName, "Backing up encrypted expense $expense.")
 
-        docRef.update("values", FieldValue.arrayUnion(encrypt(expense)))
-            .addOnSuccessListener { Log.d(javaClass.canonicalName, "$expense backup success") }
-            .addOnFailureListener {
-                Log.d(
-                    javaClass.canonicalName,
-                    "$expense backup fail due to $it"
-                )
-            }
+        val sk = AES.generateKey(userEmail(), userEmail())
+        val iv = AES.generateIV()
+        val plainText = Gson().toJson(expense)
+        val cipher = AES.encrypt(plainText, sk, iv)
 
-    }
+        Log.d(javaClass.canonicalName, "toJSON $plainText")
 
+        val encryptedExpense = EncryptedExpense(cipher, Convertor().ivToString(iv))
 
-    private fun backupAllExpenses(unwarranted: List<Expense>, expenseDoc: DocumentReference) {
-        Log.d(javaClass.canonicalName, "starting backing up up all expenses")
-        unwarranted.map { exp ->
-            ExpenseFirestore(
-                exp.ofUser,
-                exp.id,
-                exp.title,
-                exp.amount,
-                exp.ofCategory,
-                Convertor().calendarToString(exp.createdOn),
-                exp.backedUp
-            )
-        }.forEach { expF -> backUpExpense(expenseDoc, expF) }
-        Log.d(javaClass.canonicalName, "finished backing up all expenses")
-    }
-
-    // TODO Backup status should be moved to backupUserExpenses
-    private fun backUpExpense(dr: DocumentReference, p: ExpenseFirestore) {
-
-        Log.d(javaClass.canonicalName, "backing up $p")
-
-        dr.update("values", FieldValue.arrayUnion(p))
-            .addOnSuccessListener {
-                Log.d(javaClass.canonicalName, "$p backup success")
-            }
-            .addOnFailureListener {
-                Log.d(javaClass.canonicalName, "$p backup fail $it")
-            }
+//        docRef.update("values", FieldValue.arrayUnion(encryptedExpense))
+//            .addOnSuccessListener {
+//                Log.d(javaClass.canonicalName, "$expense backup succeed")
+//                expense.backedUp = 1
+//                updateExpense(expense)
+//            }
+//            .addOnFailureListener {
+//                Log.d(javaClass.canonicalName, "$expense backup failed $it")
+//            }
 
     }
 
 
-    private fun updateAll(list: List<Expense>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            expenseDAO.updateExpenseBatch(list)
-        }.invokeOnCompletion {
-            backupStat.postValue(true)
-        }
-    }
-
-    private fun markAsBackedUp(expense: List<Expense>) {
-        expense.forEach { it.backedUp = 1 }
-        updateAll(expense)
-    }
-
-// Restore
+    // Restore
 
     fun restoreUserCategories() {
         firestore
@@ -444,28 +373,36 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             .get()
             .addOnSuccessListener { docSnapshot ->
                 if (docSnapshot.exists()) {
-                    println("nice tits")
-                    docSnapshot.toObject(UserExpenseBackup::class.java)!!.values
-                        .map {
-                            Expense(
-                                it.ofUser,
-                                it.id,
-                                it.title,
-                                it.amount,
-                                it.ofCategory,
-                                Convertor().stringToCalendar(it.createdOn)
-                            )
-                        }
-                        .forEach {
-                            println("expense restore ${it.title}")
-                            addExpense(it)
-                        }
-                    restoreStat.value = restoreStat.value!! + 1
+
+                    Log.d(javaClass.canonicalName, "Expense docSnapshot exists")
+
+                    val values =
+                        (docSnapshot.get("values") as List<*>).filterIsInstance<Map<String, String>>()
+
+                    val exps: List<Expense> = values.map {
+                        Log.d(
+                            javaClass.canonicalName,
+                            "Decryption -> JSON -> Object conversion ${it.values}"
+                        )
+                        val cipher = it.values.first()
+                        val aesIv = Convertor().stringToIv(it.values.last())
+                        val sk = AES.generateKey(userEmail(), userEmail())
+                        val plainText = AES.decrypt(cipher, sk, aesIv)
+                        Log.d(javaClass.canonicalName, "JSON $plainText")
+                        Gson().fromJson(plainText, Expense::class.java)
+                    }
+
+                    exps.forEach {
+                        Log.d(javaClass.canonicalName, "obj list $it")
+//                        addExpense(it)
+                    }
+
+//                    restoreStat.value = restoreStat.value!! + 1
                 }
             }
             .addOnFailureListener {
-                Log.d("ViewModel.FirestoreRestore.Expenses", it.stackTraceToString())
-                restoreStat.value = restoreStat.value!! - 2
+                Log.d(javaClass.canonicalName, it.stackTraceToString())
+//                restoreStat.value = restoreStat.value!! - 2
             }
     }
 
@@ -501,15 +438,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
         return formattedNumber
 
-    }
-
-    // Encryption
-    fun encrypt(expense: Expense): String {
-        val plainText = Gson().toJson(expense)
-        val secretKey = AES.generateKey(userEmail(), userEmail())
-        val iv = AES.generateIV()
-        val encrypted = AES.encrypt(plainText, secretKey, iv)
-        return encrypted
     }
 
 

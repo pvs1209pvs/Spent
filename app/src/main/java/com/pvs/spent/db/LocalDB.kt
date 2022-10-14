@@ -53,6 +53,7 @@ abstract class LocalDB : RoomDatabase() {
                     .addMigrations(MIGRATION_7_8)
                     .addMigrations(MIGRATION_8_9)
                     .addMigrations(MIGRATION_9_10)
+//                    .addMigrations(MIGRATION_10_11)
                     .build()
 
                 INSTANCE = instance
@@ -136,6 +137,13 @@ abstract class LocalDB : RoomDatabase() {
                 database.execSQL("CREATE TABLE IF NOT EXISTS expense_table (ofUser text not null, id integer primary key autoincrement not null, title text not null, amount real not null, ofCategory text not null, createdOn text not null, backedUp integer not null default 0)")
             }
         }
+
+//        private val MIGRATION_10_11 = object : Migration(10, 11) {
+//            override fun migrate(database: SupportSQLiteDatabase) {
+//                database.execSQL("DROP TABLE IF EXISTS expense_table")
+//                database.execSQL("CREATE TABLE IF NOT EXISTS expense_table (ofUser text not null, id integer primary key autoincrement not null, title text not null, amount real not null, ofCategory text not null, createdOn text not null, backedUp integer not null default 0, aesIv text not null)")
+//            }
+//        }
 
     }
 

@@ -27,6 +27,7 @@ interface ExpenseDAO {
     @Query("UPDATE expense_table SET amount = :newAmount WHERE title = :title AND ofUser = :ofUser")
     suspend fun updateTotal(title: String, newAmount: Float, ofUser: String)
 
+
     @Query("UPDATE expense_table SET ofCategory = :newCategory WHERE title = :title AND ofUser = :ofUser")
     suspend fun updateCategoryOf(title: String, newCategory: String, ofUser: String)
 

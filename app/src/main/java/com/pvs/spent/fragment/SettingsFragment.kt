@@ -16,8 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pvs.spent.MyViewModel
-import com.pvs.spent.data.UserCategoryBackup
-import com.pvs.spent.ui.AlertBackup
 import com.pvs.spent.ui.ProfileViewPreference
 import java.util.*
 
@@ -106,10 +104,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
             val unwarranted = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
 
             unwarranted.observe(viewLifecycleOwner){
-                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
+                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow()}
                 if (unbackedPastExpenses.isNotEmpty()) {
-                    Log.d(javaClass.canonicalName, "backing up takes place in view model")
-                    viewModel.backupExpensesEncrypted(unbackedPastExpenses)
+                    viewModel.backupExpenseEncrypted(unbackedPastExpenses)
                 }
                 unwarranted.removeObservers(viewLifecycleOwner)
             }
@@ -136,7 +133,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Restore data
         findPreference<Preference>("restore")!!.setOnPreferenceClickListener {
-            viewModel.restoreUserCategories()
+//            viewModel.restoreUserCategories()
             viewModel.restoreUserExpenses()
             true
         }

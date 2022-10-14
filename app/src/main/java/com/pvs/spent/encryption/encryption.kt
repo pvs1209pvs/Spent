@@ -1,5 +1,6 @@
 package com.pvs.spent.encryption
 
+import android.util.Log
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
@@ -19,21 +20,22 @@ object AES {
     private const val SECRET_KEY_ALGORITHM = "PBKDF2WithHmacSHA256"
     private const val ALGORITHM = "AES"
 
-    /**
-     * @param keySize Key-size used for AES.
-     * @return The secret-key.
-     * @throws NoSuchAlgorithmException
-     */
-    @Throws(NoSuchAlgorithmException::class)
-    fun generateKey(keySize: Int): SecretKey? {
-        val keyGenerator: KeyGenerator = KeyGenerator.getInstance(ALGORITHM)
-        keyGenerator.init(keySize)
-        return keyGenerator.generateKey()
-    }
+//    /**
+//     * @param keySize Key-size used for AES.
+//     * @return The secret-key.
+//     * @throws NoSuchAlgorithmException
+//     */
+//    @Throws(NoSuchAlgorithmException::class)
+//    fun generateKey(keySize: Int): SecretKey? {
+//        val keyGenerator: KeyGenerator = KeyGenerator.getInstance(ALGORITHM)
+//        keyGenerator.init(keySize)
+//        return keyGenerator.generateKey()
+//    }
 
     fun generateIV(): IvParameterSpec {
         val iv = ByteArray(16)
         SecureRandom().nextBytes(iv)
+        Log.d(javaClass.canonicalName, "iv ${iv.contentToString()}")
         return IvParameterSpec(iv)
     }
 
