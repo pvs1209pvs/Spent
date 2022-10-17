@@ -25,10 +25,6 @@ class AlertBackup(private val activity: Activity) {
         dialog.show()
     }
 
-    fun updateExpenseProgress(progress:String){
-        dialogView.expenseBackupProgress.text = progress
-    }
-
     fun dismiss() {
         dialog.dismiss()
     }

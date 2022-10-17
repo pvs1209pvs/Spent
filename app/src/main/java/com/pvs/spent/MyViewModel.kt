@@ -73,6 +73,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
 //    fun readCategory(ofUser: String, isBackedUp: Int) = categoryDAO.readCategory(ofUser, isBackedUp)
 
+    fun categoryCount(ofUser: String, isBackedUp: Int) = categoryDAO.categoryCount(ofUser, isBackedUp)
+
     fun categoryWithTotal(user: String, y: Int, m: Int) = categoryDAO.categoryWithTotal(user, y, m)
 
     fun modifyCategoryBudget(title: String, newBudget: Float, ofUser: String) {
@@ -397,7 +399,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun backupExpense(){
+    fun backupExpense() {
         viewModelScope.launch (Dispatchers.IO){
             backupExpense(expenseDAO.readExpenses(userEmail(),0).filter { !it.isFromNow() })
         }
@@ -501,6 +503,12 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                 Log.d(javaClass.canonicalName, it.stackTraceToString())
 //                restoreStat.value = restoreStat.value!! - 2
             }
+    }
+
+    val isBackupComplete = MutableLiveData(false)
+
+    fun isBackupComplete() {
+           isBackupComplete.value = expenseDAO.expenseCount(userEmail(),0).value == 0 && categoryDAO.categoryCount(userEmail(), 0).value == 0
     }
 
     // UI input checks

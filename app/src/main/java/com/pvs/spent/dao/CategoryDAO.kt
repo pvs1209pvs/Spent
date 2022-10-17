@@ -34,6 +34,9 @@ interface CategoryDAO {
     @Query("SELECT * FROM category_table WHERE title = :title AND ofUser = :ofUser")
     suspend fun readCategory(title: String, ofUser: String): Category
 
+    @Query("SELECT COUNT(DISTINCT title) FROM category_table WHERE ofUser = :ofUser AND isBackedUp = :isBackedUp")
+    fun categoryCount(ofUser: String, isBackedUp: Int) : LiveData<Int>
+
     @Query(
         "SELECT " +
                 "ofUser," +

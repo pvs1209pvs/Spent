@@ -28,9 +28,7 @@ import java.util.*
 class SettingsFragment : PreferenceFragmentCompat() {
 
     private val viewModel: MyViewModel by viewModels()
-
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
 
     @SuppressLint("RestrictedApi")
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -63,13 +61,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
 
-        // Budgets
-//        findPreference<Preference>("budgets")!!.onPreferenceClickListener =
-//            Preference.OnPreferenceClickListener {
-//                val action = SettingsFragmentDirections.actionSettingsFragmentToBudgetFragment()
-//                findNavController().navigate(action)
-//                true
-//            }
 
         // Currency
         val useLocalCurrency = findPreference<SwitchPreferenceCompat>("useLocalCurrency")!!
@@ -102,8 +93,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
             val backupDialog = AlertBackup(requireActivity())
             backupDialog.show()
 
-            viewModel.expenseCount(viewModel.userEmail(), 0).observe(viewLifecycleOwner){
-                if(it==0) { backupDialog.dismiss() }
+            viewModel.expenseCount(viewModel.userEmail(), 0).observe(viewLifecycleOwner){ expenseCount ->
+                viewModel.categoryCount(viewModel.userEmail(), 0).observe(viewLifecycleOwner) { categoryCount ->
+                    if (expenseCount == 0 && categoryCount == 0) {
+                        backupDialog.dismiss()
+                    }
+                }
             }
 
             true
