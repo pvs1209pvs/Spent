@@ -133,8 +133,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Restore data
         findPreference<Preference>("restore")!!.setOnPreferenceClickListener {
-//            viewModel.restoreUserCategories()
-            viewModel.restoreUserExpenses()
+            viewModel.restoreUserCategories()
+//            viewModel.restoreUserExpenses()
             true
         }
 

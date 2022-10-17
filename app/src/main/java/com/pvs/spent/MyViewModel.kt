@@ -255,9 +255,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun userEmail() = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
 
-    // Firebase Firestore
+    // Firebase FireStore
 
-    // Backup
 
     fun backupUserCategories(unwarranted: List<Category>) {
 
@@ -311,26 +310,51 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun restoreUserCategories() {
-        firestore
+
+        Log.d(javaClass.canonicalName, "Restoring categories")
+
+        val firestore = firestore
             .collection(FIRESTORE_DB)
             .document(userEmail())
+
+
+        val categoryDocRef = firestore
             .collection(CATEGORY_COLLECTION)
             .document(CATEGORY_DOC)
+
+
+        categoryDocRef
             .get()
             .addOnSuccessListener { docSnapshot ->
                 if (docSnapshot.exists()) {
-                    val allCats =
-                        docSnapshot.toObject(UserCategoryBackup::class.java)!!.allCategories
-                    allCats.forEach {
-                        println("category restore ${it.title}")
+
+                    Log.d(javaClass.canonicalName, "DocSnapshot exists")
+
+                    val values =
+                        (docSnapshot.get("values") as List<*>).filterIsInstance<Map<String, String>>()
+
+                    val category : List<Category> = values.map {
+                        val cipher = it.values.first()
+                        val sk = AES.generateKey(userEmail(),userEmail())
+                        val iv = Convertor().stringToIv(it.values.last())
+                        val plainText = AES.decrypt(cipher,sk, iv)
+                        Gson().fromJson(plainText,Category::class.java)
+                    }
+
+                    category.forEach {
                         addCategory(it)
                     }
-                    restoreStat.value = restoreStat.value!! + 1
+
+//                    restoreStat.value = restoreStat.value!! + 1
+                }
+                else{
+                    Log.d(javaClass.canonicalName, "DocSnapshot DOESN'T exists")
+
                 }
             }
             .addOnFailureListener {
-                Log.d("ViewModel.FirestoreRestore", it.stackTraceToString())
-                restoreStat.value = restoreStat.value!! - 2
+                Log.d(javaClass.canonicalName, "$categoryDAO doc ref get failed due to ${it.stackTraceToString()}")
+//                restoreStat.value = restoreStat.value!! - 2
             }
     }
 
@@ -434,7 +458,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-// UI input checks
+    // UI input checks
 
     fun isTitleValid(text: String) = text.isNotEmpty() && text != ""
 
