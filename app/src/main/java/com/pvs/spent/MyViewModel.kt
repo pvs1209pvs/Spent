@@ -196,8 +196,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun expenseCount(ofUser: String, now: CreationPeriod) =
         expenseDAO.expenseCount(ofUser, now.year, now.monthValue)
 
-    fun expenseCountOld(ofUser: String, now: CreationPeriod) =
-        expenseDAO.expenseCountOld(ofUser, now.year, now.monthValue)
+    fun expenseCount(ofUser: String, isBackedUp:Int) = expenseDAO.expenseCount(ofUser, isBackedUp)
+
 
     fun orderExpenseAmountHighestFirst(category: String, period: Calendar, ofUser: String) =
         expenseDAO.orderExpenseAmountHighestFirst(
@@ -257,8 +257,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     // Firebase FireStore
 
-
-    fun backupUserCategories(unwarranted: List<Category>) {
+    fun backupCategory(unwarranted: List<Category>) {
 
         Log.d(javaClass.canonicalName, "Backing up encrypted category (${unwarranted.size} items)")
 
@@ -272,7 +271,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             if (it.exists()) {
                 Log.d(javaClass.canonicalName, "Adding to existing doc snapshot.")
                 unwarranted.forEach { category ->
-                    backupCategoryEncrypted(category, categoryDocRef)
+                    backupCategory(category, categoryDocRef)
                 }
             } else {
                 Log.d(javaClass.canonicalName, "Creating new doc snapshot + adding")
@@ -280,7 +279,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                     .set(mapOf("values" to listOf<ExpenseFirestore>()))
                     .addOnSuccessListener {
                         unwarranted.forEach { category ->
-                            backupCategoryEncrypted(category, categoryDocRef)
+                            backupCategory(category, categoryDocRef)
                         }
                     }
             }
@@ -289,7 +288,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    private fun backupCategoryEncrypted(category: Category, docRef: DocumentReference){
+    private fun backupCategory(category: Category, docRef: DocumentReference){
 
         Log.d(javaClass.canonicalName, "Backing up encrypted expense $category.")
 
@@ -309,7 +308,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun restoreUserCategories() {
+    fun restoreCategory() {
 
         Log.d(javaClass.canonicalName, "Restoring categories")
 
@@ -317,11 +316,9 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             .collection(FIRESTORE_DB)
             .document(userEmail())
 
-
         val categoryDocRef = firestore
             .collection(CATEGORY_COLLECTION)
             .document(CATEGORY_DOC)
-
 
         categoryDocRef
             .get()
@@ -358,7 +355,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun backupExpenseEncrypted(unwarranted: List<Expense>) {
+    fun backupExpense(unwarranted: List<Expense>) {
 
         Log.d(javaClass.canonicalName, "Starting backup (${unwarranted.size} items)")
 
@@ -374,7 +371,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             if (it.exists()) {
                 Log.d(javaClass.canonicalName, "Adding to existing doc snapshot.")
                 unwarranted.forEach { exp ->
-                    backupExpenseEncrypted(expenseDoc, exp)
+                    backupExpense(expenseDoc, exp)
                 }
             } else {
                 Log.d(javaClass.canonicalName, "Creating new doc snapshot + adding")
@@ -382,7 +379,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                     .set(mapOf("values" to listOf<ExpenseFirestore>()))
                     .addOnSuccessListener {
                         unwarranted.forEach { exp ->
-                            backupExpenseEncrypted(expenseDoc, exp)
+                            backupExpense(expenseDoc, exp)
                         }
                     }
             }
@@ -390,7 +387,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun backupExpenseEncrypted(docRef: DocumentReference, expense: Expense) {
+    private fun backupExpense(docRef: DocumentReference, expense: Expense) {
 
         Log.d(javaClass.canonicalName, "Backing up encrypted expense $expense.")
 
@@ -415,7 +412,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun restoreUserExpenses() {
+    fun restoreExpense() {
 
         firestore
             .collection(FIRESTORE_DB)

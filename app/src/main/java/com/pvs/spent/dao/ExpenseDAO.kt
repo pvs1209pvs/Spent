@@ -57,11 +57,14 @@ interface ExpenseDAO {
     @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser AND backedUp = 0")
     fun getUnbackedUpExpenses(ofUser: String): LiveData<List<Expense>>
 
-    @Query("SELECT COUNT(DISTINCT id) from expense_table WHERE ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%' ")
+    @Query("SELECT COUNT(DISTINCT id) FROM expense_table WHERE ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%' ")
     fun expenseCount(ofUser: String, y: Int, m: Int): LiveData<Int>
 
-    @Query("SELECT COUNT(DISTINCT id) from expense_table WHERE ofUser = :ofUser AND backedUp = 0 AND createdOn NOT LIKE :y||','||:m||','||'%' ")
-    fun expenseCountOld(ofUser: String, y: Int, m: Int): Int
+    @Query("SELECT COUNT(DISTINCT id) FROM expense_table WHERE ofUser = :ofUser AND backedUp = :isBackedUp")
+    fun expenseCount(ofUser: String, isBackedUp: Int) : LiveData<Int>
+
+    @Query("SELECT COUNT(DISTINCT id) FROM expense_table WHERE ofUser = :ofUser")
+    fun expenseCount(ofUser: String): Int
 
     @Query("SELECT * FROM expense_table WHERE ofCategory = :category AND ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%' ORDER BY amount DESC")
     fun orderExpenseAmountHighestFirst(

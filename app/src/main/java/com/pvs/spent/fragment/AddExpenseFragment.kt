@@ -75,6 +75,7 @@ class AddExpenseFragment : Fragment() {
                         expenseToEdit.title = title.trim()
                         expenseToEdit.amount = amount.toFloat()
                         expenseToEdit.ofCategory = ofCategory
+                        expenseToEdit.backedUp = 0
                         viewModel.mergeExpense(expenseToEdit)
                     }
 

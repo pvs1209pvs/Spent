@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pvs.spent.MyViewModel
+import com.pvs.spent.ui.AlertBackup
 import com.pvs.spent.ui.ProfileViewPreference
 import java.util.*
 
@@ -93,48 +94,40 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Backup Data
         findPreference<Preference>("backup")!!.setOnPreferenceClickListener {
 
-            Log.d(javaClass.canonicalName, "backup button clicked ${viewModel.backupStat.value}")
+            Log.d(javaClass.canonicalName, "Backup button clicked ${viewModel.backupStat.value}")
 
             viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner) {
-                viewModel.backupUserCategories(it)
+                viewModel.backupCategory(it)
             }
 
-//            val dialogBackup = AlertBackup(requireActivity())
+            val backupDialog = AlertBackup(requireActivity())
+            backupDialog.show()
 
             val unwarranted = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
 
             unwarranted.observe(viewLifecycleOwner){
                 val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() && exp.backedUp == 0}
                 if (unbackedPastExpenses.isNotEmpty()) {
-                    viewModel.backupExpenseEncrypted(unbackedPastExpenses)
+                    viewModel.backupExpense(unbackedPastExpenses)
                 }
                 unwarranted.removeObservers(viewLifecycleOwner)
             }
 
-//            unwarranted.observe(viewLifecycleOwner) {
-//                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() }
-//                if (unbackedPastExpenses.isNotEmpty()) {
-//                    dialogBackup.show()
-//                    Log.d(javaClass.canonicalName, "backing up takes place in view model")
-//                    viewModel.backupUserExpenses(unbackedPastExpenses)
-//                }
-//                unwarranted.removeObservers(viewLifecycleOwner)
-//            }
+            viewModel.expenseCount(viewModel.userEmail(), 0).observe(viewLifecycleOwner){
+                if(it==0) {
+                    backupDialog.dismiss()
+                }
+            }
 
-//            viewModel.backupStat.observe(viewLifecycleOwner) {
-//                Log.d(javaClass.canonicalName, "backup result $it")
-//                if (it) {
-//                    dialogBackup.dismiss()
-//                }
-//            }
+
 
             true
         }
 
         // Restore data
         findPreference<Preference>("restore")!!.setOnPreferenceClickListener {
-            viewModel.restoreUserCategories()
-//            viewModel.restoreUserExpenses()
+            viewModel.restoreCategory()
+            viewModel.restoreExpense()
             true
         }
 
