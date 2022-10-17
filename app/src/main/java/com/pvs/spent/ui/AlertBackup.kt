@@ -4,7 +4,6 @@ import android.app.Activity
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.pvs.spent.R
-import kotlinx.android.synthetic.main.dialog_backup.view.*
 
 class AlertBackup(private val activity: Activity) {
 
