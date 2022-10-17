@@ -56,8 +56,8 @@ interface ExpenseDAO {
     @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%'")
     fun readAllExpenseFromNow(ofUser: String, y: Int, m: Int): LiveData<List<Expense>>
 
-    @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser AND backedUp = 0")
-    fun getUnbackedUpExpenses(ofUser: String): LiveData<List<Expense>>
+    @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser AND backedUp = :isBackedUp")
+    fun readExpenses(ofUser: String, isBackedUp: Int): List<Expense>
 
     @Query("SELECT COUNT(DISTINCT id) FROM expense_table WHERE ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%' ")
     fun expenseCount(ofUser: String, y: Int, m: Int): LiveData<Int>

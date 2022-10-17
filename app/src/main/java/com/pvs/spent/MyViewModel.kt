@@ -201,7 +201,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun getUnbackedUpExpenses(ofUser: String) = expenseDAO.getUnbackedUpExpenses(ofUser)
+//    fun getUnbackedUpExpenses(ofUser: String) = expenseDAO.getUnbackedUpExpenses(ofUser)
 
     fun expenseCount(ofUser: String, now: CreationPeriod) =
         expenseDAO.expenseCount(ofUser, now.year, now.monthValue)
@@ -397,7 +397,13 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-    fun backupExpense(unwarranted: List<Expense>) {
+    fun backupExpense(){
+        viewModelScope.launch (Dispatchers.IO){
+            backupExpense(expenseDAO.readExpenses(userEmail(),0).filter { !it.isFromNow() })
+        }
+    }
+
+    private fun backupExpense(unwarranted: List<Expense>) {
 
         Log.d(javaClass.canonicalName, "Starting backup (${unwarranted.size} items)")
 

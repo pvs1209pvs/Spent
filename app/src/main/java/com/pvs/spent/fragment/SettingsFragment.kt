@@ -96,31 +96,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
             Log.d(javaClass.canonicalName, "Backup button clicked ${viewModel.backupStat.value}")
 
-
             viewModel.backupCategory()
-
-
+            viewModel.backupExpense()
 
             val backupDialog = AlertBackup(requireActivity())
             backupDialog.show()
 
-            val unwarranted = viewModel.getUnbackedUpExpenses(viewModel.userEmail())
-
-            unwarranted.observe(viewLifecycleOwner){
-                val unbackedPastExpenses = it.filter { exp -> !exp.isFromNow() && exp.backedUp == 0}
-                if (unbackedPastExpenses.isNotEmpty()) {
-                    viewModel.backupExpense(unbackedPastExpenses)
-                }
-                unwarranted.removeObservers(viewLifecycleOwner)
-            }
-
             viewModel.expenseCount(viewModel.userEmail(), 0).observe(viewLifecycleOwner){
-                if(it==0) {
-                    backupDialog.dismiss()
-                }
+                if(it==0) { backupDialog.dismiss() }
             }
-
-
 
             true
         }
