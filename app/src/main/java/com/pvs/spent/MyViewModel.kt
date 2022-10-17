@@ -5,6 +5,7 @@ import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import com.pvs.spent.data.CreationPeriod
+import kotlinx.coroutines.withContext
 
 
 class MyViewModel(application: Application) : AndroidViewModel(application) {
@@ -55,13 +57,21 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun updateCategoryIsBackup(title: String, ofUser: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            categoryDAO.updateCategoryIsBackup(title, ofUser)
+        }
+    }
+
     fun deleteCategory(categoryTitle: String, ofUser: String) {
         viewModelScope.launch(Dispatchers.IO) {
             categoryDAO.delCategory(categoryTitle, ofUser)
         }
     }
 
-    fun readAllCategory(ofUser: String) = categoryDAO.readAllCategory(ofUser)
+    fun readAllCategory(ofUser: String) = categoryDAO.readCategory(ofUser)
+
+//    fun readCategory(ofUser: String, isBackedUp: Int) = categoryDAO.readCategory(ofUser, isBackedUp)
 
     fun categoryWithTotal(user: String, y: Int, m: Int) = categoryDAO.categoryWithTotal(user, y, m)
 
@@ -196,8 +206,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun expenseCount(ofUser: String, now: CreationPeriod) =
         expenseDAO.expenseCount(ofUser, now.year, now.monthValue)
 
-    fun expenseCount(ofUser: String, isBackedUp:Int) = expenseDAO.expenseCount(ofUser, isBackedUp)
-
+    fun expenseCount(ofUser: String, isBackedUp: Int) = expenseDAO.expenseCount(ofUser, isBackedUp)
 
     fun orderExpenseAmountHighestFirst(category: String, period: Calendar, ofUser: String) =
         expenseDAO.orderExpenseAmountHighestFirst(
@@ -214,7 +223,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             period.get(Calendar.MONTH),
             ofUser
         )
-
 
     // CategoryIcon
 
@@ -257,9 +265,39 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     // Firebase FireStore
 
-    fun backupCategory(unwarranted: List<Category>) {
+    private suspend fun nonEmptyCategory() : List<Category> {
 
-        Log.d(javaClass.canonicalName, "Backing up encrypted category (${unwarranted.size} items)")
+        return withContext(Dispatchers.IO) {
+
+            val nonEmptyCategoryTitle =
+                expenseDAO.readExpense(userEmail())
+                    .filter { !it.isFromNow() }
+                    .map { it.ofCategory }
+
+            Log.d(javaClass.canonicalName, "Non empty categories $nonEmptyCategoryTitle")
+
+            categoryDAO.readCategory(userEmail(), 0)
+                .filter { nonEmptyCategoryTitle.contains(it.title) }
+
+        }
+
+
+    }
+
+    fun backupCategory() {
+
+        viewModelScope.launch {
+            backupCategory(nonEmptyCategory())
+        }
+
+    }
+
+    private fun backupCategory(unwarranted: List<Category>) {
+
+        Log.d(
+            javaClass.canonicalName,
+            "Backing up encrypted categories ${unwarranted.map { it.title }} (${unwarranted.size} items)"
+        )
 
         val categoryDocRef = firestore
             .collection(FIRESTORE_DB)
@@ -288,7 +326,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    private fun backupCategory(category: Category, docRef: DocumentReference){
+    private fun backupCategory(category: Category, docRef: DocumentReference) {
 
         Log.d(javaClass.canonicalName, "Backing up encrypted expense $category.")
 
@@ -296,11 +334,13 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         val iv = AES.generateIV()
         val plainText = Gson().toJson(category)
         val cipher = AES.encrypt(plainText, sk, iv)
-        val categoryEncrypted =  AESCategory(cipher, Convertor().ivToString(iv))
+        val categoryEncrypted = AESCategory(cipher, Convertor().ivToString(iv))
 
         docRef.update("values", FieldValue.arrayUnion(categoryEncrypted))
             .addOnSuccessListener {
                 Log.d(javaClass.canonicalName, "$category backup succeed")
+                category.isBackedUp = 1
+                updateCategoryIsBackup(category.title, userEmail())
             }
             .addOnFailureListener {
                 Log.d(javaClass.canonicalName, "$category backup failed $it")
@@ -330,12 +370,12 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                     val values =
                         (docSnapshot.get("values") as List<*>).filterIsInstance<Map<String, String>>()
 
-                    val category : List<Category> = values.map {
+                    val category: List<Category> = values.map {
                         val cipher = it.values.first()
-                        val sk = AES.generateKey(userEmail(),userEmail())
+                        val sk = AES.generateKey(userEmail(), userEmail())
                         val iv = Convertor().stringToIv(it.values.last())
-                        val plainText = AES.decrypt(cipher,sk, iv)
-                        Gson().fromJson(plainText,Category::class.java)
+                        val plainText = AES.decrypt(cipher, sk, iv)
+                        Gson().fromJson(plainText, Category::class.java)
                     }
 
                     category.forEach {
@@ -343,14 +383,16 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                     }
 
 //                    restoreStat.value = restoreStat.value!! + 1
-                }
-                else{
+                } else {
                     Log.d(javaClass.canonicalName, "DocSnapshot DOESN'T exists")
 
                 }
             }
             .addOnFailureListener {
-                Log.d(javaClass.canonicalName, "$categoryDAO doc ref get failed due to ${it.stackTraceToString()}")
+                Log.d(
+                    javaClass.canonicalName,
+                    "$categoryDAO doc ref get failed due to ${it.stackTraceToString()}"
+                )
 //                restoreStat.value = restoreStat.value!! - 2
             }
     }

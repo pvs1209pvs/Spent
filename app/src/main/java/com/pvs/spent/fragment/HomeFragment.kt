@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
 
             val categories = universe
                 .filter { !(it.title == "Misc" && it.total <= 0) }
-                .map { Category(it.ofUser, it.title, it.total, it.budget, it.icon) }
+                .map { Category(it.ofUser, it.title, it.total, it.budget, it.icon, isBackedUp = 0) }
 
             val resStringFormat = if(viewModel.getCurrency().length == 1) resources.getString(R.string.monetary_amount) else resources.getString(R.string.monetary_amount_long)
 

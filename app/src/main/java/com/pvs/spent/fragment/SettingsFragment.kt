@@ -96,9 +96,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
             Log.d(javaClass.canonicalName, "Backup button clicked ${viewModel.backupStat.value}")
 
-            viewModel.readAllCategory(viewModel.userEmail()).observe(viewLifecycleOwner) {
-                viewModel.backupCategory(it)
-            }
+
+            viewModel.backupCategory()
+
+
 
             val backupDialog = AlertBackup(requireActivity())
             backupDialog.show()

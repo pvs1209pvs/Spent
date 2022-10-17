@@ -16,6 +16,9 @@ interface CategoryDAO {
     @Update
     suspend fun updateCategory(category: Category)
 
+    @Query("UPDATE category_table SET isBackedUp = 1 WHERE title = :title AND ofUser = :ofUser")
+    suspend fun updateCategoryIsBackup(title: String, ofUser: String)
+
     @Query("UPDATE category_table SET total = :newTotal WHERE title = :title AND ofUser = :ofUser ")
     suspend fun updateCategoryTotal(title: String, newTotal: Float, ofUser: String)
 
@@ -23,7 +26,10 @@ interface CategoryDAO {
     suspend fun updateCategoryBudget(title: String, newBudget: Float, ofUser: String)
 
     @Query("SELECT * FROM category_table WHERE ofUser = :ofUser")
-    fun readAllCategory(ofUser: String): LiveData<MutableList<Category>>
+    fun readCategory(ofUser: String): LiveData<MutableList<Category>>
+
+    @Query("SELECT * FROM category_table WHERE ofUser = :ofUser AND isBackedUp = :isBackedUp")
+    fun readCategory(ofUser: String, isBackedUp:Int): List<Category>
 
     @Query("SELECT * FROM category_table WHERE title = :title AND ofUser = :ofUser")
     suspend fun readCategory(title: String, ofUser: String): Category

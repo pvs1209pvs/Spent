@@ -27,7 +27,6 @@ interface ExpenseDAO {
     @Query("UPDATE expense_table SET amount = :newAmount WHERE title = :title AND ofUser = :ofUser")
     suspend fun updateTotal(title: String, newAmount: Float, ofUser: String)
 
-
     @Query("UPDATE expense_table SET ofCategory = :newCategory WHERE title = :title AND ofUser = :ofUser")
     suspend fun updateCategoryOf(title: String, newCategory: String, ofUser: String)
 
@@ -50,6 +49,9 @@ interface ExpenseDAO {
 
     @Query("SELECT * FROM expense_table WHERE ofCategory = :categoryTitle AND ofUser = :ofUser")
     fun readAllExpenseList(categoryTitle: String, ofUser: String): List<Expense>
+
+    @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser")
+    fun readExpense(ofUser: String): List<Expense>
 
     @Query("SELECT * FROM expense_table WHERE ofUser = :ofUser AND createdOn LIKE :y||','||:m||','||'%'")
     fun readAllExpenseFromNow(ofUser: String, y: Int, m: Int): LiveData<List<Expense>>

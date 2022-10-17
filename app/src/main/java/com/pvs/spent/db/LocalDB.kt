@@ -16,7 +16,7 @@ import com.pvs.spent.data.Expense
 
 @Database(
     entities = [Category::class, Expense::class, CategoryIcon::class],
-    version = 10,
+    version = 11,
     exportSchema = true
 )
 @TypeConverters(Convertor::class)
@@ -53,7 +53,7 @@ abstract class LocalDB : RoomDatabase() {
                     .addMigrations(MIGRATION_7_8)
                     .addMigrations(MIGRATION_8_9)
                     .addMigrations(MIGRATION_9_10)
-//                    .addMigrations(MIGRATION_10_11)
+                    .addMigrations(MIGRATION_10_11)
                     .build()
 
                 INSTANCE = instance
@@ -138,12 +138,13 @@ abstract class LocalDB : RoomDatabase() {
             }
         }
 
-//        private val MIGRATION_10_11 = object : Migration(10, 11) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                database.execSQL("DROP TABLE IF EXISTS expense_table")
-//                database.execSQL("CREATE TABLE IF NOT EXISTS expense_table (ofUser text not null, id integer primary key autoincrement not null, title text not null, amount real not null, ofCategory text not null, createdOn text not null, backedUp integer not null default 0, aesIv text not null)")
-//            }
-//        }
+        private val MIGRATION_10_11 = object : Migration(10, 11) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE IF EXISTS category_table")
+                database.execSQL("CREATE TABLE IF NOT EXISTS category_table (ofUser text not null, title text not null, total float not null, budget float not null, icon int not null, isBackedUp integer not null, primary key(ofUser, title))")
+
+            }
+        }
 
     }
 
