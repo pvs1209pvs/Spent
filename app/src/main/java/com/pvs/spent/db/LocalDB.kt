@@ -55,7 +55,7 @@ abstract class LocalDB : RoomDatabase() {
                     .addMigrations(MIGRATION_9_10)
                     .addMigrations(MIGRATION_10_11)
                     .addMigrations(MIGRATION_11_12)
-                    .createFromAsset("database/spent-test.db")
+//                    .createFromAsset("database/spent-test.db")
                     .build()
 
                 INSTANCE = instance

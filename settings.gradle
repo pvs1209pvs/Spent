@@ -12,5 +12,5 @@
 //        mavenCentral()
 //    }
 //}
-rootProject.name = "Expensesio"
+rootProject.name = "Spent"
 include ':app'
