@@ -9,7 +9,7 @@ import java.io.Serializable
 data class Category(
     var ofUser: String = "",
     var title: String = "",
-    var total: Float = 0f,
+    var aggregate: Float = 0f,
     var budget: Float = 0f,
     var icon: Int = R.drawable.cat_other,
     @ColumnInfo(defaultValue = "0") var isBackedUp : Int = 0

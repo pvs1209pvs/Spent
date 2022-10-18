@@ -13,10 +13,6 @@
             app:key="categories"
             app:title="Categories" />
 
-<!--        <Preference-->
-<!--            app:key="budgets"-->
-<!--            app:title="Budgets" />-->
-
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="useLocalCurrency"
@@ -66,6 +62,10 @@
         <Preference
             app:key="logout"
             app:title="Logout" />
+
+        <Preference
+            app:key="del_user_data"
+            app:title="Delete User Data" />
 
     </PreferenceCategory>
 

@@ -4,8 +4,6 @@ import android.app.Application
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
@@ -39,10 +37,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    val restoreStat = MutableLiveData(0)
-
-    val backupStat = MutableLiveData(false)
-
     // Category
 
     fun addCategory(category: Category) {
@@ -57,7 +51,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun updateCategoryIsBackup(title: String, ofUser: String) {
+    private fun updateCategoryIsBackup(title: String, ofUser: String) {
         viewModelScope.launch(Dispatchers.IO) {
             categoryDAO.updateCategoryIsBackup(title, ofUser)
         }
@@ -69,11 +63,18 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun delCategory() {
+        viewModelScope.launch(Dispatchers.IO) {
+            categoryDAO.delCategory()
+        }
+    }
+
     fun readAllCategory(ofUser: String) = categoryDAO.readCategory(ofUser)
 
 //    fun readCategory(ofUser: String, isBackedUp: Int) = categoryDAO.readCategory(ofUser, isBackedUp)
 
-    fun categoryCount(ofUser: String, isBackedUp: Int) = categoryDAO.categoryCount(ofUser, isBackedUp)
+    fun categoryCount(ofUser: String, isBackedUp: Int) =
+        categoryDAO.categoryCount(ofUser, isBackedUp)
 
     fun categoryWithTotal(user: String, y: Int, m: Int) = categoryDAO.categoryWithTotal(user, y, m)
 
@@ -151,16 +152,13 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun updateAll(list: List<Expense>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            expenseDAO.updateExpenseBatch(list)
-        }.invokeOnCompletion {
-            backupStat.postValue(true)
-        }
-    }
 
     fun delExpense(expense: Expense) {
         viewModelScope.launch(Dispatchers.IO) { expenseDAO.delExpense(expense) }
+    }
+
+    fun delExpense() {
+        viewModelScope.launch(Dispatchers.IO) { expenseDAO.delExpense() }
     }
 
     fun delExpenseByTitle(title: String) {
@@ -267,7 +265,33 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     // Firebase FireStore
 
-    private suspend fun nonEmptyCategory() : List<Category> {
+    fun delFirestoreData() {
+
+        val userDoc = firestore
+            .collection(FIRESTORE_DB)
+            .document(userEmail())
+
+        userDoc
+            .collection(CATEGORY_COLLECTION)
+            .get()
+            .addOnSuccessListener {
+                it.documents.forEach { category ->
+                    category.reference.delete()
+                }
+            }
+
+        userDoc
+            .collection(EXPENSE_COLLECTION)
+            .get()
+            .addOnSuccessListener {
+                it.documents.forEach {expense->
+                    expense.reference.delete()
+                }
+            }
+
+    }
+
+    private suspend fun nonEmptyCategory(): List<Category> {
 
         return withContext(Dispatchers.IO) {
 
@@ -400,8 +424,8 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun backupExpense() {
-        viewModelScope.launch (Dispatchers.IO){
-            backupExpense(expenseDAO.readExpenses(userEmail(),0).filter { !it.isFromNow() })
+        viewModelScope.launch(Dispatchers.IO) {
+            backupExpense(expenseDAO.readExpenses(userEmail(), 0).filter { !it.isFromNow() })
         }
     }
 
@@ -496,20 +520,15 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                         addExpense(it)
                     }
 
-//                    restoreStat.value = restoreStat.value!! + 1
                 }
             }
             .addOnFailureListener {
                 Log.d(javaClass.canonicalName, it.stackTraceToString())
-//                restoreStat.value = restoreStat.value!! - 2
             }
     }
 
-    val isBackupComplete = MutableLiveData(false)
 
-    fun isBackupComplete() {
-           isBackupComplete.value = expenseDAO.expenseCount(userEmail(),0).value == 0 && categoryDAO.categoryCount(userEmail(), 0).value == 0
-    }
+
 
     // UI input checks
 

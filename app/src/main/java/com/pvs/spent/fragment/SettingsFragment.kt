@@ -3,6 +3,7 @@ package com.pvs.spent.fragment
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.AlertDialog.BUTTON_POSITIVE
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.viewModels
@@ -14,15 +15,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
-import com.google.firebase.firestore.FirebaseFirestore
 import com.pvs.spent.MyViewModel
+import com.pvs.spent.data.CreationPeriod
+import com.pvs.spent.db.Convertor
 import com.pvs.spent.ui.AlertBackup
 import com.pvs.spent.ui.ProfileViewPreference
 import java.util.*
-
-
-//data class Person(public var name: String, public var age: String)
-//data class MyData(public var names: List<Person> = listOf())
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -33,6 +31,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     @SuppressLint("RestrictedApi")
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(com.pvs.spent.R.xml.root_preferences, rootKey)
+
+        Log.d(javaClass.canonicalName, "date conv ${com.pvs.spent.R.drawable.cat_other}")
 
         // Display name, email and profile pic
         val user = firebaseAuth.currentUser!!
@@ -85,8 +85,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Backup Data
         findPreference<Preference>("backup")!!.setOnPreferenceClickListener {
 
-            Log.d(javaClass.canonicalName, "Backup button clicked ${viewModel.backupStat.value}")
-
             viewModel.backupCategory()
             viewModel.backupExpense()
 
@@ -111,7 +109,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
-        // Account section
+        // Account management
         findPreference<Preference>("logout")!!.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
 
@@ -134,6 +132,26 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
                 true
             }
+
+        findPreference<Preference>("del_user_data")!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+
+            AlertDialog.Builder(requireContext()).apply {
+                setTitle("Delete User Data")
+                setMessage("Are you sure you want to erase all your data permantelly? This action cannot be reversed.")
+
+                setPositiveButton("YES") { _, _ ->
+                    viewModel.delCategory()
+                    viewModel.delExpense()
+                    viewModel.delFirestoreData()
+                }
+
+                setNegativeButton("NO", null)
+
+                show()
+            }
+
+            true
+        }
 
         // About
         findPreference<Preference>("about")!!.onPreferenceClickListener =

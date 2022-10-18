@@ -55,7 +55,7 @@ class AdapterCategory(private val myViewModel: MyViewModel) :
 
             totalTextView.text = String.format(
                 monetaryFormat,
-                myViewModel.formatNumber(list[position].total),
+                myViewModel.formatNumber(list[position].aggregate),
                 myViewModel.getCurrency()
             )
 
@@ -65,7 +65,7 @@ class AdapterCategory(private val myViewModel: MyViewModel) :
                 myViewModel.getCurrency()
             )
 
-            if (list[position].total > list[position].budget) {
+            if (list[position].aggregate > list[position].budget) {
                 holder.binding.totalTextView.setTextColor(Color.RED)
             }
 

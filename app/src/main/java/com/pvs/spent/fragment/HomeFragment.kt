@@ -65,14 +65,14 @@ class HomeFragment : Fragment() {
         ).observe(viewLifecycleOwner) { universe ->
 
             val categories = universe
-                .filter { !(it.title == "Misc" && it.total <= 0) }
-                .map { Category(it.ofUser, it.title, it.total, it.budget, it.icon, isBackedUp = 0) }
+                .filter { !(it.title == "Misc" && it.aggregate <= 0) }
+                .map { Category(it.ofUser, it.title, it.aggregate, it.budget, it.icon, isBackedUp = 0) }
 
             val resStringFormat = if(viewModel.getCurrency().length == 1) resources.getString(R.string.monetary_amount) else resources.getString(R.string.monetary_amount_long)
 
             val monthTotal = String.format(
                 resStringFormat,
-                viewModel.formatNumber(categories.sumOf { it.total.toDouble() }),
+                viewModel.formatNumber(categories.sumOf { it.aggregate.toDouble() }),
                 viewModel.getCurrency()
             )
 

@@ -13,6 +13,9 @@ interface ExpenseDAO {
     @Delete
     suspend fun delExpense(expense: Expense)
 
+    @Query("DELETE FROM expense_table")
+    suspend fun delExpense()
+
     @Query("DELETE FROM expense_table WHERE title = :title")
     suspend fun delExpenseByTitle(title: String)
 

@@ -10,6 +10,9 @@ interface CategoryDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCategory(category: Category)
 
+    @Query("DELETE FROM category_table")
+    suspend fun delCategory()
+
     @Query("DELETE FROM category_table WHERE title = :categoryTitle AND ofUser = :ofUser")
     suspend fun delCategory(categoryTitle: String, ofUser: String)
 
@@ -19,7 +22,7 @@ interface CategoryDAO {
     @Query("UPDATE category_table SET isBackedUp = 1 WHERE title = :title AND ofUser = :ofUser")
     suspend fun updateCategoryIsBackup(title: String, ofUser: String)
 
-    @Query("UPDATE category_table SET total = :newTotal WHERE title = :title AND ofUser = :ofUser ")
+    @Query("UPDATE category_table SET aggregate = :newTotal WHERE title = :title AND ofUser = :ofUser ")
     suspend fun updateCategoryTotal(title: String, newTotal: Float, ofUser: String)
 
     @Query("UPDATE category_table SET budget = :newBudget WHERE title = :title AND ofUser = :ofUser")
@@ -41,7 +44,7 @@ interface CategoryDAO {
         "SELECT " +
                 "ofUser," +
                 "title," +
-                "(SELECT SUM(amount) FROM expense_table WHERE ofCategory = category_table.title AND expense_table.ofUser = :user AND createdOn LIKE :y||','||:m||','||'%') AS total," +
+                "(SELECT SUM(amount) FROM expense_table WHERE ofCategory = category_table.title AND expense_table.ofUser = :user AND createdOn LIKE :y||','||:m||','||'%') AS aggregate," +
                 "budget," +
                 "icon " +
                 "FROM category_table " +
@@ -49,10 +52,10 @@ interface CategoryDAO {
     )
     fun categoryWithTotal(user: String, y: Int, m: Int): LiveData<List<CategoryWithTotal>>
 
-    @Query("SELECT * FROM category_table WHERE title NOT LIKE 'Misc' AND ofUser = :ofUser ORDER BY total ASC")
+    @Query("SELECT * FROM category_table WHERE title NOT LIKE 'Misc' AND ofUser = :ofUser ORDER BY aggregate ASC")
     fun orderTotalLowestFirst(ofUser: String): LiveData<List<Category>>
 
-    @Query("SELECT * FROM category_table WHERE title NOT LIKE 'Misc' AND ofUser = :ofUser ORDER BY total DESC")
+    @Query("SELECT * FROM category_table WHERE title NOT LIKE 'Misc' AND ofUser = :ofUser ORDER BY aggregate DESC")
     fun orderTotalHighestFirst(ofUser: String): LiveData<List<Category>>
 
     @Query("SELECT * FROM category_table WHERE title NOT LIKE 'Misc' AND ofUser = :ofUser ORDER BY budget ASC")
