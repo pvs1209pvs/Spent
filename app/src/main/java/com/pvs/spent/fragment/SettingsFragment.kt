@@ -32,7 +32,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(com.pvs.spent.R.xml.root_preferences, rootKey)
 
-        Log.d(javaClass.canonicalName, "date conv ${com.pvs.spent.R.drawable.cat_other}")
+        Log.d(javaClass.canonicalName, "other ${com.pvs.spent.R.drawable.cat_other}")
+        Log.d(javaClass.canonicalName, "home ${com.pvs.spent.R.drawable.cat_home}")
+        Log.d(javaClass.canonicalName, "car ${com.pvs.spent.R.drawable.cat_car}")
+        Log.d(javaClass.canonicalName, "grocery ${com.pvs.spent.R.drawable.cat_food}")
+        Log.d(javaClass.canonicalName, "snacks ${com.pvs.spent.R.drawable.cat_pizza}")
+        Log.d(javaClass.canonicalName, "clothes ${com.pvs.spent.R.drawable.cat_clothes}")
 
         // Display name, email and profile pic
         val user = firebaseAuth.currentUser!!

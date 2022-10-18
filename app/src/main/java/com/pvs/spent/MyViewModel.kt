@@ -548,7 +548,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun formatNumber(number: Number): String {
 
-        Log.d("MyViewModel -> formatNumber", number.toString())
 
         val nf = java.text.NumberFormat.getInstance()
 
@@ -556,7 +555,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
         val formattedNumber = nf.format(number)
 
-        Log.d("MyViewModel -> formatNumber", formattedNumber)
 
         return formattedNumber
 

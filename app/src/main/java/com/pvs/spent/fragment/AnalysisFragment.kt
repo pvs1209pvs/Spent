@@ -2,6 +2,7 @@ package com.pvs.spent.fragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,8 @@ import com.pvs.spent.data.Expense
 import com.pvs.spent.data.CreationPeriod
 import com.pvs.spent.viewbehavior.ViewBehavior
 import java.text.DateFormatSymbols
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class AnalysisFragment : Fragment() {
@@ -152,9 +155,22 @@ class AnalysisFragment : Fragment() {
     }
 
     private fun getDropDownField(): CreationPeriod {
+
         val dropDownText = binding.monthYearDropDown.text.toString().split(" ")
-        return CreationPeriod(dropDownText[1].toInt(), dropDownText[0].toInt(),1)
-//        return LocalDate.of(dropDownText[1].toInt(), Month.valueOf(dropDownText[0].uppercase()), 1)
+        Log.d(javaClass.canonicalName, "Drop-down text $dropDownText")
+
+        val selectedMonth = SimpleDateFormat("MMM", Locale.getDefault()).parse(dropDownText[0])!!
+        Log.d(javaClass.canonicalName, "Selected month = $selectedMonth")
+
+        val cal = Calendar.getInstance()
+        cal.time = selectedMonth
+        Log.d(javaClass.canonicalName, "Calendar month ${cal[Calendar.MONTH]}")
+
+        val creationPeriod = CreationPeriod(dropDownText[1].toInt(), cal[Calendar.MONTH]+1,1)
+        Log.d(javaClass.canonicalName, "Creation period $creationPeriod")
+
+        return  creationPeriod
+
     }
 
     override fun onResume() {
