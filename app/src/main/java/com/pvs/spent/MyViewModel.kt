@@ -408,7 +408,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                         addCategory(it)
                     }
 
-//                    restoreStat.value = restoreStat.value!! + 1
                 } else {
                     Log.d(javaClass.canonicalName, "DocSnapshot DOESN'T exists")
 
@@ -419,7 +418,6 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
                     javaClass.canonicalName,
                     "$categoryDAO doc ref get failed due to ${it.stackTraceToString()}"
                 )
-//                restoreStat.value = restoreStat.value!! - 2
             }
     }
 
