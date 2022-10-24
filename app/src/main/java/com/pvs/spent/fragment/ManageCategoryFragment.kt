@@ -34,6 +34,7 @@ class ManageCategoryFragment : Fragment() {
 
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_5)
+        binding.noData.noDataText.text = "Tap the plus button to add a Category."
 
         // Set up RecyclerView
         binding.recyclerView.apply {

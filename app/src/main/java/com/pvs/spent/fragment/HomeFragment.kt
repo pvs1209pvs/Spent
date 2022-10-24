@@ -30,12 +30,6 @@ class HomeFragment : Fragment() {
 
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        auth = FirebaseAuth.getInstance()
-//    }
-
     @SuppressLint("RestrictedApi")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +41,12 @@ class HomeFragment : Fragment() {
 
         // Set no data image
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_1)
+        binding.noData.noDataText.text = "Tap here to add a Category or go to Setting -> Categories."
+
+        binding.noData.noDataText.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToManageCategory()
+            Navigation.findNavController(binding.root).navigate(action)
+        }
 
         // Set up recyclerview
         binding.homeRecyclerView.apply {

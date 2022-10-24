@@ -22,7 +22,7 @@ import com.pvs.spent.data.CreationPeriod
 import kotlinx.coroutines.withContext
 
 
-class MyViewModel(application: Application) : AndroidViewModel(application) {
+public class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     private val FIRESTORE_DB = "UserBackup"
     private val CATEGORY_COLLECTION = "Categories"
