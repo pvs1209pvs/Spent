@@ -39,7 +39,7 @@ class HomeFragment : Fragment() {
 
         Log.d("HomeFragment.onCreateView", "Back stack ${BS()}")
 
-        // Set no data image
+        // Set no data message
         binding.noData.noDataImage.setImageResource(R.drawable.img_empty_box_color_1)
         binding.noData.noDataText.text = "Tap here to add a Category or go to Setting -> Categories."
 
