@@ -10,4 +10,4 @@
 https://www.freeprivacypolicy.com/live/25710f19-7fb7-45ea-b684-9d9f1c1a5acf
 
 ### Play Store
-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
+https://play.google.com/store/apps/details?id=com.pvs.spent
