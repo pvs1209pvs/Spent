@@ -34,8 +34,20 @@ public class MyViewModel(application: Application) : AndroidViewModel(applicatio
     private val categoryDAO = db.categoryDAO()
     private val expenseDAO = db.expenseDAO()
     private val categoryIconDAO = db.categoryIconDAO()
+    private val fixedExpDateDAO = db.fixedExpDateDAO()
 
     private val firestore = FirebaseFirestore.getInstance()
+
+    // Fixed Exp Date
+
+    fun addFixedExpDate(fixedExpDate: FixedExpDate) {
+        viewModelScope.launch(Dispatchers.IO) {
+            fixedExpDateDAO.addFixedExpDate(fixedExpDate)
+        }
+    }
+
+    fun getFixedExpDate(fixedExpDate: FixedExpDate) =
+        fixedExpDateDAO.getFixedExpDate(fixedExpDate.month, fixedExpDate.year, fixedExpDate.ofUser)
 
     // Category
 
@@ -151,7 +163,6 @@ public class MyViewModel(application: Application) : AndroidViewModel(applicatio
             expenseDAO.updateTotal(title, newAmount, ofUser)
         }
     }
-
 
     fun delExpense(expense: Expense) {
         viewModelScope.launch(Dispatchers.IO) { expenseDAO.delExpense(expense) }
@@ -284,7 +295,7 @@ public class MyViewModel(application: Application) : AndroidViewModel(applicatio
             .collection(EXPENSE_COLLECTION)
             .get()
             .addOnSuccessListener {
-                it.documents.forEach {expense->
+                it.documents.forEach { expense ->
                     expense.reference.delete()
                 }
             }
@@ -439,6 +450,8 @@ public class MyViewModel(application: Application) : AndroidViewModel(applicatio
             .collection(EXPENSE_COLLECTION)
             .document(EXPENSE_DOC)
 
+
+
         expenseDoc.get().addOnSuccessListener {
             if (it.exists()) {
                 Log.d(javaClass.canonicalName, "Adding to existing doc snapshot.")
@@ -463,14 +476,9 @@ public class MyViewModel(application: Application) : AndroidViewModel(applicatio
 
         Log.d(javaClass.canonicalName, "Backing up encrypted expense $expense.")
 
-        val sk = AES.generateKey(userEmail(), userEmail())
-        val iv = AES.generateIV()
-        val plainText = Gson().toJson(expense)
-        val cipher = AES.encrypt(plainText, sk, iv)
+        val encryptedExpense = AES.encrypt(expense, userEmail())
 
-        Log.d(javaClass.canonicalName, "toJSON $plainText")
-
-        val encryptedExpense = EncryptedExpense(cipher, Convertor().ivToString(iv))
+        Log.d(javaClass.canonicalName, "Sealed object $encryptedExpense")
 
         docRef.update("values", FieldValue.arrayUnion(encryptedExpense))
             .addOnSuccessListener {
@@ -524,8 +532,6 @@ public class MyViewModel(application: Application) : AndroidViewModel(applicatio
                 Log.d(javaClass.canonicalName, it.stackTraceToString())
             }
     }
-
-
 
 
     // UI input checks

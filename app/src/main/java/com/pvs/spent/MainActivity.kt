@@ -1,6 +1,12 @@
 package com.pvs.spent
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
@@ -20,8 +30,13 @@ import com.facebook.FacebookSdk
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.pvs.spent.data.Category
+import com.pvs.spent.data.CreationPeriod
+import com.pvs.spent.data.Expense
+import com.pvs.spent.data.FixedExpDate
 import com.pvs.spent.databinding.ActivityMainBinding
 import com.pvs.spent.fragment.HomeFragmentDirections
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
@@ -181,6 +196,60 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp() = navController.navigateUp() || super.onSupportNavigateUp()
 
+
+
+    fun Context.lifecycleOwner(): LifecycleOwner? {
+        var curContext = this
+        var maxDepth = 20
+        while (maxDepth-- > 0 && curContext !is LifecycleOwner) {
+            curContext = (curContext as ContextWrapper).baseContext
+        }
+        return if (curContext is LifecycleOwner) {
+            curContext as LifecycleOwner
+        } else {
+            null
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val now = CreationPeriod.now()
+        val fixedExpDate = FixedExpDate(now.monthValue, now.year, viewModel.userEmail())
+
+        viewModel.getFixedExpDate(fixedExpDate).observe(lifecycleOwner()!!){
+            if (it==null){
+                Log.d("MainActivity/onResume", "Adding $fixedExpDate")
+                viewModel.addFixedExpDate(fixedExpDate)
+                viewModel.apply {
+
+                    addCategory(Category(ofUser = userEmail(), title="House", budget = 650f))
+                    addCategory(Category(ofUser = userEmail(), title="Car", budget = 1000f))
+                    addCategory(Category(ofUser = userEmail(), title="Policy", budget = 200f))
+                    addCategory(Category(ofUser = userEmail(), title="Subscription", budget = 50f))
+
+                    addExpense(Expense(ofUser = userEmail(), title="Rent", amount = 550f, ofCategory = "House"))
+
+                    addExpense(Expense(ofUser = userEmail(), title="Loan", amount = 225f, ofCategory = "Car"))
+                    addExpense(Expense(ofUser = userEmail(), title="Insurance", amount = 380f, ofCategory = "Car"))
+
+                    addExpense(Expense(ofUser = userEmail(), title="YouTube Music", amount = 12f, ofCategory = "Subscription"))
+                    addExpense(Expense(ofUser = userEmail(), title="GeForce Now", amount = 13f, ofCategory = "Subscription"))
+
+                    addExpense(Expense(ofUser = userEmail(), title="My Life Insurance", amount = 45f, ofCategory = "Policy"))
+                    addExpense(Expense(ofUser = userEmail(), title="Dad's Life Insurance", amount = 100f, ofCategory = "Policy"))
+
+
+                }
+            }
+            else{
+                Log.d("MainActivity/onResume", "Already present $fixedExpDate")
+            }
+        }
+
+
+    }
+
     fun buildSnackBar(msg: String) {
         Snackbar.make(
             binding.mainLayout,
@@ -194,6 +263,7 @@ class MainActivity : AppCompatActivity() {
         .map { it.destination }
         .filterNot { it is NavGraph }
         .joinToString(" > ") { it.displayName.split('/')[1] }
+
 
 }
 

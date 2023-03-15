@@ -1,6 +1,7 @@
 package com.pvs.spent.encryption
 
 import android.util.Log
+import com.pvs.spent.data.Expense
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
@@ -32,6 +33,35 @@ object AES {
 //        return keyGenerator.generateKey()
 //    }
 
+    private fun genSalt(): ByteArray {
+        val salt = ByteArray(16)
+        SecureRandom.getInstanceStrong().nextBytes(salt)
+        return salt
+    }
+
+
+    private fun genSymmetricKey(password: String): SecretKey {
+        val spec = PBEKeySpec(password.toCharArray(), genSalt(), 65536, 256)
+        val secretKey = SecretKeyFactory.getInstance(SECRET_KEY_ALGORITHM).generateSecret(spec)
+        return secretKey
+    }
+
+    fun encrypt(obj:Expense, password: String): SealedObject {
+
+        val key = genSymmetricKey(password)
+
+        val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
+        cipher.init(Cipher.ENCRYPT_MODE, key, generateIV())
+
+        val sealed = SealedObject(obj, cipher)
+        return sealed
+    }
+
+    fun decryptObj(cipherObj: SealedObject, key: SecretKey, iv: IvParameterSpec){
+        val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
+        cipher.init(Cipher.DECRYPT_MODE, key, iv)
+    }
+
     fun generateIV(): IvParameterSpec {
         val iv = ByteArray(16)
         SecureRandom().nextBytes(iv)
@@ -41,9 +71,11 @@ object AES {
 
     @Throws(NoSuchAlgorithmException::class, InvalidKeySpecException::class)
     fun generateKey(password: String, salt: String): SecretKey {
+
         val factory = SecretKeyFactory.getInstance(SECRET_KEY_ALGORITHM)
         val spec: KeySpec = PBEKeySpec(password.toCharArray(), salt.toByteArray(), 65536, 256)
         return SecretKeySpec(factory.generateSecret(spec).encoded, ALGORITHM)
+
     }
 
     @Throws(
@@ -54,7 +86,7 @@ object AES {
         BadPaddingException::class,
         IllegalBlockSizeException::class
     )
-    fun encrypt(plainText:String,key: SecretKey?, iv: IvParameterSpec?): String {
+    fun encrypt(plainText: String, key: SecretKey?, iv: IvParameterSpec?): String {
         val cipher: Cipher = Cipher.getInstance(CIPHER_ALGORITHM)
         cipher.init(Cipher.ENCRYPT_MODE, key, iv)
         val cipherText: ByteArray = cipher.doFinal(plainText.toByteArray())
@@ -69,7 +101,7 @@ object AES {
         BadPaddingException::class,
         IllegalBlockSizeException::class
     )
-    fun decrypt(cipherText:String,key: SecretKey, iv: IvParameterSpec): String {
+    fun decrypt(cipherText: String, key: SecretKey, iv: IvParameterSpec): String {
         val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
         cipher.init(Cipher.DECRYPT_MODE, key, iv)
         val plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText))

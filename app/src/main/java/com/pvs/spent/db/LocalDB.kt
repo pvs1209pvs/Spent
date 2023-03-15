@@ -10,13 +10,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.pvs.spent.dao.CategoryDAO
 import com.pvs.spent.dao.CategoryIconDAO
 import com.pvs.spent.dao.ExpenseDAO
+import com.pvs.spent.dao.FixedExpDateDAO
 import com.pvs.spent.data.Category
 import com.pvs.spent.data.CategoryIcon
 import com.pvs.spent.data.Expense
+import com.pvs.spent.data.FixedExpDate
 
 @Database(
-    entities = [Category::class, Expense::class, CategoryIcon::class],
-    version = 12,
+    entities = [Category::class, Expense::class, CategoryIcon::class, FixedExpDate::class],
+    version = 13,
     exportSchema = true
 )
 @TypeConverters(Convertor::class)
@@ -25,6 +27,7 @@ abstract class LocalDB : RoomDatabase() {
     abstract fun categoryDAO(): CategoryDAO
     abstract fun expenseDAO(): ExpenseDAO
     abstract fun categoryIconDAO(): CategoryIconDAO
+    abstract fun fixedExpDateDAO(): FixedExpDateDAO
 
     companion object {
 
@@ -55,6 +58,7 @@ abstract class LocalDB : RoomDatabase() {
                     .addMigrations(MIGRATION_9_10)
                     .addMigrations(MIGRATION_10_11)
                     .addMigrations(MIGRATION_11_12)
+                    .addMigrations(MIGRATION_12_13)
 //                    .createFromAsset("database/spent-test.db")
                     .build()
 
@@ -153,6 +157,12 @@ abstract class LocalDB : RoomDatabase() {
                 database.execSQL("DROP TABLE IF EXISTS category_table")
                 database.execSQL("CREATE TABLE IF NOT EXISTS category_table (ofUser text not null, title text not null, aggregate real not null, budget real not null, icon integer not null, isBackedUp integer not null default 0, primary key(ofUser, title))")
 
+            }
+        }
+
+        private val MIGRATION_12_13 = object : Migration(12, 13) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS fixed_exp_date_table (month integer not null, year int not null, ofUser text not null, primary key(month, year, ofUser))")
             }
         }
 
